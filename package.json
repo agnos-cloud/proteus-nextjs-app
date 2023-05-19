@@ -10,6 +10,7 @@
     "prisma:generate": "npx prisma generate --schema=src/prisma/schema.prisma"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.14",
     "@chakra-ui/react": "^2.6.1",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
@@ -21,6 +22,7 @@
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.2",
     "framer-motion": "^10.12.12",
+    "graphql": "^16.6.0",
     "next": "13.4.2",
     "next-auth": "^4.22.1",
     "react": "18.2.0",

@@ -15,3 +15,5 @@ This is a [Next.js](https://nextjs.org/) client for the Proteus API.
 - [NextJs API routes](https://nextjs.org/docs/api-routes/introduction)
 - [Next.js deployment documentation](https://nextjs.org/docs/deployment)
 - [Realtime Chat App with NextJS, GraphQL, NodeJS, MongoDB, Prisma, TypeScrip](https://www.youtube.com/watch?v=mj_Qe2jBYS4)
+- [Chakra UI](https://chakra-ui.com/)
+- [Apollo GraphQL](https://www.apollographql.com/)
