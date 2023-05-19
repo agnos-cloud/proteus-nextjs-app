@@ -1,17 +1,26 @@
-import type { NextPage } from "next";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { Box } from "@chakra-ui/react";
+import { Auth } from "@components/auth";
+import { OrgsGridView } from "@components/org";
+import type { NextPage, NextPageContext } from "next";
+import { getSession, useSession } from "next-auth/react";
 
 const Home: NextPage = () => {
     const { data: session } = useSession();
-    if (session) {
-        return (
-          <>
-            Signed in as {session.user?.email} <br />
-            <button onClick={() => signOut()}>Sign out</button>
-          </>
-        )
-    }
-    return <div><button onClick={() => signIn("google")}>Sign In</button></div>;
+    return (
+        <Box>
+            {session?.user ? <OrgsGridView /> : <Auth />}
+        </Box>
+    );
 };
+
+export async function getServerSideProps(context: NextPageContext) {
+    const session = await getSession(context);
+
+    return {
+        props: {
+            session,
+        },
+    };
+}
 
 export default Home;

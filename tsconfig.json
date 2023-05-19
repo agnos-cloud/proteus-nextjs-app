@@ -20,7 +20,10 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@components/auth": [ "./src/features/auth/components" ],
+      "@components/chat": [ "./src/features/chat/components" ],
+      "@components/org": [ "./src/features/org/components" ],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/**/*.ts"],
