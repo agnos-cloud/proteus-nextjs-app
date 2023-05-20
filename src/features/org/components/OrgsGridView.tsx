@@ -1,20 +1,58 @@
 import { Button, Center, Input, Stack, Text } from "@chakra-ui/react";
 import { signOut } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useMutation } from "@apollo/client";
+import OrgOps from  "@graphql/org";
+import { toast } from "react-hot-toast";
 
 interface IOrgsGridViewProps {
+}
+
+interface CreateOrgData {
+    createOrg: {
+        id: string;
+        name: string;
+        description?: string;
+    }
+}
+
+interface OrgInput {
+    name: string;
+    description?: string;
+}
+
+interface CreateOrgVars {
+    input: OrgInput;
 }
 
 const OrgsGridView: React.FC<IOrgsGridViewProps> = (props) => {
     const [name, setName] = useState<string>("");
     const [description, setDescription] = useState<string>("");
 
-    const onSubmit = async () => {
-        try {
-            //
-        } catch (error) {
-            console.error(error);
+    const [ createOrg, { data, loading, error }] = useMutation<CreateOrgData, CreateOrgVars>(OrgOps.Mutations.createOrg);
+
+    useEffect(() => {
+        if (data) {
+            toast.success("Organization created!");
         }
+    }, [data]);
+    useEffect(() => {
+        if (error) {
+            toast.error(error.message);
+        }
+    }, [error]);
+
+    const onSubmit = async () => {
+        if (!name) return;
+
+        const result = await createOrg({
+            variables: {
+                input: {
+                    name,
+                    description,
+                }
+            },
+        });
     };
 
   return (
