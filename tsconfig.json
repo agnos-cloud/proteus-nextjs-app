@@ -24,6 +24,8 @@
       "@components/auth": [ "./src/features/auth/components" ],
       "@components/chat": [ "./src/features/chat/components" ],
       "@components/org": [ "./src/features/org/components" ],
+      "@graphql": [ "./src/graphql" ],
+      "@graphql/org": [ "./src/features/org/graphql" ],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/**/*.ts"],

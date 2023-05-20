@@ -2,12 +2,9 @@ import { Button, Center, Image, Stack, Text } from "@chakra-ui/react";
 import { Session } from "next-auth";
 import { signIn } from "next-auth/react";
 
-interface IAuthProps {
-    session?: Session | null;
-    reloadSession?: () => void;
-}
+interface IAuthProps {}
 
-const Auth: React.FC<IAuthProps> = ({ session, reloadSession }) => {
+const Auth: React.FC<IAuthProps> = (props) => {
   return <Center height="100vh">
     <Stack spacing={8} align="center">
         <Text fontSize="9xl">Proteus AI</Text>
