@@ -52,7 +52,7 @@ const OrgsGridView: React.FC<IOrgsGridViewProps> = (props) => {
                     description,
                 }
             },
-        });
+        }).catch((e) => toast.error(e.message || String(e)));
     };
 
   return (
