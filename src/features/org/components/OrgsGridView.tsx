@@ -2,7 +2,7 @@ import { Button, Center, Input, Stack, Text } from "@chakra-ui/react";
 import { signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
-import OrgOps from  "@graphql/org";
+import OrgsOps from  "@graphql/org";
 import { toast } from "react-hot-toast";
 
 interface IOrgsGridViewProps {
@@ -29,7 +29,7 @@ const OrgsGridView: React.FC<IOrgsGridViewProps> = (props) => {
     const [name, setName] = useState<string>("");
     const [description, setDescription] = useState<string>("");
 
-    const [ createOrg, { data, loading, error }] = useMutation<CreateOrgData, CreateOrgVars>(OrgOps.Mutations.createOrg);
+    const [ createOrg, { data, loading, error }] = useMutation<CreateOrgData, CreateOrgVars>(OrgsOps.Mutations.createOrg);
 
     useEffect(() => {
         if (data) {
@@ -45,7 +45,7 @@ const OrgsGridView: React.FC<IOrgsGridViewProps> = (props) => {
     const onSubmit = async () => {
         if (!name) return;
 
-        const result = await createOrg({
+        await createOrg({
             variables: {
                 input: {
                     name,
@@ -69,7 +69,7 @@ const OrgsGridView: React.FC<IOrgsGridViewProps> = (props) => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
             />
-            <Button onClick={onSubmit} width="100%">Save</Button>
+            <Button onClick={onSubmit} isLoading={loading} width="100%">Save</Button>
             <Button onClick={() => signOut()}>Logout</Button>
         </Stack>
     </Center>
