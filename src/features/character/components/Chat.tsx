@@ -1,8 +1,14 @@
+import { Flex } from "@chakra-ui/react";
+
 interface IChatProps {
 }
 
 const Chat: React.FC<IChatProps> = (props) => {
-  return <div>CHAT</div>;
+  return (
+    <Flex height="100vh">
+        CHAT
+    </Flex>
+  );
 };
 
 export default Chat;
