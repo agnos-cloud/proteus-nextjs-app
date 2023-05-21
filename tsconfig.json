@@ -21,11 +21,16 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
+      "@components": [ "./src/components" ],
       "@components/auth": [ "./src/features/auth/components" ],
-      "@components/chat": [ "./src/features/chat/components" ],
+      "@components/character": [ "./src/features/character/components" ],
       "@components/org": [ "./src/features/org/components" ],
       "@graphql": [ "./src/graphql" ],
+      "@graphql/character": [ "./src/features/character/graphql" ],
+      "@graphql/conversation": [ "./src/features/conversation/graphql" ],
       "@graphql/org": [ "./src/features/org/graphql" ],
+      "@hooks": [ "./src/hooks" ],
+      "@types": [ "./src/types" ],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/**/*.ts"],
