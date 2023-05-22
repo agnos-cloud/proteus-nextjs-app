@@ -7,6 +7,7 @@ import ConversationForm from "./ConversationForm";
 import ConversationsOps from  "@graphql/conversation";
 import { useMutation } from "@apollo/client";
 import toast from "react-hot-toast";
+import { useRouter } from "next/router";
 
 interface IConversationListProps {
   org: string;
@@ -38,8 +39,18 @@ let participants: SearchedCharacter[] | undefined = undefined;
 
 const ConversationList: React.FC<IConversationListProps> = ({ org }) => {
   const { openModal, closeModal, setModalIsLoading } = useApp();
+  const router = useRouter();
 
   const [ createConversation, { data, loading, error }] = useMutation<CreateConversationData, CreateConversationVars>(ConversationsOps.Mutations.createConversation);
+
+  useEffect(() => {
+      if (data) {
+          const conversationId = data.createConversation.id;
+          router.push(`/${org}/?conversationId=${conversationId}`);
+          handleCloseModal();
+      }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   useEffect(() => {
       setModalIsLoading(loading);

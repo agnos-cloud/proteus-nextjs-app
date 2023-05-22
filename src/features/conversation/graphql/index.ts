@@ -1,12 +1,41 @@
 import { gql } from "@apollo/client";
 
+const ConversationFields = `
+conversations(input: $input) {
+    id
+    characters {
+        id
+        character {
+            id
+            name
+        }
+    }
+    users {
+        id
+        hasUnread
+        user {
+            id
+            name
+        }
+    }
+    latestMessage {
+        id
+        sender {
+            id
+            name
+        }
+        content
+        createdAt
+    }
+    updatedAt
+}
+`;
+
 const GQL = {
     Queries: {
         conversations: gql`
             query Conversations($input: ConversationSearchInput!) {
-                conversations(input: $input) {
-                    id
-                }
+                ${ConversationFields}
             }
         `,
     },
