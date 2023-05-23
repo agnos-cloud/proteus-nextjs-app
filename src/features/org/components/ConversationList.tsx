@@ -8,10 +8,41 @@ import ConversationsOps from  "@graphql/conversation";
 import { useMutation } from "@apollo/client";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
+import ConversationItem from "./ConversationItem";
+
+interface Conversation {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  characters: Array<{
+      id: string;
+      createdAt: Date;
+      updatedAt: Date;
+      character: {
+          id: string;
+          name: string;
+      }
+  }>;
+  users: Array<{
+      id: string;
+      createdAt: Date;
+      updatedAt: Date;
+      hasUnread: boolean;
+      user: {
+          id: string;
+          name: string;
+      }
+  }>;
+  latestMessage: {
+    content: string;
+  }
+}
 
 interface IConversationListProps {
   org: string;
   session: Session;
+  conversations: Array<Conversation>;
+  onViewConversation: (conversationId: string) => void;
 }
 
 interface CreateConversationData {
@@ -37,7 +68,7 @@ type SearchedCharacter = {
 
 let participants: SearchedCharacter[] | undefined = undefined;
 
-const ConversationList: React.FC<IConversationListProps> = ({ org }) => {
+const ConversationList: React.FC<IConversationListProps> = ({ conversations, org, session, onViewConversation }) => {
   const { openModal, closeModal, setModalIsLoading } = useApp();
   const router = useRouter();
 
@@ -118,8 +149,18 @@ const ConversationList: React.FC<IConversationListProps> = ({ org }) => {
   return (
     <Stack width="100%" spacing={1}>
       <Box py={2} px={4} bg="blackAlpha.300" borderRadius={4} cursor="pointer" onClick={handleOpenModal}>
-        <Text textAlign="center" color="whiteAlpha.800" fontWeight={500}>Find or start a conversation</Text>
+        <Text textAlign="center" color="blackAlpha.800" fontWeight={500}>Find or start a conversation</Text>
       </Box>
+      {conversations.map((conversation) => (
+        <ConversationItem
+          key={conversation.id}
+          conversation={conversation}
+          onClick={() => onViewConversation(conversation.id)}
+          isSelected={router.query.conversationId === conversation.id}
+          userId={session.user.id}
+          onDeleteConversation={() => {}}
+        />
+      ))}
     </Stack>
   );
 };
