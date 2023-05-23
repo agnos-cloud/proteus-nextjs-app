@@ -12,7 +12,7 @@ const OrgView: React.FC<IOrgViewProps> = ({ org, session }) => {
   return (
     <Flex height="100vh">
         <SideBar org={org} session={session} />
-        <FeedWrapper session={session} />
+        <FeedWrapper org={org} session={session} />
     </Flex>
   );
 };

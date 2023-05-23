@@ -105,10 +105,10 @@ const OrgActionList: React.FC<IConversationListProps> = ({ org }) => {
   return (
     <Stack width="100%" spacing={1}>
       <Box py={2} px={4} bg="blackAlpha.300" borderRadius={4} cursor="pointer" onClick={handleOpenModal}>
-        <Text textAlign="center" color="whiteAlpha.800" fontWeight={500}>OpenAI API Key</Text>
+        <Text textAlign="center" color="blackAlpha.800" fontWeight={500}>OpenAI API Key</Text>
       </Box>
       <Box py={2} px={4} bg="blackAlpha.300" borderRadius={4} cursor="pointer" onClick={handleOpenModal}>
-        <Text textAlign="center" color="whiteAlpha.800" fontWeight={500}>Create a Character</Text>
+        <Text textAlign="center" color="blackAlpha.800" fontWeight={500}>Create a Character</Text>
       </Box>
     </Stack>
   );

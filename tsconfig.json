@@ -31,6 +31,7 @@
       "@graphql/org": [ "./src/features/org/graphql" ],
       "@hooks": [ "./src/hooks" ],
       "@types": [ "./src/types" ],
+      "@utils/*": [ "./src/utils/*" ],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/**/*.ts"],
