@@ -149,7 +149,7 @@ const ConversationItem: React.FunctionComponent<ConversationItemProps> = ({
             </Menu>
             <Flex position="absolute" left="-6px">
                 {hasUnread && (
-                <GoPrimitiveDot fontSize={18} color="#6B46C1" />
+                    <GoPrimitiveDot fontSize={18} color="#6B46C1" />
                 )}
             </Flex>
             <Avatar />
@@ -165,14 +165,14 @@ const ConversationItem: React.FunctionComponent<ConversationItemProps> = ({
                 </Text>
                 {conversation.latestMessage && (
                     <Box width="140%" maxWidth="360px">
-                    <Text
-                        color="whiteAlpha.700"
-                        whiteSpace="nowrap"
-                        overflow="hidden"
-                        textOverflow="ellipsis"
-                    >
-                        {conversation.latestMessage.content}
-                    </Text>
+                        <Text
+                            color="blackAlpha.700"
+                            whiteSpace="nowrap"
+                            overflow="hidden"
+                            textOverflow="ellipsis"
+                        >
+                            {conversation.latestMessage.content}
+                        </Text>
                     </Box>
                 )}
                 </Flex>

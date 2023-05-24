@@ -158,6 +158,7 @@ const ConversationList: React.FC<IConversationListProps> = ({ conversations, org
           onClick={() => onViewConversation(conversation.id)}
           isSelected={router.query.conversationId === conversation.id}
           userId={session.user.id}
+          hasUnread={conversation.users.find((u) => u.user.id === session.user.id)?.hasUnread}
           onDeleteConversation={() => {}}
         />
       ))}

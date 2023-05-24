@@ -7,6 +7,7 @@ import ConversationsOps from  "@graphql/conversation";
 import { useQuery } from "@apollo/client";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { SkeletonLoader } from "@components";
 
 interface Conversation {
     id: string;
@@ -114,12 +115,16 @@ const SideBar: React.FC<ISideBarProps> = ({ org, session }) => {
           <Stack>
             <OrgActionList org={org} session={session} />
             <Divider orientation="horizontal" />
-            <ConversationList
-              org={org}
-              session={session}
-              conversations={data?.conversations || []}
-              onViewConversation={onViewConversation}
-            />
+            {loading ? (
+              <SkeletonLoader count={7} height="80px" />
+            ) : (
+              <ConversationList
+                org={org}
+                session={session}
+                conversations={data?.conversations || []}
+                onViewConversation={onViewConversation}
+              />
+            )}
           </Stack>
           <Button onClick={() => signOut()}>Log Out</Button>
         </Stack>

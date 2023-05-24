@@ -28,6 +28,7 @@
       "@graphql": [ "./src/graphql" ],
       "@graphql/character": [ "./src/features/character/graphql" ],
       "@graphql/conversation": [ "./src/features/conversation/graphql" ],
+      "@graphql/message": [ "./src/features/message/graphql" ],
       "@graphql/org": [ "./src/features/org/graphql" ],
       "@hooks": [ "./src/hooks" ],
       "@types": [ "./src/types" ],

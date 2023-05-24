@@ -10,16 +10,17 @@ export const theme = extendTheme(
     {
         colors: {
             brand: {
-                100: "#3d84f7", // "#f7fafc",
+                100: "#f7fafc", // "#3d84f7",
+                200: "#87CEEB",
                 // ...
-                // 900: "#1a202c",
+                900: "#1a202c",
             },
         },
         styles: {
             global: {
                 // styles for the `body`
                 body: {
-                    bg: "whiteAlpha.200", // "brand.100"
+                    bg: "brand.100", // "brand.100"
                     // color: "black",
                 },
                 // styles for the `a`
