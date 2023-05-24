@@ -36,8 +36,8 @@ const CharacterSearchList: React.FC<CharacterSearchListProps> = ({ characters, a
                                 <Text>{character.name}</Text>
                                 <Button
                                     size="sm"
-                                    bg="brand.100"
-                                    _hover={{ bg: "brand.100" }}
+                                    bg="brand.200"
+                                    _hover={{ bg: "brand.200" }}
                                     onClick={() => addCharacters(character)}
                                 >
                                     Select

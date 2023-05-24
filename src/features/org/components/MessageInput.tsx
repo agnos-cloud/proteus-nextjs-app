@@ -11,8 +11,11 @@ type MessageType = "TEXT";
 interface Message {
     id: string;
     createdAt: Date;
+    updatedAt: Date;
+    conversationId: string;
     content: string;
     type: MessageType;
+    senderId: string;
     sender: {
         id: string;
         name: string;
@@ -41,6 +44,18 @@ interface MessageInputProps {
     org: string;
 }
 
+interface UserMessagesData {
+    userMessages: Array<Message>
+}
+
+interface GetMessagesInput {
+    conversation: string;
+}
+
+interface MessagesVars {
+    input: GetMessagesInput;
+}
+
 const MessageInput: React.FC<MessageInputProps> = ({ conversationId, session }) => {
     const [message, setMessage] = useState("");
     const [ sendMessage ] =
@@ -48,25 +63,68 @@ const MessageInput: React.FC<MessageInputProps> = ({ conversationId, session }) 
 
     const onSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
+        setMessage("");
 
         try {
+            const messageId = new ObjectID().toString();
             const { data, errors } = await sendMessage({
                 variables: {
                     input: {
-                        id: new ObjectID().toString(),
+                        id: messageId,
                         conversation: conversationId,
                         sender: session.user.id,
                         content: message,
                         type: "TEXT",
                     }
                 },
+                optimisticResponse: {
+                    sendUserMessage: true,
+                },
+                update: (cache) => {
+                    const existing = cache.readQuery<UserMessagesData>({
+                        query: MessagesOps.Queries.userMessages,
+                        variables: {
+                            input: {
+                                conversation: conversationId,
+                            },
+                        },
+                    });
+
+                    cache.writeQuery<UserMessagesData, MessagesVars>({
+                        query: MessagesOps.Queries.userMessages,
+                        variables: {
+                            input: {
+                                conversation: conversationId,
+                            },
+                        },
+                        data: {
+                            ...existing,
+                            userMessages: [
+                                {
+                                    id: messageId,
+                                    conversationId,
+                                    senderId: session.user.id,
+                                    sender: {
+                                        id: session.user.id,
+                                        name: session.user.name!,
+                                    },
+                                    content: message,
+                                    type: "TEXT",
+                                    createdAt: new Date(),
+                                    updatedAt: new Date(),
+                                },
+                                ...(existing?.userMessages || []),
+                            ],
+                        },
+                    });
+                }
             });
 
             if (!data?.sendUserMessage || errors) {
                 throw new Error("Failed to send message");
             }
 
-            setMessage("");
+            // setMessage("");
         } catch (error: any) {
             console.error(error);
             toast.error(error?.message || String(error));

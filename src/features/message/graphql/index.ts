@@ -2,12 +2,15 @@ import { gql } from "@apollo/client";
 
 export const MessageFields = `
 id
+conversationId
+senderId
 sender {
     id
     name
 }
 content
 createdAt
+updatedAt
 `;
 
 const GQL = {

@@ -76,8 +76,14 @@ const Messages: React.FC<MessagesProps> = ({ conversationId, userId }) => {
 
     useEffect(() => {
         const combinedMessages = [...(charMsgsData?.characterMessages || []), ...(userMsgsData?.userMessages || [])];
-        combinedMessages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-        setMessages(combinedMessages);
+        combinedMessages.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        const uniqueMessages = combinedMessages.reduce((acc: Message[], curr: Message) => {
+            if (acc.find((m) => m.id === curr.id)) {
+                return acc;
+            }
+            return [...acc, curr];
+        }, []);
+        setMessages(uniqueMessages);
     }, [charMsgsData, userMsgsData]);
 
     const subscribeToNewCharMessages = (conversationId: string) => {
