@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Flex, Stack } from "@chakra-ui/react";
+import { Avatar, Box, Button, Divider, Flex, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
 import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
 import ConversationList from "./ConversationList";
@@ -8,6 +8,7 @@ import { gql, useMutation, useQuery, useSubscription } from "@apollo/client";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { SkeletonLoader } from "@components";
+import { CharacterList } from "@components/character";
 
 interface Conversation {
     id: string;
@@ -188,35 +189,56 @@ const SideBar: React.FC<ISideBarProps> = ({ org, session }) => {
   return (
     <Stack
       width={{ base: "100%", md: "400px" }}
-      // height="100vh"
       bg="whiteAlpha.50"
       py={6}
       px={3}
       display={{ base: conversationId ? "none" : "flex", md: "flex" }}
     >
-        <Stack width="100%" height="100%" justify="space-between">
-          <Stack
-            direction="column"
-            overflow="hidden"
-            flexGrow={1}
-          >
+      <Stack width="100%" height="100%" justify="space-between">
+        <Stack overflow="hidden" flexGrow={1} justify="space-between">
+          <Stack>
             <OrgActionList org={org} session={session} />
             <Divider orientation="horizontal" />
-            {loading ? (
-              <SkeletonLoader count={7} height="80px" />
-            ) : (
-              <ConversationList
-                org={org}
-                session={session}
-                conversations={data?.conversations || []}
-                onViewConversation={onViewConversation}
-              />
-            )}
           </Stack>
-          <Box>
-            <Button onClick={() => signOut()}>Log Out</Button>
-          </Box>
+          <Stack overflow="hidden" flexGrow={1}>
+            <Tabs variant="enclosed" isFitted height="100%">
+              <TabList>
+                <Tab>Conversations</Tab>
+                <Tab>Characters</Tab>
+              </TabList>
+
+              <TabPanels height="92%">
+                <TabPanel height="100%">
+                  <Stack
+                    height="100%"
+                  >
+                    {loading ? (
+                      <SkeletonLoader count={7} height="80px" />
+                    ) : (
+                      <ConversationList
+                        org={org}
+                        session={session}
+                        conversations={data?.conversations || []}
+                        onViewConversation={onViewConversation}
+                      />
+                    )}
+                  </Stack>
+                </TabPanel>
+                <TabPanel height="100%">
+                  <CharacterList org={org} session={session} />
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </Stack>
         </Stack>
+        <Flex gap={1} align="center" justify="space-between">
+          <Flex gap={1} align="center">
+            {session.user.image && <Avatar src={session.user.image} size="sm" />}
+            <Text fontWeight={600}>{session.user.name}</Text>
+          </Flex>
+          <Button size="sm" onClick={() => signOut()}>Log Out</Button>
+        </Flex>
+      </Stack>
     </Stack>
   );
 };

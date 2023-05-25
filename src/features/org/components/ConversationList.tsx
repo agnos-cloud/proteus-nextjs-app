@@ -147,7 +147,7 @@ const ConversationList: React.FC<IConversationListProps> = ({ conversations, org
   );
 
   return (
-    <Flex direction="column" justify="flex-end" overflow="hidden" gap={1}>
+    <Flex direction="column" justify="flex-end" overflow="hidden" gap={1}  flexGrow={1}>
       <Box py={2} px={4} bg="blackAlpha.300" borderRadius={4} cursor="pointer" onClick={handleOpenModal}>
         <Text textAlign="center" color="blackAlpha.800" fontWeight={500}>Find or start a conversation</Text>
       </Box>
