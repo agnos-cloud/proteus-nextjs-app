@@ -53,6 +53,11 @@ const GQL = {
                 }
             }
         `,
+        markConversationAsRead: gql`
+            mutation MarkConversationAsRead($id: ID!) {
+                markConversationAsRead(id: $id)
+            }
+        `,
     },
     Subscriptions: {
         conversationCreated: gql`

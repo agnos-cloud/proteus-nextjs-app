@@ -11,6 +11,16 @@ const GQL = {
                 }
             }
         `,
+        deleteOpenaiAPIKey: gql`
+            mutation DeleteOpenaiAPIKey($id: ID!) {
+                deleteOpenaiAPIKey(id: $id)
+            }
+        `,
+        saveOpenaiAPIKey: gql`
+            mutation SaveOpenaiAPIKey($id: ID! $key: String!) {
+                saveOpenaiAPIKey(id: $id key: $key)
+            }
+        `,
     },
     Subscriptions: {},
 }

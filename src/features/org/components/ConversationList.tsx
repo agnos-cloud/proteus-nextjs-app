@@ -42,7 +42,7 @@ interface IConversationListProps {
   org: string;
   session: Session;
   conversations: Array<Conversation>;
-  onViewConversation: (conversationId: string) => void;
+  onViewConversation: (conversationId: string, hasUnread: boolean) => void;
 }
 
 interface CreateConversationData {
@@ -151,17 +151,20 @@ const ConversationList: React.FC<IConversationListProps> = ({ conversations, org
       <Box py={2} px={4} bg="blackAlpha.300" borderRadius={4} cursor="pointer" onClick={handleOpenModal}>
         <Text textAlign="center" color="blackAlpha.800" fontWeight={500}>Find or start a conversation</Text>
       </Box>
-      {conversations.map((conversation) => (
-        <ConversationItem
-          key={conversation.id}
-          conversation={conversation}
-          onClick={() => onViewConversation(conversation.id)}
-          isSelected={router.query.conversationId === conversation.id}
-          userId={session.user.id}
-          hasUnread={conversation.users.find((u) => u.user.id === session.user.id)?.hasUnread}
-          onDeleteConversation={() => {}}
-        />
-      ))}
+      {conversations.map((conversation) => {
+        const hasUnread = !!conversation.users.find((u) => u.user.id === session.user.id)?.hasUnread;
+        return (
+          <ConversationItem
+            key={conversation.id}
+            conversation={conversation}
+            onClick={() => onViewConversation(conversation.id, hasUnread)}
+            isSelected={router.query.conversationId === conversation.id}
+            userId={session.user.id}
+            hasUnread={hasUnread}
+            onDeleteConversation={() => {}}
+          />
+        );
+      })}
     </Stack>
   );
 };

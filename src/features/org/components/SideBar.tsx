@@ -4,7 +4,7 @@ import { signOut } from "next-auth/react";
 import ConversationList from "./ConversationList";
 import OrgActionList from "./OrgActionList";
 import ConversationsOps from  "@graphql/conversation";
-import { useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { SkeletonLoader } from "@components";
@@ -54,12 +54,22 @@ interface ConversationsVars {
   input: ConversationsInput;
 }
 
+interface MarkConvoData {
+  markConversationAsRead: boolean;
+}
+
+interface MarkConvoVars {
+  id: string;
+}
+
 interface ISideBarProps {
   org: string;
   session: Session;
 }
 
 const SideBar: React.FC<ISideBarProps> = ({ org, session }) => {
+  const router = useRouter();
+  const { query: { conversationId } } = router;
   const { data, loading, error, subscribeToMore } = useQuery<ConversationsData, ConversationsVars>(ConversationsOps.Queries.conversations, {
     variables: {
       input: {
@@ -67,11 +77,67 @@ const SideBar: React.FC<ISideBarProps> = ({ org, session }) => {
       },
     }
   });
-  const router = useRouter();
-  const { query: { conversationId } } = router;
 
-  const onViewConversation = async (conversationId: string) => {
+  const [ markConversationAsRead ] =
+    useMutation<MarkConvoData, MarkConvoVars>(ConversationsOps.Mutations.markConversationAsRead);
+
+  const onViewConversation = async (conversationId: string, hasUnread: boolean) => {
     router.push(`/${org}/?conversationId=${conversationId}`);
+
+    if (!hasUnread) return;
+
+    try {
+      await markConversationAsRead({
+        variables: {
+          id: conversationId,
+        },
+        optimisticResponse: {
+          markConversationAsRead: true,
+        },
+        update: (cache) => {
+          const conversationUserFragment = cache.readFragment<{ users: Array<{ id: string; hasUnread: boolean; user: { id: string; name: string; } }> }>({
+            id: `Conversation:${conversationId}`,
+            fragment: gql`
+              fragment MarkConversationAsRead on Conversation {
+                users {
+                  id
+                  user {
+                    id
+                    name
+                  }
+                  hasUnread
+                }
+              }`
+          });
+
+          if (!conversationUserFragment) return;
+
+          const users = [...conversationUserFragment.users];
+          const userIndex = users.findIndex(u => u.user.id === session.user.id);
+          if (userIndex === -1) return;
+
+          const user = users[userIndex];
+          users[userIndex] = {
+            ...user,
+            hasUnread: false,
+          };
+
+          cache.writeFragment({
+            id: `Conversation:${conversationId}`,
+            fragment: gql`
+              fragment MarkConversationAsRead on Conversation {
+                users
+              }`,
+            data: {
+              users,
+            }
+          });
+        }
+      });
+    }
+    catch (e) {
+      console.error(e);
+    }
   };
 
   const subscribeToNewConversations = () => {
