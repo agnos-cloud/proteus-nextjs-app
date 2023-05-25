@@ -1,4 +1,4 @@
-import { Box, Stack, Text } from "@chakra-ui/react";
+import { Box, Flex, Stack, Text } from "@chakra-ui/react";
 import { useApp } from "@hooks";
 import { ModalOptions } from "@types";
 import { Session } from "next-auth";
@@ -42,7 +42,7 @@ interface IConversationListProps {
   org: string;
   session: Session;
   conversations: Array<Conversation>;
-  onViewConversation: (conversationId: string, hasUnread: boolean) => void;
+  onViewConversation: (conversationId: string) => void;
 }
 
 interface CreateConversationData {
@@ -147,25 +147,28 @@ const ConversationList: React.FC<IConversationListProps> = ({ conversations, org
   );
 
   return (
-    <Stack width="100%" spacing={1}>
+    <Flex direction="column" justify="flex-end" overflow="hidden" gap={1}>
       <Box py={2} px={4} bg="blackAlpha.300" borderRadius={4} cursor="pointer" onClick={handleOpenModal}>
         <Text textAlign="center" color="blackAlpha.800" fontWeight={500}>Find or start a conversation</Text>
       </Box>
-      {conversations.map((conversation) => {
-        const hasUnread = !!conversation.users.find((u) => u.user.id === session.user.id)?.hasUnread;
-        return (
-          <ConversationItem
-            key={conversation.id}
-            conversation={conversation}
-            onClick={() => onViewConversation(conversation.id, hasUnread)}
-            isSelected={router.query.conversationId === conversation.id}
-            userId={session.user.id}
-            hasUnread={hasUnread}
-            onDeleteConversation={() => {}}
-          />
-        );
-      })}
-    </Stack>
+      <Flex direction="column" overflowY="scroll" height="100%">
+        {[...conversations].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+        .map((conversation) => {
+          const hasUnread = !!conversation.users.find((u) => u.user.id === session.user.id)?.hasUnread;
+          return (
+            <ConversationItem
+              key={conversation.id}
+              conversation={conversation}
+              onClick={() => onViewConversation(conversation.id)}
+              isSelected={router.query.conversationId === conversation.id}
+              userId={session.user.id}
+              hasUnread={hasUnread}
+              onDeleteConversation={() => {}}
+            />
+          );
+        })}
+      </Flex>
+    </Flex>
   );
 };
 

@@ -1,10 +1,10 @@
-import { Button, Divider, Stack } from "@chakra-ui/react";
+import { Box, Button, Divider, Flex, Stack } from "@chakra-ui/react";
 import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
 import ConversationList from "./ConversationList";
 import OrgActionList from "./OrgActionList";
 import ConversationsOps from  "@graphql/conversation";
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery, useSubscription } from "@apollo/client";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { SkeletonLoader } from "@components";
@@ -81,10 +81,27 @@ const SideBar: React.FC<ISideBarProps> = ({ org, session }) => {
   const [ markConversationAsRead ] =
     useMutation<MarkConvoData, MarkConvoVars>(ConversationsOps.Mutations.markConversationAsRead);
 
-  const onViewConversation = async (conversationId: string, hasUnread: boolean) => {
-    router.push(`/${org}/?conversationId=${conversationId}`);
+  useSubscription<{ conversationUpdated: Conversation }, { input: { org: string }}>(ConversationsOps.Subscriptions.conversationUpdated, {
+    variables: {
+      input: {
+        org,
+      },
+    },
+    onData: ({ client, data }) => {
+      const { data: subscriptionData } = data;
+      if (!subscriptionData) return;
 
-    if (!hasUnread) return;
+      const { conversationUpdated: updatedConversation } = subscriptionData;
+      const currentlyViewingConversation = updatedConversation.id === conversationId;
+
+      if (currentlyViewingConversation) {
+        onViewConversation(updatedConversation.id);
+      }
+    },
+    });
+
+  const onViewConversation = async (conversationId: string) => {
+    router.push(`/${org}/?conversationId=${conversationId}`);
 
     try {
       await markConversationAsRead({
@@ -178,7 +195,11 @@ const SideBar: React.FC<ISideBarProps> = ({ org, session }) => {
       display={{ base: conversationId ? "none" : "flex", md: "flex" }}
     >
         <Stack width="100%" height="100%" justify="space-between">
-          <Stack>
+          <Stack
+            direction="column"
+            overflow="hidden"
+            flexGrow={1}
+          >
             <OrgActionList org={org} session={session} />
             <Divider orientation="horizontal" />
             {loading ? (
@@ -192,7 +213,9 @@ const SideBar: React.FC<ISideBarProps> = ({ org, session }) => {
               />
             )}
           </Stack>
-          <Button onClick={() => signOut()}>Log Out</Button>
+          <Box>
+            <Button onClick={() => signOut()}>Log Out</Button>
+          </Box>
         </Stack>
     </Stack>
   );
