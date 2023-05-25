@@ -1,8 +1,8 @@
-import { SkeletonLoader } from "@components";
 import { useQuery } from "@apollo/client";
 import { Flex, Stack } from "@chakra-ui/react";
-import MessagesOps from  "@graphql/message";
-import { use, useEffect, useState } from "react";
+import { SkeletonLoader } from "@components";
+import MessagesOps from "@graphql/message";
+import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import MessageItem from "./MessageItem";
 
@@ -16,6 +16,7 @@ interface Message {
     createdAt: Date;
     content: string;
     type: MessageType;
+    conversationId: string;
     sender: {
         id: string;
         name: string;
@@ -49,7 +50,7 @@ const Messages: React.FC<MessagesProps> = ({ conversationId, userId }) => {
         data: charMsgsData,
         loading: charMsgsLoading,
         error: charMsgsError,
-        subscribeToMore: subscribeToMoreCharMsgs
+        subscribeToMore: subscribeToMoreCharMsgs,
     } = useQuery<CharacterMessagesData, MessagesVars>(
         MessagesOps.Queries.characterMessages, {
           variables: {
@@ -75,19 +76,22 @@ const Messages: React.FC<MessagesProps> = ({ conversationId, userId }) => {
         });
 
     useEffect(() => {
-        const combinedMessages = [...(charMsgsData?.characterMessages || []), ...(userMsgsData?.userMessages || [])];
+        const combinedMessages = [
+            ...(charMsgsData?.characterMessages || []),
+            ...(userMsgsData?.userMessages || []),
+        ];
         combinedMessages.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         const uniqueMessages = combinedMessages.reduce((acc: Message[], curr: Message) => {
-            if (acc.find((m) => m.id === curr.id)) {
+            if (acc.find((m) => m.id === curr.id)/* || curr.conversationId !== conversationId*/) {
                 return acc;
             }
             return [...acc, curr];
         }, []);
         setMessages(uniqueMessages);
-    }, [charMsgsData, userMsgsData]);
+    }, [charMsgsData, userMsgsData, conversationId]);
 
     const subscribeToNewCharMessages = (conversationId: string) => {
-        subscribeToMoreCharMsgs({
+        return subscribeToMoreCharMsgs({
             document: MessagesOps.Subscriptions.characterMessageSent,
             variables: {
                 input: {
@@ -108,7 +112,7 @@ const Messages: React.FC<MessagesProps> = ({ conversationId, userId }) => {
     };
 
     const subscribeToNewUserMessages = (conversationId: string) => {
-        subscribeToMoreUserMsgs({
+        return subscribeToMoreUserMsgs({
             document: MessagesOps.Subscriptions.userMessageSent,
             variables: {
                 input: {
@@ -129,8 +133,13 @@ const Messages: React.FC<MessagesProps> = ({ conversationId, userId }) => {
     };
 
     useEffect(() => {
-        subscribeToNewCharMessages(conversationId);
-        subscribeToNewUserMessages(conversationId);
+        const unsubFromNewCharMsgs = subscribeToNewCharMessages(conversationId);
+        const unsubFromNewUserMsgs = subscribeToNewUserMessages(conversationId);
+
+        return () => {
+            unsubFromNewCharMsgs();
+            unsubFromNewUserMsgs();
+        };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [conversationId]);
 

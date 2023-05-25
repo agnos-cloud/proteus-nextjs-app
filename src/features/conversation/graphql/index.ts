@@ -67,6 +67,13 @@ const GQL = {
                 }
             }
         `,
+        conversationUpdated: gql`
+            subscription ConversationUpdated($input: ConversationSearchInput!) {
+                conversationUpdated(input: $input) {
+                    ${ConversationFields}
+                }
+            }
+        `,
     },
 }
 
