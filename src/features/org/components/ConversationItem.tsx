@@ -101,50 +101,41 @@ const ConversationItem: React.FunctionComponent<ConversationItemProps> = ({
             position="relative"
         >
             <Menu isOpen={menuOpen} onClose={() => setMenuOpen(false)}>
-                <MenuList bg="#2d2d2d">
+                <MenuList bg="#d2d2d2">
                     <MenuItem
                         icon={<AiOutlineEdit fontSize={20} />}
                         onClick={(event) => {
                         event.stopPropagation();
                         //   onEditConversation();
                         }}
-                        bg="#2d2d2d"
-                        _hover={{ bg: "blackAlpha.300" }}
+                        bg="#d2d2d2"
+                        _hover={{ bg: "whiteAlpha.300" }}
                     >
                         Edit
                     </MenuItem>
-                    <MenuItem
-                        icon={<MdDeleteOutline fontSize={20} />}
-                        onClick={(event) => {
-                            event.stopPropagation();
-                            onDeleteConversation(conversation.id);
-                        }}
-                        bg="#2d2d2d"
-                        _hover={{ bg: "blackAlpha.300" }}
-                    >
-                        Delete
-                    </MenuItem>
-                    {/* {conversation.participants.length > 2 ? (
+                    {conversation.users.length > 2 ? (
                         <MenuItem
-                        icon={<BiLogOut fontSize={20} />}
-                        onClick={(event) => {
-                            event.stopPropagation();
-                            // onLeaveConversation(conversation);
-                        }}
+                            icon={<BiLogOut fontSize={20} />}
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                // onLeaveConversation(conversation);
+                            }}
                         >
-                        Leave
+                            Leave
                         </MenuItem>
                     ) : (
                         <MenuItem
-                        icon={<MdDeleteOutline fontSize={20} />}
-                        onClick={(event) => {
-                            event.stopPropagation();
-                            // onDeleteConversation(conversation.id);
-                        }}
+                            icon={<MdDeleteOutline fontSize={20} />}
+                            bg="#d2d2d2"
+                            _hover={{ bg: "whiteAlpha.300" }}
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                onDeleteConversation(conversation.id);
+                            }}
                         >
-                        Delete
+                            Delete
                         </MenuItem>
-                    )} */}
+                    )}
                 </MenuList>
             </Menu>
             <Flex position="absolute" left="-6px">

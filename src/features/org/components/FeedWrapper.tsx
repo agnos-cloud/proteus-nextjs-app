@@ -5,6 +5,7 @@ import MessagesHeader from "./MessagesHeader";
 import { MessageChannel } from "worker_threads";
 import MessageInput from "./MessageInput";
 import Messages from "./Messages";
+import NoConversationSelected from "./NoConversationSelected";
 
 interface IFeedWrapperProps {
   org: string;
@@ -18,7 +19,7 @@ const FeedWrapper: React.FC<IFeedWrapperProps> = ({ org, session }) => {
 
   return (
     <Flex
-      display={{ base: conversationId ? "flex" : "none" }}
+      display={{ base: conversationId ? "flex" : "none", md: "flex" }}
       width="100%"
       direction="column"
     >
@@ -36,7 +37,7 @@ const FeedWrapper: React.FC<IFeedWrapperProps> = ({ org, session }) => {
           <MessageInput org={org} session={session} conversationId={conversationId as string} />
         </>
       ) : (
-        <div>No conversation selected</div>
+        <NoConversationSelected org={org} />
       )}
     </Flex>
   );

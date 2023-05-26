@@ -53,6 +53,11 @@ const GQL = {
                 }
             }
         `,
+        deleteConversation: gql`
+            mutation DeleteConversation($id: ID!) {
+                deleteConversation(id: $id)
+            }
+        `,
         markConversationAsRead: gql`
             mutation MarkConversationAsRead($id: ID!) {
                 markConversationAsRead(id: $id)
@@ -63,6 +68,13 @@ const GQL = {
         conversationCreated: gql`
             subscription ConversationCreated($input: ConversationSearchInput!) {
                 conversationCreated(input: $input) {
+                    ${ConversationFields}
+                }
+            }
+        `,
+        conversationDeleted: gql`
+            subscription ConversationDeleted($input: ConversationSearchInput!) {
+                conversationDeleted(input: $input) {
                     ${ConversationFields}
                 }
             }
