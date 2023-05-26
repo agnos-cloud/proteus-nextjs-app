@@ -60,6 +60,14 @@ interface CreateConversationVars {
   input: ConversationInput;
 }
 
+interface DeleteConversationData {
+  deleteConversation: boolean;
+}
+
+interface DeleteConversationVars {
+  id: string;
+}
+
 type SearchedCharacter = {
   id: string;
   name: string;
@@ -72,7 +80,11 @@ const ConversationList: React.FC<IConversationListProps> = ({ conversations, org
   const { openModal, closeModal, setModalIsLoading } = useApp();
   const router = useRouter();
 
-  const [ createConversation, { data, loading, error }] = useMutation<CreateConversationData, CreateConversationVars>(ConversationsOps.Mutations.createConversation);
+  const [ createConversation, { data, loading, error }] =
+    useMutation<CreateConversationData, CreateConversationVars>(ConversationsOps.Mutations.createConversation);
+
+  const [ deleteConversation ] =
+    useMutation<DeleteConversationData, DeleteConversationVars>(ConversationsOps.Mutations.deleteConversation);
 
   useEffect(() => {
       if (data) {
@@ -146,10 +158,31 @@ const ConversationList: React.FC<IConversationListProps> = ({ conversations, org
     []
   );
 
+  const onDeleteConversation = async (conversationId: string) => {
+    try {
+      toast.promise(
+        deleteConversation({
+          variables: {
+            id: conversationId,
+          },
+          update: () => {
+            router.push(`/${org}`);
+          }
+        }), {
+          loading: "Deleting conversation...",
+          success: "Conversation deleted",
+          error: "Could not delete conversation",
+        }
+      );
+    } catch (e: any) {
+      toast.error(e.message || String(e));
+    }
+  };
+
   return (
     <Flex direction="column" justify="flex-end" overflow="hidden" gap={1}  flexGrow={1}>
       <Box py={2} px={4} bg="blackAlpha.300" borderRadius={4} cursor="pointer" onClick={handleOpenModal}>
-        <Text textAlign="center" color="blackAlpha.800" fontWeight={500}>Find or start a conversation</Text>
+        <Text textAlign="center" color="blackAlpha.800" fontWeight={500}>Create a conversation</Text>
       </Box>
       <Flex direction="column" overflowY="scroll" height="100%">
         {[...conversations].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
@@ -163,7 +196,7 @@ const ConversationList: React.FC<IConversationListProps> = ({ conversations, org
               isSelected={router.query.conversationId === conversation.id}
               userId={session.user.id}
               hasUnread={hasUnread}
-              onDeleteConversation={() => {}}
+              onDeleteConversation={onDeleteConversation}
             />
           );
         })}

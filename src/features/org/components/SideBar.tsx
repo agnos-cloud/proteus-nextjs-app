@@ -82,7 +82,7 @@ const SideBar: React.FC<ISideBarProps> = ({ org, session }) => {
   const [ markConversationAsRead ] =
     useMutation<MarkConvoData, MarkConvoVars>(ConversationsOps.Mutations.markConversationAsRead);
 
-  useSubscription<{ conversationUpdated: Conversation }, { input: { org: string }}>(ConversationsOps.Subscriptions.conversationUpdated, {
+  useSubscription<{ conversationUpdated: Conversation }, { input: { org: string } }>(ConversationsOps.Subscriptions.conversationUpdated, {
     variables: {
       input: {
         org,
@@ -99,7 +99,45 @@ const SideBar: React.FC<ISideBarProps> = ({ org, session }) => {
         onViewConversation(updatedConversation.id);
       }
     },
-    });
+  });
+
+  useSubscription<{ conversationDeleted: Conversation }, { input: { org: string } }>(ConversationsOps.Subscriptions.conversationDeleted, {
+    variables: {
+      input: {
+        org,
+      },
+    },
+    onData: ({ client, data }) => {
+      const { data: subscriptionData } = data;
+      if (!subscriptionData) return;
+
+      const existingConversations = client.readQuery<ConversationsData, ConversationsVars>({
+        query: ConversationsOps.Queries.conversations,
+        variables: {
+          input: {
+            org,
+          },
+        },
+      });
+
+      if (!existingConversations) return;
+
+      const { conversations } = existingConversations;
+      const { conversationDeleted: deletedConversation } = subscriptionData;
+
+      client.writeQuery<ConversationsData, ConversationsVars>({
+        query: ConversationsOps.Queries.conversations,
+        variables: {
+          input: {
+            org,
+          },
+        },
+        data: {
+          conversations: conversations.filter((c) => c.id !== deletedConversation.id),
+        },
+      });
+    },
+  });
 
   const onViewConversation = async (conversationId: string) => {
     router.push(`/${org}/?conversationId=${conversationId}`);
