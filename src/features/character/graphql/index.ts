@@ -1,12 +1,20 @@
 import { gql } from "@apollo/client";
 
+const CharacterFields = `
+id
+name
+description
+image
+createdAt
+updatedAt
+`;
+
 const GQL = {
     Queries: {
         characters: gql`
             query Characters($input: CharacterSearchInput!) {
                 characters(input: $input) {
-                    id
-                    name
+                    ${CharacterFields}
                 }
             }
         `,
@@ -15,8 +23,7 @@ const GQL = {
         createCharacter: gql`
             mutation CreateCharacter($input: CharacterInput!) {
                 createCharacter(input: $input) {
-                    id
-                    name
+                    ${CharacterFields}
                 }
             }
         `,

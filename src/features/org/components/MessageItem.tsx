@@ -1,9 +1,10 @@
 import { Avatar, Box, Flex, Stack, Text } from "@chakra-ui/react";
 import { formatRelative } from "date-fns";
 import enUS from "date-fns/locale/en-US";
-import { BiBorderRadius } from "react-icons/bi";
+import { BiBot } from "react-icons/bi";
+import { MdDangerous } from "react-icons/md";
 
-type MessageType = "TEXT";
+type MessageType = "TEXT" | "ERROR_MESSAGE";
 
 interface Message {
     id: string;
@@ -26,9 +27,10 @@ const formatRelativeLocale = {
 interface MessageItemProps {
     message: Message;
     sentByMe: boolean;
+    isCharacter: boolean;
 }
 
-const MessageItem: React.FC<MessageItemProps> = ({ message, sentByMe }) => {
+const MessageItem: React.FC<MessageItemProps> = ({ message, sentByMe, isCharacter }) => {
   return (
     <Stack
         direction="row"
@@ -40,7 +42,11 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, sentByMe }) => {
     >
         {!sentByMe && (
             <Flex align="flex-end">
-                <Avatar size="sm" />
+                {isCharacter ? (
+                    <BiBot size={24} />
+                ) : (
+                    <Avatar size="xs" name={message.sender.name} />
+                )}
             </Flex>
         )}
         <Stack spacing={1} width="100%">
@@ -60,10 +66,11 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, sentByMe }) => {
                             },
                         })}
                     </Text>
+                    {message.type === "ERROR_MESSAGE" && <MdDangerous fontSize={20} color="red" />}
                 </Stack>
                 <Flex justify={sentByMe ? "flex-end" : "flex-start"}>
                     <Box
-                        bg={sentByMe ? "brand.200" : "blackAlpha.300"}
+                        bg={sentByMe ? "brand.200" : message.type === "ERROR_MESSAGE" ? "red.200" : "blackAlpha.300"}
                         px={2}
                         py={1}
                         borderRadius={12}

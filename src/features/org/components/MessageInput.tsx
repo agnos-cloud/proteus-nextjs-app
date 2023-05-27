@@ -140,6 +140,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ conversationId, session }) 
                     placeholder="Send a message..."
                     size="md"
                     resize="none"
+                    bg="whiteAlpha.900"
                     _focus={{
                         boxShadow: "none",
                         border: "1px solid",
