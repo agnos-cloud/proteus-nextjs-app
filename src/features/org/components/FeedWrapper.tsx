@@ -22,6 +22,7 @@ const FeedWrapper: React.FC<IFeedWrapperProps> = ({ org, session }) => {
       display={{ base: conversationId ? "flex" : "none", md: "flex" }}
       width="100%"
       direction="column"
+      bg="grey.50"
     >
       {conversationId ? (
         <>

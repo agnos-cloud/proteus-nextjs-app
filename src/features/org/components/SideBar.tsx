@@ -4,6 +4,7 @@ import { signOut } from "next-auth/react";
 import ConversationList from "./ConversationList";
 import OrgActionList from "./OrgActionList";
 import ConversationsOps from  "@graphql/conversation";
+import CharactersOps from  "@graphql/character";
 import { gql, useMutation, useQuery, useSubscription } from "@apollo/client";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
@@ -55,6 +56,27 @@ interface ConversationsVars {
   input: ConversationsInput;
 }
 
+interface Character {
+  id: string;
+  name: string;
+  description?: string;
+  image?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface CharactersData {
+  characters: Array<Character>
+}
+
+interface CharactersInput {
+  org: string;
+}
+
+interface CharactersVars {
+  input: CharactersInput;
+}
+
 interface MarkConvoData {
   markConversationAsRead: boolean;
 }
@@ -72,6 +94,14 @@ const SideBar: React.FC<ISideBarProps> = ({ org, session }) => {
   const router = useRouter();
   const { query: { conversationId } } = router;
   const { data, loading, error, subscribeToMore } = useQuery<ConversationsData, ConversationsVars>(ConversationsOps.Queries.conversations, {
+    variables: {
+      input: {
+        org,
+      },
+    }
+  });
+  const { data: charactersData, loading: charactersLoading, error: charactersError, subscribeToMore: subscribeToMoreCharacters } =
+    useQuery<CharactersData, CharactersVars>(CharactersOps.Queries.characters, {
     variables: {
       input: {
         org,
@@ -226,8 +256,8 @@ const SideBar: React.FC<ISideBarProps> = ({ org, session }) => {
 
   return (
     <Stack
-      width={{ base: "100%", md: "400px" }}
-      bg="whiteAlpha.50"
+      width={{ base: "100%", md: "430px" }}
+      bg="whiteAlpha.900"
       py={6}
       px={3}
       display={{ base: conversationId ? "none" : "flex", md: "flex" }}
@@ -239,7 +269,7 @@ const SideBar: React.FC<ISideBarProps> = ({ org, session }) => {
             <Divider orientation="horizontal" />
           </Stack>
           <Stack overflow="hidden" flexGrow={1}>
-            <Tabs variant="enclosed" isFitted height="100%">
+            <Tabs variant="enclosed" isFitted isLazy height="100%">
               <TabList>
                 <Tab>Conversations</Tab>
                 <Tab>Characters</Tab>
@@ -247,9 +277,7 @@ const SideBar: React.FC<ISideBarProps> = ({ org, session }) => {
 
               <TabPanels height="92%">
                 <TabPanel height="100%">
-                  <Stack
-                    height="100%"
-                  >
+                  <Stack height="100%">
                     {loading ? (
                       <SkeletonLoader count={7} height="80px" />
                     ) : (
@@ -263,7 +291,17 @@ const SideBar: React.FC<ISideBarProps> = ({ org, session }) => {
                   </Stack>
                 </TabPanel>
                 <TabPanel height="100%">
-                  <CharacterList org={org} session={session} />
+                  <Stack height="100%">
+                    {charactersLoading ? (
+                      <SkeletonLoader count={7} height="80px" />
+                    ) : (
+                      <CharacterList
+                        org={org}
+                        session={session}
+                        characters={charactersData?.characters || []}
+                      />
+                    )}
+                  </Stack>
                 </TabPanel>
               </TabPanels>
             </Tabs>

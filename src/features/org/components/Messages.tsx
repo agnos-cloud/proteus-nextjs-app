@@ -156,7 +156,12 @@ const Messages: React.FC<MessagesProps> = ({ conversationId, userId }) => {
     {messages.length > 0 && (
         <Flex direction="column-reverse" overflowY="scroll" height="100%">
             {messages.map((message) => (
-                <MessageItem key={message.id} message={message} sentByMe={message.sender.id === userId} />
+                <MessageItem
+                    key={message.id}
+                    message={message}
+                    sentByMe={message.sender.id === userId}
+                    isCharacter={charMsgsData?.characterMessages.find((m) => m.id === message.id) !== undefined}
+                />
             ))}
         </Flex>
     )}
