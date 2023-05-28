@@ -22,7 +22,6 @@
     "paths": {
       "@/*": ["./src/*"],
       "@components": [ "./src/components" ],
-      "@components/auth": [ "./src/features/auth/components" ],
       "@components/character": [ "./src/features/character/components" ],
       "@components/org": [ "./src/features/org/components" ],
       "@graphql": [ "./src/graphql" ],
