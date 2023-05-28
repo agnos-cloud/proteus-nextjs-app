@@ -257,7 +257,6 @@ const SideBar: React.FC<ISideBarProps> = ({ org, session }) => {
   return (
     <Stack
       width={{ base: "100%", md: "430px" }}
-      bg="whiteAlpha.900"
       py={6}
       px={3}
       display={{ base: conversationId ? "none" : "flex", md: "flex" }}

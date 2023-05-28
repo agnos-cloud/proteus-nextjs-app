@@ -9,6 +9,7 @@ import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import { JSXElementConstructor, ReactElement, useMemo, useState } from "react";
 import { Toaster } from "react-hot-toast";
+import Head from "next/head";
 
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
     const [modalActions, setModalActions] = useState<ModalAction[]>([]);
@@ -54,6 +55,12 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
     };
 
     return (
+        <>
+        <Head>
+        <title>Proteus AI</title>
+        <meta name="description" content="Proteus AI" />
+        <link rel="icon" href="/images/logo.png" />
+    </Head>
         <ApolloProvider client={client}>
             <SessionProvider session={session}>
                 <ChakraProvider theme={theme}>
@@ -74,6 +81,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
                 </ChakraProvider>
             </SessionProvider>
         </ApolloProvider>
+        </>
     );
 };
 

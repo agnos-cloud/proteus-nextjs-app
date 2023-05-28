@@ -15,22 +15,31 @@ export const theme = extendTheme(
                 // ...
                 900: "#1a202c",
             },
+            background: {
+                700: "RGBA(255, 255, 255, 0.1)",
+                800: "RGBA(255, 255, 255, 0.05)",
+                900: "#1a202c",
+            },
+            button: {
+                primary: "#805AD5",
+                "primary.hover": "#6B46C1",
+                secondary: "RGBA(255, 255, 255, 0.24)",
+                "secondary.hover": "RGBA(255, 255, 255, 0.36)",
+            },
+            color: {
+                400: "RGBA(255, 255, 255, 0.24)",
+                700: "RGBA(255, 255, 255, 0.64)",
+                800: "RGBA(255, 255, 255, 0.80)",
+                900: "RGBA(255, 255, 255, 0.92)",
+            },
         },
         styles: {
-            global: {
-                // styles for the `body`
+            global: () => ({
                 body: {
-                    bg: "brand.100", // "brand.100"
-                    // color: "black",
+                    bg: "background.900",
+                    color: "color.900",
                 },
-                // styles for the `a`
-                // a: {
-                //     color: "teal.500",
-                //     _hover: {
-                //         textDecoration: "underline",
-                //     },
-                // },
-            },
+            }),
         },
         // fonts: {
         //     heading: "Poppins",
