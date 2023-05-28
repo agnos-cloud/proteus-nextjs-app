@@ -22,14 +22,20 @@ const Modal: React.FunctionComponent<IModalProps> = (props) => {
     <>
       <ChakraModal isOpen={isOpen} onClose={onClose} size={size}>
         <ModalOverlay />
-        <ModalContent pb={4}> {/* bg="#2d2d2d" */}
+        <ModalContent pb={4} bg="background.900" color="color.900">
           <ModalHeader>{title || "Modal"}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>{children}</ModalBody>
           {actions.length > 0 && <ModalFooter>
             <Flex gap="10px">
               {actions.map((action, index) => (
-                <Button key={index} onClick={action.onClick} isDisabled={loading}>
+                <Button
+                  key={index}
+                  bg={action.isPrimary ? "button.primary" : "button.secondary"}
+                  _hover={{ bg: action.isPrimary ? "button.primary.hover" : "button.secondary.hover" }}
+                  isDisabled={loading}
+                  onClick={action.onClick}
+                >
                   {action.text}
                 </Button>
               ))}

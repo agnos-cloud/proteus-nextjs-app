@@ -1,10 +1,30 @@
 import { gql } from "@apollo/client";
 
+const OrgFields = `
+id
+name
+description
+createdAt
+updatedAt
+members {
+    role
+    userId
+}
+`;
+
 const GQL = {
-    Queries: {},
+    Queries: {
+        orgs: gql`
+            query Orgs {
+                orgs {
+                    ${OrgFields}
+                }
+            }
+        `,
+    },
     Mutations: {
         createOrg: gql`
-            mutation CreateOrg($input: OrgInput!) {
+            mutation CreateOrg($input: CreateOrgInput!) {
                 createOrg(input: $input) {
                     id
                     name
@@ -22,7 +42,15 @@ const GQL = {
             }
         `,
     },
-    Subscriptions: {},
+    Subscriptions: {
+        orgCreated: gql`
+            subscription OrgCreated {
+                orgCreated {
+                    ${OrgFields}
+                }
+            }
+        `,
+    },
 }
 
 export default GQL;
