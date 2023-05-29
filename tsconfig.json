@@ -28,8 +28,8 @@
       "@graphql/character": [ "./src/features/character/graphql" ],
       "@graphql/conversation": [ "./src/features/conversation/graphql" ],
       "@graphql/message": [ "./src/features/message/graphql" ],
-      "@graphql/org": [ "./src/features/org/graphql" ],
       "@hooks": [ "./src/hooks" ],
+      "@org/*": [ "./src/features/org/*" ],
       "@types": [ "./src/types" ],
       "@utils/*": [ "./src/utils/*" ],
     }

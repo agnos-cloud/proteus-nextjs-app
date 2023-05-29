@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { Box, Stack, Text } from "@chakra-ui/react";
-import OrgsOps from "@graphql/org";
+import OrgsOps from "@org/graphql";
 import { useApp } from "@hooks";
 import { ModalOptions } from "@types";
 import { Session } from "next-auth";

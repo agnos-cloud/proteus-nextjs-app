@@ -30,20 +30,13 @@ updatedAt
 
 const GQL = {
     Queries: {
-        conversation: gql`
-            query Conversation($input: ConversationSearchInput!) {
-                conversation(input: $input) {
+        conversations: gql`
+            query Conversations($input: ConversationSearchInput!) {
+                conversations(input: $input) {
                     ${ConversationFields}
                 }
             }
         `,
-        conversations: gql`
-        query Conversations($input: ConversationSearchInput!) {
-            conversations(input: $input) {
-                ${ConversationFields}
-            }
-        }
-    `,
     },
     Mutations: {
         createConversation: gql`

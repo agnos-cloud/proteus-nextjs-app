@@ -21,6 +21,7 @@ export type ModalOptions = {
 
 export type ModalAction = {
     text: string;
+    isPrimary?: boolean;
     onClick: MouseEventHandler<HTMLButtonElement> | undefined;
 };
 

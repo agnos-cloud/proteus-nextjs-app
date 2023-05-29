@@ -57,10 +57,10 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
     return (
         <>
         <Head>
-        <title>Proteus AI</title>
-        <meta name="description" content="Proteus AI" />
-        <link rel="icon" href="/images/logo.png" />
-    </Head>
+            <title>Proteus AI</title>
+            <meta name="description" content="Proteus AI" />
+            <link rel="icon" href="/images/logo.png" />
+        </Head>
         <ApolloProvider client={client}>
             <SessionProvider session={session}>
                 <ChakraProvider theme={theme}>

@@ -1,6 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import { Home } from "@components";
-import { OrgsGridView } from "@components/org";
+import { Home, OrgListView } from "@components";
 import type { NextPage, NextPageContext } from "next";
 import { getSession, useSession } from "next-auth/react";
 
@@ -8,7 +7,7 @@ const Index: NextPage = () => {
     const { data: session } = useSession();
     return (
         <Box>
-            {session?.user ? <OrgsGridView /> : <Home />}
+            {session?.user ? <OrgListView session={session} /> : <Home />}
         </Box>
     );
 };

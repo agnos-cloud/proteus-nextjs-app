@@ -8,21 +8,15 @@ import {
     Stack,
     Text,
 } from "@chakra-ui/react";
+import { formatNames } from "@utils/functions";
+import { formatRelativeLocale } from "@utils/time";
 import { formatRelative } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 import React, { useState } from "react";
+import { AiOutlineEdit } from "react-icons/ai";
+import { BiLogOut } from "react-icons/bi";
 import { GoPrimitiveDot } from "react-icons/go";
 import { MdDeleteOutline } from "react-icons/md";
-import { BiLogOut } from "react-icons/bi";
-import { AiOutlineEdit } from "react-icons/ai";
-import { formatNames } from "@utils/functions"
-
-  const formatRelativeLocale = {
-    lastWeek: "eeee",
-    yesterday: "'Yesterday",
-    today: "p",
-    other: "MM/dd/yy",
-  };
 
 interface Conversation {
   id: string;
@@ -146,42 +140,42 @@ const ConversationItem: React.FunctionComponent<ConversationItemProps> = ({
             <Avatar />
             <Flex justify="space-between" width="80%" height="100%">
                 <Flex direction="column" width="70%" height="100%">
-                <Text
-                    fontWeight={600}
-                    whiteSpace="nowrap"
-                    overflow="hidden"
-                    textOverflow="ellipsis"
-                >
-                    {formatNames(conversation.characters, conversation.users, userId)}
-                </Text>
-                {conversation.latestMessage && (
-                    <Box width="140%" maxWidth="360px">
-                        <Text
-                            color="blackAlpha.700"
-                            whiteSpace="nowrap"
-                            overflow="hidden"
-                            textOverflow="ellipsis"
-                        >
-                            {conversation.latestMessage.content}
-                        </Text>
-                    </Box>
-                )}
+                    <Text
+                        fontWeight={600}
+                        whiteSpace="nowrap"
+                        overflow="hidden"
+                        textOverflow="ellipsis"
+                    >
+                        {formatNames(conversation.characters, conversation.users, userId)}
+                    </Text>
+                    {conversation.latestMessage && (
+                        <Box width="140%" maxWidth="360px">
+                            <Text
+                                color="blackAlpha.700"
+                                whiteSpace="nowrap"
+                                overflow="hidden"
+                                textOverflow="ellipsis"
+                            >
+                                {conversation.latestMessage.content}
+                            </Text>
+                        </Box>
+                    )}
                 </Flex>
                 <Text
-                color="blackAlpha.700"
-                textAlign="right"
-                position="absolute"
-                right={4}
+                    color="blackAlpha.700"
+                    textAlign="right"
+                    position="absolute"
+                    right={4}
                 >
-                {formatRelative(new Date(conversation.updatedAt), new Date(), {
-                    locale: {
-                    ...enUS,
-                    formatRelative: (token) =>
-                        formatRelativeLocale[
-                        token as keyof typeof formatRelativeLocale
-                        ],
-                    },
-                })}
+                    {formatRelative(new Date(conversation.updatedAt), new Date(), {
+                        locale: {
+                        ...enUS,
+                        formatRelative: (token) =>
+                            formatRelativeLocale[
+                            token as keyof typeof formatRelativeLocale
+                            ],
+                        },
+                    })}
                 </Text>
             </Flex>
         </Stack>
