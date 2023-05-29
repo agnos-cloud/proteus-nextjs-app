@@ -1,17 +1,18 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { Avatar, Box, Button, Center, Flex, Stack, Text } from "@chakra-ui/react";
+import { Avatar, Button, Flex, Text } from "@chakra-ui/react";
+import { SkeletonLoader } from "@components";
 import ConversationsOps from "@graphql/conversation";
 import { useApp } from "@hooks";
 import OrgsOps from "@org/graphql";
 import { CreateOrgData, CreateOrgInput, CreateOrgVars, Org, OrgsData } from "@org/types";
 import { ModalOptions } from "@types";
+import { Session } from "next-auth";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import CreateOrgForm from "./components/CreateOrgForm";
 import OrgListIem from "./components/OrgListItem";
-import { signOut, useSession } from "next-auth/react";
-import { Session } from "next-auth";
 
 interface OrgListProps {
     session: Session;
@@ -173,14 +174,15 @@ const ConversationList: React.FC<OrgListProps> = ({ session }) => {
                 <Button
                     bg="button.primary"
                     _hover={{ bg: "button.primary.hover" }}
-                    // leftIcon={<Image height="20px" src="/images/googlelogo.png" alt="Google logo" />}
                     onClick={handleOpenModal}
                 >
                     Create new account
                 </Button>
-                <Flex direction="column" height="100%" overflowY="scroll">
-                    {
-                        [...(orgListData?.orgs || [])]
+                <Flex direction="column" gap={1} height="100%" overflowY="scroll">
+                    {orgListLoading ? (
+                        <SkeletonLoader count={7} height="80px" />
+                        ) : (
+                            [...(orgListData?.orgs || [])]
                             .sort((a, b) => a.name.localeCompare(b.name))
                             .map((org, i) => (
                                 <OrgListIem
@@ -191,7 +193,7 @@ const ConversationList: React.FC<OrgListProps> = ({ session }) => {
                                     // onDeleteConversation={onDeleteConversation}
                                 />
                             ))
-                    }
+                        )}
                 </Flex>
             </Flex>
             <Flex align="center" gap={1} justify="space-between" width={{ base: "100%", md: "500px" }}>

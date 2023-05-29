@@ -14,6 +14,13 @@ members {
 
 const GQL = {
     Queries: {
+        org: gql`
+            query Org($id: ID!) {
+                org(id: $id) {
+                    ${OrgFields}
+                }
+            }
+        `,
         orgs: gql`
             query Orgs {
                 orgs {

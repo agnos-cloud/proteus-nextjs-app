@@ -1,7 +1,7 @@
 import { Flex } from "@chakra-ui/react";
 import { Session } from "next-auth";
 import FeedWrapper from "../../features/org/components/FeedWrapper";
-import SideBar from "../../features/org/components/SideBar";
+import SideBar from "./components/SideBar";
 
 interface OrgViewProps {
     org: string;

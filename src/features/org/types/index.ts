@@ -35,6 +35,23 @@ export type Org = {
     members: Array<Membership>;
     updatedAt: Date
 }
+export interface OrgData {
+    org: Org
+}
+
+export interface OrgVars {
+    id: string;
+}
+
 export interface OrgsData {
     orgs: Array<Org>
+}
+
+export interface SaveApiKeyData {
+    saveOpenaiAPIKey: boolean;
+}
+
+export interface SaveApiKeyVars {
+    id: string;
+    key: string;
 }

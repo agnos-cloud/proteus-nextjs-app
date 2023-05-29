@@ -1,10 +1,9 @@
 import { Flex } from "@chakra-ui/react";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
-import MessagesHeader from "./MessagesHeader";
-import { MessageChannel } from "worker_threads";
 import MessageInput from "./MessageInput";
 import Messages from "./Messages";
+import MessagesHeader from "./MessagesHeader";
 import NoConversationSelected from "./NoConversationSelected";
 
 interface IFeedWrapperProps {
