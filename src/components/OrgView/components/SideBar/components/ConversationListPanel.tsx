@@ -187,7 +187,7 @@ const ConversationListPanel: React.FC<ConversationListPanelProps> = ({ org, sess
     return (
         <Stack height="100%">
             {conversationsLoading ? (
-                <SkeletonLoader count={7} height="80px" />
+                <SkeletonLoader count={7} height="80px" width="350px" />
             ) : (
                 <ConversationList
                     org={org}

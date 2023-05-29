@@ -132,7 +132,7 @@ const ConversationList: React.FC<ConversationListProps> = ({ conversations, org,
             gap={1}
             justify="flex-end"
             overflow="hidden"
-            width={{ base: "100%", md: "400px" }}
+            width={{ base: "100%", md: "350px" }}
         >
             <Button
                 bg="button.primary"

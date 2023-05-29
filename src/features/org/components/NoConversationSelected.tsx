@@ -74,7 +74,7 @@ const NoConversationSelected: React.FC<NoConversationSelectedProps> = ({ org }) 
       return (
         <Flex height="100%" justify="center" align="center">
           <Stack spacing={10} align="center">
-            <Text fontSize={50}>{text}</Text>
+            <Text fontSize={50} textAlign="center">{text}</Text>
             <BiMessageSquareDots fontSize={90} />
           </Stack>
         </Flex>

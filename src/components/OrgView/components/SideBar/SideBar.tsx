@@ -20,7 +20,7 @@ const SideBar: React.FC<SideBarProps> = ({ org, session }) => {
             display={{ base: conversationId ? "none" : "flex", md: "flex" }}
             px={3}
             py={6}
-            width={{ base: "100%", md: "430px" }}
+            width={{ base: "100%", md: "400px" }}
         >
             <Stack height="100%" justify="space-between" width="100%">
                 <Stack overflow="hidden" flexGrow={1} justify="space-between">
@@ -29,17 +29,17 @@ const SideBar: React.FC<SideBarProps> = ({ org, session }) => {
                         <Divider orientation="horizontal" />
                     </Stack>
                     <Stack overflow="hidden" flexGrow={1}>
-                        <Tabs colorScheme="purple" height="100%" isFitted isLazy>
-                            <TabList >
+                        <Tabs colorScheme="tab" height="100%" isFitted isLazy>
+                            <TabList color="color.400">
                                 <Tab>Conversations</Tab>
                                 <Tab>Characters</Tab>
                             </TabList>
 
                             <TabPanels height="92%">
-                                <TabPanel height="100%">
+                                <TabPanel height="100%" p={1}>
                                     <ConversationListPanel org={org} session={session} />
                                 </TabPanel>
-                                <TabPanel height="100%">
+                                <TabPanel height="100%" p={1}>
                                     <CharacterListPanel org={org} session={session} />
                                 </TabPanel>
                             </TabPanels>

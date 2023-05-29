@@ -2,10 +2,10 @@ import { useQuery } from "@apollo/client";
 import { Stack } from "@chakra-ui/react";
 import { CharactersData, CharactersVars } from "@character/types";
 import { SkeletonLoader } from "@components";
-import { CharacterList } from "@components/character";
 import CharactersOps from "@graphql/character";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
+import CharacterList from "./CharacterList";
 
 interface CharacterListPanelProps {
     org: string;
@@ -32,7 +32,7 @@ const CharacterListPanel: React.FC<CharacterListPanelProps> = ({ org, session })
     return (
         <Stack height="100%">
             {charactersLoading ? (
-                <SkeletonLoader count={7} height="80px" />
+                <SkeletonLoader count={7} height="80px" width="350px" />
             ) : (
                 <CharacterList
                     org={org}

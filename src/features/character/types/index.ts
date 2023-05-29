@@ -20,6 +20,25 @@ export interface CharactersVars {
     input: CharactersInput;
 }
 
+export interface CreateCharacterData {
+    createCharacter: {
+        id: string;
+        name: string;
+        description?: string;
+    }
+}
+
+export interface CharacterInput {
+    name: string;
+    description?: string;
+    org: string;
+}
+
+export interface CreateCharacterVars {
+    input: CharacterInput;
+}
+
+
 export type SearchedCharacter = {
     id: string;
     name: string;

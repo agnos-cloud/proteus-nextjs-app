@@ -1,3 +1,4 @@
+import { Character } from "@character/types";
 import {
     Avatar,
     Box,
@@ -14,23 +15,14 @@ import React, { useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
 
-  const formatRelativeLocale = {
+const formatRelativeLocale = {
     lastWeek: "eeee",
     yesterday: "'Yesterday",
     today: "p",
     other: "MM/dd/yy",
-  };
+};
 
-  interface Character {
-    id: string;
-    name: string;
-    description?: string;
-    image?: string;
-    createdAt: Date;
-    updatedAt: Date;
-}
-
-interface CharacterItemProps {
+interface CharacterListItemProps {
     character: Character;
     userId: string;
     onClick: () => void;
@@ -41,7 +33,7 @@ interface CharacterItemProps {
     //   onLeaveConversation?: (conversation: ConversationPopulated) => void;
 }
 
-const CharacterItem: React.FunctionComponent<CharacterItemProps> = ({
+const CharacterListItem: React.FunctionComponent<CharacterListItemProps> = ({
     userId,
     character,
     onClick,
@@ -50,7 +42,7 @@ const CharacterItem: React.FunctionComponent<CharacterItemProps> = ({
     //   selectedConversationId,
     //   onEditConversation,
     //   onLeaveConversation,
-  }) => {
+}) => {
     const [menuOpen, setMenuOpen] = useState(false);
 
     const handleClick = (event: React.MouseEvent) => {
@@ -64,8 +56,8 @@ const CharacterItem: React.FunctionComponent<CharacterItemProps> = ({
 
     return (
         <Stack
-            direction="row"
             align="center"
+            direction="row"
             justify="space-between"
             p={2}
             cursor="pointer"
@@ -153,4 +145,4 @@ const CharacterItem: React.FunctionComponent<CharacterItemProps> = ({
     );
 };
 
-export default CharacterItem;
+export default CharacterListItem;
