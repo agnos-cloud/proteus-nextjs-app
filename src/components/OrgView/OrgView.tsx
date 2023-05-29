@@ -1,14 +1,14 @@
 import { Flex } from "@chakra-ui/react";
 import { Session } from "next-auth";
-import FeedWrapper from "./FeedWrapper";
-import SideBar from "./SideBar";
+import FeedWrapper from "../../features/org/components/FeedWrapper";
+import SideBar from "../../features/org/components/SideBar";
 
-interface IOrgViewProps {
+interface OrgViewProps {
     org: string;
     session: Session;
 }
 
-const OrgView: React.FC<IOrgViewProps> = ({ org, session }) => {
+const OrgView: React.FC<OrgViewProps> = ({ org, session }) => {
   return (
     <Flex height="100vh">
         <SideBar org={org} session={session} />

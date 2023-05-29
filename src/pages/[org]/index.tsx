@@ -1,6 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import { Home } from "@components";
-import { OrgView } from "@components/org";
+import { Home, OrgView } from "@components";
 import type { NextPage, NextPageContext } from "next";
 import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
