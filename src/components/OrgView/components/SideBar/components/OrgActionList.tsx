@@ -5,27 +5,24 @@ import OrgsOps from "@org/graphql";
 import { OrgData, OrgVars, SaveApiKeyData, SaveApiKeyVars } from "@org/types";
 import { ModalOptions } from "@types";
 import { Session } from "next-auth";
+import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
-import { IoSettingsSharp, IoArrowBack } from "react-icons/io5";
+import { IoArrowBack, IoSettingsSharp } from "react-icons/io5";
 import OrgSettingsForm from "./OrgSettingsForm";
-import { useRouter } from "next/router";
 
-interface IConversationListProps {
+interface OrgActionListProps {
     org: string;
     session: Session;
 }
 
 let apiKey: string | undefined = undefined;
 
-const OrgActionList: React.FC<IConversationListProps> = ({ org }) => {
+const OrgActionList: React.FC<OrgActionListProps> = ({ org }) => {
     const { openModal, closeModal, setModalIsLoading } = useApp();
     const router = useRouter();
     const {
         data: orgData,
-        loading: orgLoading,
-        error: ordError,
-        subscribeToMore: subscribeToMoreOrgs
     } = useQuery<OrgData, OrgVars>(OrgsOps.Queries.org, {
         variables: {
             id: org,
