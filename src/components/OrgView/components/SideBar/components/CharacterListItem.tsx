@@ -1,3 +1,4 @@
+import { Character } from "@character/types";
 import {
     Avatar,
     Box,
@@ -13,24 +14,16 @@ import enUS from "date-fns/locale/en-US";
 import React, { useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
+import { BiBot } from "react-icons/bi";
 
-  const formatRelativeLocale = {
+const formatRelativeLocale = {
     lastWeek: "eeee",
     yesterday: "'Yesterday",
     today: "p",
     other: "MM/dd/yy",
-  };
+};
 
-  interface Character {
-    id: string;
-    name: string;
-    description?: string;
-    image?: string;
-    createdAt: Date;
-    updatedAt: Date;
-}
-
-interface CharacterItemProps {
+interface CharacterListItemProps {
     character: Character;
     userId: string;
     onClick: () => void;
@@ -41,7 +34,7 @@ interface CharacterItemProps {
     //   onLeaveConversation?: (conversation: ConversationPopulated) => void;
 }
 
-const CharacterItem: React.FunctionComponent<CharacterItemProps> = ({
+const CharacterListItem: React.FunctionComponent<CharacterListItemProps> = ({
     userId,
     character,
     onClick,
@@ -50,7 +43,7 @@ const CharacterItem: React.FunctionComponent<CharacterItemProps> = ({
     //   selectedConversationId,
     //   onEditConversation,
     //   onLeaveConversation,
-  }) => {
+}) => {
     const [menuOpen, setMenuOpen] = useState(false);
 
     const handleClick = (event: React.MouseEvent) => {
@@ -64,17 +57,17 @@ const CharacterItem: React.FunctionComponent<CharacterItemProps> = ({
 
     return (
         <Stack
-            direction="row"
             align="center"
+            bg={ isSelected ? "background.700" : "none" }
+            borderRadius={4}
+            cursor="pointer"
+            direction="row"
+            _hover={{ bg: "background.800" }}
             justify="space-between"
             p={2}
-            cursor="pointer"
-            borderRadius={4}
-            bg={ isSelected ? "blackAlpha.200" : "none" }
-            _hover={{ bg: "blackAlpha.200" }}
+            position="relative"
             onClick={handleClick}
             onContextMenu={handleClick}
-            position="relative"
         >
             <Menu isOpen={menuOpen} onClose={() => setMenuOpen(false)}>
                 <MenuList bg="#d2d2d2">
@@ -102,7 +95,11 @@ const CharacterItem: React.FunctionComponent<CharacterItemProps> = ({
                     </MenuItem>
                 </MenuList>
             </Menu>
-            <Avatar />
+            {character.image ? (
+                <Avatar name={character.name} src={character.image} />
+            ) : (
+                <BiBot size={48} />
+            )}
             <Flex justify="space-between" width="80%" height="100%">
                 <Flex direction="column" width="70%" height="100%">
                     <Text
@@ -115,28 +112,20 @@ const CharacterItem: React.FunctionComponent<CharacterItemProps> = ({
                     </Text>
                     <Box width="140%" maxWidth="360px">
                         <Text
-                            color="blackAlpha.700"
-                            whiteSpace="nowrap"
-                            overflow="hidden"
+                            color="color.700"
                             textOverflow="ellipsis"
+                            overflow="hidden"
+                            whiteSpace="nowrap"
                         >
-                            {formatRelative(new Date(character.updatedAt), new Date(), {
-                                locale: {
-                                ...enUS,
-                                formatRelative: (token) =>
-                                    formatRelativeLocale[
-                                    token as keyof typeof formatRelativeLocale
-                                    ],
-                                },
-                            })}
+                            {character.description}
                         </Text>
                     </Box>
                 </Flex>
-                {/* <Text
-                    color="blackAlpha.700"
-                    textAlign="right"
+                <Text
+                    color="color.400"
                     position="absolute"
                     right={4}
+                    textAlign="right"
                 >
                     {formatRelative(new Date(character.updatedAt), new Date(), {
                         locale: {
@@ -147,10 +136,10 @@ const CharacterItem: React.FunctionComponent<CharacterItemProps> = ({
                             ],
                         },
                     })}
-                </Text> */}
+                </Text>
             </Flex>
         </Stack>
     );
 };
 
-export default CharacterItem;
+export default CharacterListItem;

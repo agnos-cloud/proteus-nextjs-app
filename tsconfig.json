@@ -21,9 +21,11 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
+      "@character/*": [ "./src/features/character/*" ],
       "@components": [ "./src/components" ],
       "@components/character": [ "./src/features/character/components" ],
       "@components/org": [ "./src/features/org/components" ],
+      "@conversation/*": [ "./src/features/conversation/*" ],
       "@graphql": [ "./src/graphql" ],
       "@graphql/character": [ "./src/features/character/graphql" ],
       "@graphql/conversation": [ "./src/features/conversation/graphql" ],

@@ -7,40 +7,22 @@ import toast from "react-hot-toast";
 import next from "next/types";
 import { nextTick } from "process";
 import { on } from "events";
-
-interface CharactersData {
-  characters: Array<SearchedCharacter>
-}
-
-interface CharactersInput {
-  name?: string;
-  org: string;
-}
-
-interface CharactersVars {
-  input: CharactersInput;
-}
-
-interface IConversationFormProps {
-    onChange: (participants: SearchedCharacter[]) => void;
-    org: string;
-}
-
-type SearchedCharacter = {
-    id: string;
-    name: string;
-    description?: string;
-};
+import { Character, CharactersData, CharactersVars } from "@character/types";
 
 export type FormData = {
     characterName: string;
 }
 
-const ConversationForm: React.FC<IConversationFormProps> = (props) => {
-    const { org, onChange } = props;
+interface ConversationFormProps {
+    onChange: (participants: Character[]) => void;
+    org: string;
+}
+
+const ConversationForm: React.FC<ConversationFormProps> = ({ org, onChange }) => {
     const [characterName, setCharacterName] = useState<string>("");
-    const [participants, setParticipants] = useState<Array<SearchedCharacter>>([]);
-    const [characters, { data, loading, error }] = useLazyQuery<CharactersData, CharactersVars>(CharactersOps.Queries.characters);
+    const [participants, setParticipants] = useState<Array<Character>>([]);
+    const [characters, { data, loading, error }] =
+        useLazyQuery<CharactersData, CharactersVars>(CharactersOps.Query.characters);
 
     useEffect(() => {
         if (error) {
@@ -58,13 +40,13 @@ const ConversationForm: React.FC<IConversationFormProps> = (props) => {
             variables: {
               input: {
                 name: characterName,
-                org,
+                orgId: org,
               }
             }
         }).catch((e) => toast.error(e.message || String(e)));
     };
 
-    const addParticipant = (character: SearchedCharacter) => {
+    const addParticipant = (character: Character) => {
         setParticipants((prev) => {
             if (prev.find((p) => p.id === character.id)) {
                 onChange(prev);

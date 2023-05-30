@@ -10,7 +10,7 @@ updatedAt
 `;
 
 const GQL = {
-    Queries: {
+    Query: {
         characters: gql`
             query Characters($input: CharacterSearchInput!) {
                 characters(input: $input) {
@@ -19,7 +19,7 @@ const GQL = {
             }
         `,
     },
-    Mutations: {
+    Mutation: {
         createCharacter: gql`
             mutation CreateCharacter($input: CharacterInput!) {
                 createCharacter(input: $input) {
@@ -28,7 +28,29 @@ const GQL = {
             }
         `,
     },
-    Subscriptions: {},
+    Subscription: {
+        characterCreated: gql`
+            subscription CharacterCreated($input: CharacterSearchInput!) {
+                characterCreated(input: $input) {
+                    ${CharacterFields}
+                }
+            }
+        `,
+        characterDeleted: gql`
+            subscription CharacterDeleted($input: CharacterSearchInput!) {
+                characterDeleted(input: $input) {
+                    ${CharacterFields}
+                }
+            }
+        `,
+        characterUpdated: gql`
+            subscription CharacterUpdated($input: CharacterSearchInput!) {
+                characterUpdated(input: $input) {
+                    ${CharacterFields}
+                }
+            }
+        `,
+    },
 }
 
 export default GQL;

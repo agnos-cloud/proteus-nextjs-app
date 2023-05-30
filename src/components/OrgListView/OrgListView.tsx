@@ -1,37 +1,38 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { Avatar, Box, Button, Center, Flex, Stack, Text } from "@chakra-ui/react";
+import { Avatar, Button, Flex, Text } from "@chakra-ui/react";
+import { SkeletonLoader } from "@components";
 import ConversationsOps from "@graphql/conversation";
 import { useApp } from "@hooks";
 import OrgsOps from "@org/graphql";
 import { CreateOrgData, CreateOrgInput, CreateOrgVars, Org, OrgsData } from "@org/types";
 import { ModalOptions } from "@types";
+import { Session } from "next-auth";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import CreateOrgForm from "./components/CreateOrgForm";
 import OrgListIem from "./components/OrgListItem";
-import { signOut, useSession } from "next-auth/react";
-import { Session } from "next-auth";
 
 interface OrgListProps {
     session: Session;
 }
 
 interface ConversationInput {
-  characters: Array<string>;
-  org: string;
+    characters: Array<string>;
+    org: string;
 }
 
 interface CreateConversationVars {
-  input: ConversationInput;
+    input: ConversationInput;
 }
 
 interface DeleteConversationData {
-  deleteConversation: boolean;
+    deleteConversation: boolean;
 }
 
 interface DeleteConversationVars {
-  id: string;
+    id: string;
 }
 
 let orgInput: CreateOrgInput | undefined = undefined;
@@ -43,16 +44,22 @@ const ConversationList: React.FC<OrgListProps> = ({ session }) => {
     const {
         data: orgListData,
         loading: orgListLoading,
-        error: ordListError,
+        error: orgListError,
         subscribeToMore: subscribeToMoreOrgs
-    } = useQuery<OrgsData>(OrgsOps.Queries.orgs);
+    } = useQuery<OrgsData>(OrgsOps.Query.orgs);
+
+    useEffect(() => {
+        if (orgListError) {
+            toast.error(orgListError.message);
+        }
+    }, [orgListError]);
 
     const [
         createOrg, {
             data: createOrgData,
             loading: createOrgLoading,
         }
-    ] = useMutation<CreateOrgData, CreateOrgVars>(OrgsOps.Mutations.createOrg);
+    ] = useMutation<CreateOrgData, CreateOrgVars>(OrgsOps.Mutation.createOrg);
 
     const [ deleteConversation ] =
         useMutation<DeleteConversationData, DeleteConversationVars>(ConversationsOps.Mutations.deleteConversation);
@@ -73,7 +80,7 @@ const ConversationList: React.FC<OrgListProps> = ({ session }) => {
 
     const subscribeToNewOrgs = () => {
         subscribeToMoreOrgs({
-          document: OrgsOps.Subscriptions.orgCreated,
+          document: OrgsOps.Subscription.orgCreated,
           updateQuery: (prev, { subscriptionData }: { subscriptionData: { data: { orgCreated: Org } } }) => {
             if (!subscriptionData.data) return prev;
             const newOrg = subscriptionData.data.orgCreated;
@@ -173,14 +180,15 @@ const ConversationList: React.FC<OrgListProps> = ({ session }) => {
                 <Button
                     bg="button.primary"
                     _hover={{ bg: "button.primary.hover" }}
-                    // leftIcon={<Image height="20px" src="/images/googlelogo.png" alt="Google logo" />}
                     onClick={handleOpenModal}
                 >
                     Create new account
                 </Button>
-                <Flex direction="column" height="100%" overflowY="scroll">
-                    {
-                        [...(orgListData?.orgs || [])]
+                <Flex direction="column" gap={1} height="100%" overflowY="scroll">
+                    {orgListLoading ? (
+                        <SkeletonLoader count={7} height="80px" width="full" />
+                        ) : (
+                            [...(orgListData?.orgs || [])]
                             .sort((a, b) => a.name.localeCompare(b.name))
                             .map((org, i) => (
                                 <OrgListIem
@@ -191,7 +199,7 @@ const ConversationList: React.FC<OrgListProps> = ({ session }) => {
                                     // onDeleteConversation={onDeleteConversation}
                                 />
                             ))
-                    }
+                        )}
                 </Flex>
             </Flex>
             <Flex align="center" gap={1} justify="space-between" width={{ base: "100%", md: "500px" }}>

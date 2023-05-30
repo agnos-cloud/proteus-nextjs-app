@@ -1,14 +1,9 @@
 import { Avatar, Button, Flex, Stack, Text } from "@chakra-ui/react";
-
-type SearchedCharacter = {
-    id: string;
-    name: string;
-    description?: string;
-};
+import { Character } from "../types";
 
 interface CharacterSearchListProps {
-    characters: Array<SearchedCharacter>;
-    addCharacters: (character: SearchedCharacter) => void;
+    characters: Array<Character>;
+    addCharacters: (character: Character) => void;
 }
 
 const CharacterSearchList: React.FC<CharacterSearchListProps> = ({ characters, addCharacters }) => {

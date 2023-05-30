@@ -1,3 +1,4 @@
+import { Conversation } from "@conversation/types";
 import {
     Avatar,
     Box,
@@ -18,35 +19,7 @@ import { BiLogOut } from "react-icons/bi";
 import { GoPrimitiveDot } from "react-icons/go";
 import { MdDeleteOutline } from "react-icons/md";
 
-interface Conversation {
-  id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  characters: Array<{
-      id: string;
-      createdAt: Date;
-      updatedAt: Date;
-      character: {
-          id: string;
-          name: string;
-      }
-  }>;
-  users: Array<{
-      id: string;
-      createdAt: Date;
-      updatedAt: Date;
-      hasUnread: boolean;
-      user: {
-          id: string;
-          name: string;
-      }
-  }>;
-  latestMessage: {
-    content: string;
-  }
-}
-
-interface ConversationItemProps {
+interface ConversationListItemProps {
     conversation: Conversation;
     userId: string;
     onClick: () => void;
@@ -58,7 +31,7 @@ interface ConversationItemProps {
     //   onLeaveConversation?: (conversation: ConversationPopulated) => void;
 }
 
-const ConversationItem: React.FunctionComponent<ConversationItemProps> = ({
+const ConversationListItem: React.FunctionComponent<ConversationListItemProps> = ({
     userId,
     conversation,
     onClick,
@@ -182,4 +155,4 @@ const ConversationItem: React.FunctionComponent<ConversationItemProps> = ({
     );
 };
 
-export default ConversationItem;
+export default ConversationListItem;

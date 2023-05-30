@@ -1,9 +1,10 @@
 import { Skeleton } from "@chakra-ui/react";
+import { m } from "framer-motion";
 
 interface SkeletonLoaderProps {
     count: number;
     height: string;
-    width?: string;
+    width: string;
 }
 
 const SkeletonLoader: React.FunctionComponent<SkeletonLoaderProps> = ({ count, height, width }) => {
@@ -15,7 +16,7 @@ const SkeletonLoader: React.FunctionComponent<SkeletonLoaderProps> = ({ count, h
                 startColor="whiteAlpha.300"
                 endColor="blackAlpha.400"
                 height={height}
-                width={{ base: "full" }}
+                width={{ base: "full", md: width }}
                 borderRadius={4}
             />
         ))}

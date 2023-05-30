@@ -1,11 +1,11 @@
 import { Input, Stack } from "@chakra-ui/react";
 import { useState } from "react";
 
-interface OpenaiApiKeyFormProps {
+interface OrgSettingsFormProps {
     onChange: (key: string) => void;
 }
 
-const OpenaiApiKeyForm: React.FC<OpenaiApiKeyFormProps> = (props) => {
+const OrgSettingsForm: React.FC<OrgSettingsFormProps> = (props) => {
     const { onChange } = props;
     const [key, setKey] = useState<string>("");
 
@@ -18,7 +18,7 @@ const OpenaiApiKeyForm: React.FC<OpenaiApiKeyFormProps> = (props) => {
         <form>
             <Stack spacing={4}>
                 <Input
-                    placeholder="Enter character name"
+                    placeholder="Enter OpenAI API key"
                     value={key}
                     onChange={handleKeyChange}
                 />
@@ -27,4 +27,4 @@ const OpenaiApiKeyForm: React.FC<OpenaiApiKeyFormProps> = (props) => {
     );
 };
 
-export default OpenaiApiKeyForm;
+export default OrgSettingsForm;
