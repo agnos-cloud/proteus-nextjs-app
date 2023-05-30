@@ -20,7 +20,7 @@ const EmptyFeed: React.FC<EmptyFeedProps> = ({ org }) => {
     });
     const {
         data: orgData,
-    } = useQuery<OrgData, OrgVars>(OrgsOps.Queries.org, {
+    } = useQuery<OrgData, OrgVars>(OrgsOps.Query.org, {
         variables: {
             id: org,
         },

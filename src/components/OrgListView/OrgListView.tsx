@@ -19,20 +19,20 @@ interface OrgListProps {
 }
 
 interface ConversationInput {
-  characters: Array<string>;
-  org: string;
+    characters: Array<string>;
+    org: string;
 }
 
 interface CreateConversationVars {
-  input: ConversationInput;
+    input: ConversationInput;
 }
 
 interface DeleteConversationData {
-  deleteConversation: boolean;
+    deleteConversation: boolean;
 }
 
 interface DeleteConversationVars {
-  id: string;
+    id: string;
 }
 
 let orgInput: CreateOrgInput | undefined = undefined;
@@ -44,16 +44,22 @@ const ConversationList: React.FC<OrgListProps> = ({ session }) => {
     const {
         data: orgListData,
         loading: orgListLoading,
-        error: ordListError,
+        error: orgListError,
         subscribeToMore: subscribeToMoreOrgs
-    } = useQuery<OrgsData>(OrgsOps.Queries.orgs);
+    } = useQuery<OrgsData>(OrgsOps.Query.orgs);
+
+    useEffect(() => {
+        if (orgListError) {
+            toast.error(orgListError.message);
+        }
+    }, [orgListError]);
 
     const [
         createOrg, {
             data: createOrgData,
             loading: createOrgLoading,
         }
-    ] = useMutation<CreateOrgData, CreateOrgVars>(OrgsOps.Mutations.createOrg);
+    ] = useMutation<CreateOrgData, CreateOrgVars>(OrgsOps.Mutation.createOrg);
 
     const [ deleteConversation ] =
         useMutation<DeleteConversationData, DeleteConversationVars>(ConversationsOps.Mutations.deleteConversation);
@@ -74,7 +80,7 @@ const ConversationList: React.FC<OrgListProps> = ({ session }) => {
 
     const subscribeToNewOrgs = () => {
         subscribeToMoreOrgs({
-          document: OrgsOps.Subscriptions.orgCreated,
+          document: OrgsOps.Subscription.orgCreated,
           updateQuery: (prev, { subscriptionData }: { subscriptionData: { data: { orgCreated: Org } } }) => {
             if (!subscriptionData.data) return prev;
             const newOrg = subscriptionData.data.orgCreated;
@@ -180,7 +186,7 @@ const ConversationList: React.FC<OrgListProps> = ({ session }) => {
                 </Button>
                 <Flex direction="column" gap={1} height="100%" overflowY="scroll">
                     {orgListLoading ? (
-                        <SkeletonLoader count={7} height="80px" />
+                        <SkeletonLoader count={7} height="80px" width="full" />
                         ) : (
                             [...(orgListData?.orgs || [])]
                             .sort((a, b) => a.name.localeCompare(b.name))

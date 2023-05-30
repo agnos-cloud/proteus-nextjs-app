@@ -24,16 +24,16 @@ const OrgListIem: React.FunctionComponent<OrgListIemProps> = ({ org, userId, onC
     };
     return (
         <Stack
-            direction="row"
             align="center"
+            borderRadius={4}
+            cursor="pointer"
+            direction="row"
+            _hover={{ bg: "background.800" }}
             justify="space-between"
             p={2}
-            cursor="pointer"
-            borderRadius={4}
-            _hover={{ bg: "background.800" }}
+            position="relative"
             onClick={handleClick}
             onContextMenu={handleClick}
-            position="relative"
         >
             <CgOrganisation size={32} />
             <Flex justify="space-between" width="80%" height="100%">

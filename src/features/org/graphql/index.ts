@@ -13,7 +13,7 @@ members {
 `;
 
 const GQL = {
-    Queries: {
+    Query: {
         org: gql`
             query Org($id: ID!) {
                 org(id: $id) {
@@ -29,7 +29,7 @@ const GQL = {
             }
         `,
     },
-    Mutations: {
+    Mutation: {
         createOrg: gql`
             mutation CreateOrg($input: CreateOrgInput!) {
                 createOrg(input: $input) {
@@ -49,7 +49,7 @@ const GQL = {
             }
         `,
     },
-    Subscriptions: {
+    Subscription: {
         orgCreated: gql`
             subscription OrgCreated {
                 orgCreated {

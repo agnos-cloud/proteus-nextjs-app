@@ -22,7 +22,7 @@ const ConversationForm: React.FC<ConversationFormProps> = ({ org, onChange }) =>
     const [characterName, setCharacterName] = useState<string>("");
     const [participants, setParticipants] = useState<Array<Character>>([]);
     const [characters, { data, loading, error }] =
-        useLazyQuery<CharactersData, CharactersVars>(CharactersOps.Queries.characters);
+        useLazyQuery<CharactersData, CharactersVars>(CharactersOps.Query.characters);
 
     useEffect(() => {
         if (error) {
@@ -40,7 +40,7 @@ const ConversationForm: React.FC<ConversationFormProps> = ({ org, onChange }) =>
             variables: {
               input: {
                 name: characterName,
-                org,
+                orgId: org,
               }
             }
         }).catch((e) => toast.error(e.message || String(e)));

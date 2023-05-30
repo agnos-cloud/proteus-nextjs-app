@@ -7,6 +7,7 @@ senderId
 sender {
     id
     name
+    image
 }
 content
 createdAt

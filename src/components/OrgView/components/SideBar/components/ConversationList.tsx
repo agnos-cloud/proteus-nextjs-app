@@ -1,16 +1,16 @@
-import { Box, Button, Flex, Stack, Text } from "@chakra-ui/react";
+import { useMutation } from "@apollo/client";
+import { Button, Flex } from "@chakra-ui/react";
+import { Character } from "@character/types";
+import { Conversation, CreateConversationData, CreateConversationVars, DeleteConversationData, DeleteConversationVars } from "@conversation/types";
+import ConversationsOps from "@graphql/conversation";
 import { useApp } from "@hooks";
 import { ModalOptions } from "@types";
 import { Session } from "next-auth";
-import { useEffect, useMemo } from "react";
-import ConversationForm from "./ConversationForm";
-import ConversationsOps from  "@graphql/conversation";
-import { useMutation } from "@apollo/client";
-import toast from "react-hot-toast";
 import { useRouter } from "next/router";
+import { useEffect, useMemo } from "react";
+import toast from "react-hot-toast";
+import ConversationForm from "./ConversationForm";
 import ConversationListItem from "./ConversationListItem";
-import { Conversation, CreateConversationData, CreateConversationVars, DeleteConversationData, DeleteConversationVars } from "@conversation/types";
-import { SearchedCharacter } from "@character/types";
 
 interface ConversationListProps {
     org: string;
@@ -19,7 +19,7 @@ interface ConversationListProps {
     onViewConversation: (conversationId: string) => void;
 }
 
-let participants: SearchedCharacter[] | undefined = undefined;
+let participants: Character[] | undefined = undefined;
 
 const ConversationList: React.FC<ConversationListProps> = ({ conversations, org, session, onViewConversation }) => {
     const { openModal, closeModal, setModalIsLoading } = useApp();
@@ -69,7 +69,7 @@ const ConversationList: React.FC<ConversationListProps> = ({ conversations, org,
         }).catch((e) => toast.error(e.message || String(e)));
     };
 
-    const onChange = (p: SearchedCharacter[]) => {
+    const onChange = (p: Character[]) => {
         participants = p;
         if (participants.length > 0) {
             setModalIsLoading(false);

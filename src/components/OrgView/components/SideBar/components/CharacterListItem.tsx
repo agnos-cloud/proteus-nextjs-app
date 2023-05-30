@@ -14,6 +14,7 @@ import enUS from "date-fns/locale/en-US";
 import React, { useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
+import { BiBot } from "react-icons/bi";
 
 const formatRelativeLocale = {
     lastWeek: "eeee",
@@ -57,16 +58,16 @@ const CharacterListItem: React.FunctionComponent<CharacterListItemProps> = ({
     return (
         <Stack
             align="center"
+            bg={ isSelected ? "background.700" : "none" }
+            borderRadius={4}
+            cursor="pointer"
             direction="row"
+            _hover={{ bg: "background.800" }}
             justify="space-between"
             p={2}
-            cursor="pointer"
-            borderRadius={4}
-            bg={ isSelected ? "blackAlpha.200" : "none" }
-            _hover={{ bg: "blackAlpha.200" }}
+            position="relative"
             onClick={handleClick}
             onContextMenu={handleClick}
-            position="relative"
         >
             <Menu isOpen={menuOpen} onClose={() => setMenuOpen(false)}>
                 <MenuList bg="#d2d2d2">
@@ -94,7 +95,11 @@ const CharacterListItem: React.FunctionComponent<CharacterListItemProps> = ({
                     </MenuItem>
                 </MenuList>
             </Menu>
-            <Avatar />
+            {character.image ? (
+                <Avatar name={character.name} src={character.image} />
+            ) : (
+                <BiBot size={48} />
+            )}
             <Flex justify="space-between" width="80%" height="100%">
                 <Flex direction="column" width="70%" height="100%">
                     <Text
@@ -107,28 +112,20 @@ const CharacterListItem: React.FunctionComponent<CharacterListItemProps> = ({
                     </Text>
                     <Box width="140%" maxWidth="360px">
                         <Text
-                            color="blackAlpha.700"
-                            whiteSpace="nowrap"
-                            overflow="hidden"
+                            color="color.700"
                             textOverflow="ellipsis"
+                            overflow="hidden"
+                            whiteSpace="nowrap"
                         >
-                            {formatRelative(new Date(character.updatedAt), new Date(), {
-                                locale: {
-                                ...enUS,
-                                formatRelative: (token) =>
-                                    formatRelativeLocale[
-                                    token as keyof typeof formatRelativeLocale
-                                    ],
-                                },
-                            })}
+                            {character.description}
                         </Text>
                     </Box>
                 </Flex>
-                {/* <Text
-                    color="blackAlpha.700"
-                    textAlign="right"
+                <Text
+                    color="color.400"
                     position="absolute"
                     right={4}
+                    textAlign="right"
                 >
                     {formatRelative(new Date(character.updatedAt), new Date(), {
                         locale: {
@@ -139,7 +136,7 @@ const CharacterListItem: React.FunctionComponent<CharacterListItemProps> = ({
                             ],
                         },
                     })}
-                </Text> */}
+                </Text>
             </Flex>
         </Stack>
     );

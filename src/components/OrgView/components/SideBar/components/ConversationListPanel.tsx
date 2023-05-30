@@ -1,12 +1,20 @@
 import { gql, useMutation, useQuery, useSubscription } from "@apollo/client";
 import { Stack } from "@chakra-ui/react";
 import { SkeletonLoader } from "@components";
-import { Conversation, ConversationUsersInclude, ConversationsData, ConversationsVars, MarkConversationAsReadData, MarkConversationAsReadVars } from "@conversation/types";
+import {
+    Conversation,
+    ConversationUsersInclude,
+    ConversationsData,
+    ConversationsVars,
+    MarkConversationAsReadData,
+    MarkConversationAsReadVars
+} from "@conversation/types";
 import ConversationsOps from "@graphql/conversation";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import ConversationList from "./ConversationList";
+import toast from "react-hot-toast";
 
 interface ConversationListPanelProps {
     org: string;
@@ -20,7 +28,7 @@ const ConversationListPanel: React.FC<ConversationListPanelProps> = ({ org, sess
         data: conversationsData,
         loading: conversationsLoading,
         error: conversationsError,
-        subscribeToMore
+        subscribeToMore: subscribeToMoreConversations
     } = useQuery<ConversationsData, ConversationsVars>(ConversationsOps.Queries.conversations, {
         variables: {
             input: {
@@ -28,6 +36,12 @@ const ConversationListPanel: React.FC<ConversationListPanelProps> = ({ org, sess
             },
         }
     });
+
+    useEffect(() => {
+        if (conversationsError) {
+            toast.error(conversationsError.message);
+        }
+    }, [conversationsError]);
 
     const [ markConversationAsRead ] =
         useMutation<MarkConversationAsReadData, MarkConversationAsReadVars>(ConversationsOps.Mutations.markConversationAsRead);
@@ -97,6 +111,34 @@ const ConversationListPanel: React.FC<ConversationListPanelProps> = ({ org, sess
         },
     });
 
+    const subscribeToNewConversations = () => {
+        subscribeToMoreConversations({
+            document: ConversationsOps.Subscriptions.conversationCreated,
+            variables: {
+                input: {
+                    org,
+                },
+            },
+            updateQuery: (prev, { subscriptionData }: { subscriptionData: { data: { conversationCreated: Conversation } } }) => {
+                if (!subscriptionData.data) return prev;
+                const newConversation = subscriptionData.data.conversationCreated;
+                // the below is already checked on the server, but just in case
+                if (!newConversation.users.some(u => u.user.id === session.user.id) || newConversation.org.id !== org) return prev;
+                if (prev.conversations.find((c) => c.id === newConversation.id)) {
+                    return prev;
+                }
+                return Object.assign({}, prev, {
+                    conversations: [newConversation, ...prev.conversations]
+                });
+            }
+        });
+    };
+
+    useEffect(() => {
+        subscribeToNewConversations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     const onViewConversation = async (conversationId: string) => {
         router.push(`/${org}/?conversationId=${conversationId}`);
 
@@ -155,34 +197,6 @@ const ConversationListPanel: React.FC<ConversationListPanelProps> = ({ org, sess
             console.error(e);
         }
     };
-
-    const subscribeToNewConversations = () => {
-        subscribeToMore({
-            document: ConversationsOps.Subscriptions.conversationCreated,
-            variables: {
-                input: {
-                    org,
-                },
-            },
-            updateQuery: (prev, { subscriptionData }: { subscriptionData: { data: { conversationCreated: Conversation } } }) => {
-                if (!subscriptionData.data) return prev;
-                const newConversation = subscriptionData.data.conversationCreated;
-                // the below is already checked on the server, but just in case
-                if (!newConversation.users.some(u => u.user.id === session.user.id) || newConversation.org.id !== org) return prev;
-                if (prev.conversations.find((c) => c.id === newConversation.id)) {
-                    return prev;
-                }
-                return Object.assign({}, prev, {
-                    conversations: [newConversation, ...prev.conversations]
-                });
-            }
-        });
-    };
-
-    useEffect(() => {
-        subscribeToNewConversations();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     return (
         <Stack height="100%">

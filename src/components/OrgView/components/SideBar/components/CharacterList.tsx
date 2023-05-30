@@ -12,25 +12,26 @@ import CharacterListItem from "./CharacterListItem";
 import NewCharacterForm from "./NewCharacterForm";
 
 interface CharacterListProps {
-    org: string;
+    orgId: string;
     session: Session;
     characters: Array<Character>;
+    onViewCharacter: (characterId: string) => void;
 }
 
 type FormData = { name: string; description?: string; };
 
 let formData: FormData | undefined = undefined;
 
-const CharacterList: React.FC<CharacterListProps> = ({ characters, org, session }) => {
+const CharacterList: React.FC<CharacterListProps> = ({ characters, orgId, session, onViewCharacter }) => {
     const { openModal, closeModal, setModalIsLoading } = useApp();
     const router = useRouter();
     const [ createCharacter, { data, loading, error }] =
-        useMutation<CreateCharacterData, CreateCharacterVars>(CharactersOps.Mutations.createCharacter);
+        useMutation<CreateCharacterData, CreateCharacterVars>(CharactersOps.Mutation.createCharacter);
 
     useEffect(() => {
         if (data) {
             const characterId = data.createCharacter.id;
-            router.push(`/${org}/?characterId=${characterId}`);
+            router.push(`/${orgId}/?characterId=${characterId}`);
             handleCloseModal();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -60,7 +61,7 @@ const CharacterList: React.FC<CharacterListProps> = ({ characters, org, session 
                 input: {
                     name: formData.name,
                     description: formData.description,
-                    org,
+                    orgId,
                 }
             },
         }).catch((e) => toast.error(e.message || String(e)));
@@ -85,6 +86,7 @@ const CharacterList: React.FC<CharacterListProps> = ({ characters, org, session 
                 },
                 {
                     text: "Submit",
+                    isPrimary: true,
                     onClick: handleSubmit,
                 },
             ],
@@ -110,7 +112,7 @@ const CharacterList: React.FC<CharacterListProps> = ({ characters, org, session 
         //     }
         //   );
         } catch (e: any) {
-        toast.error(e.message || String(e));
+            toast.error(e.message || String(e));
         }
     };
 
@@ -137,7 +139,7 @@ const CharacterList: React.FC<CharacterListProps> = ({ characters, org, session 
                         <CharacterListItem
                             key={character.id}
                             character={character}
-                            onClick={() => {}}
+                            onClick={() => onViewCharacter(character.id)}
                             isSelected={router.query.characterId === character.id}
                             userId={session.user.id}
                             onDeleteCharacter={onDeleteCharacter}

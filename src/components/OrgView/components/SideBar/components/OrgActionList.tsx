@@ -23,7 +23,7 @@ const OrgActionList: React.FC<OrgActionListProps> = ({ org }) => {
     const router = useRouter();
     const {
         data: orgData,
-    } = useQuery<OrgData, OrgVars>(OrgsOps.Queries.org, {
+    } = useQuery<OrgData, OrgVars>(OrgsOps.Query.org, {
         variables: {
             id: org,
         },
@@ -31,7 +31,7 @@ const OrgActionList: React.FC<OrgActionListProps> = ({ org }) => {
     const [
         saveOpenaiAPIKey,
         { data, loading, error }
-    ] = useMutation<SaveApiKeyData, SaveApiKeyVars>(OrgsOps.Mutations.saveOpenaiAPIKey);
+    ] = useMutation<SaveApiKeyData, SaveApiKeyVars>(OrgsOps.Mutation.saveOpenaiAPIKey);
 
     useEffect(() => {
         if (data) {

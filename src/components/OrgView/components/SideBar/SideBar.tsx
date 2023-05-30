@@ -40,7 +40,7 @@ const SideBar: React.FC<SideBarProps> = ({ org, session }) => {
                                     <ConversationListPanel org={org} session={session} />
                                 </TabPanel>
                                 <TabPanel height="100%" p={1}>
-                                    <CharacterListPanel org={org} session={session} />
+                                    <CharacterListPanel orgId={org} session={session} />
                                 </TabPanel>
                             </TabPanels>
                         </Tabs>

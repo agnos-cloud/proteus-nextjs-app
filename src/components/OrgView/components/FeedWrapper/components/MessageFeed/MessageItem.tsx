@@ -14,6 +14,7 @@ interface Message {
     sender: {
         id: string;
         name: string;
+        image?: string;
     }
 }
 
@@ -42,10 +43,10 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, sentByMe, isCharacte
     >
         {!sentByMe && (
             <Flex align="flex-end">
-                {isCharacter ? (
+                {isCharacter && !message.sender.image ? (
                     <BiBot size={24} />
                 ) : (
-                    <Avatar size="xs" name={message.sender.name} />
+                    <Avatar size="xs" name={message.sender.name} src={message.sender.image} />
                 )}
             </Flex>
         )}

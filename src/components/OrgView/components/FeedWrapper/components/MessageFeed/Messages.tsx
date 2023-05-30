@@ -20,6 +20,7 @@ interface Message {
     sender: {
         id: string;
         name: string;
+        image?: string;
     }
 }
 
