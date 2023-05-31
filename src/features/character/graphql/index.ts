@@ -2,15 +2,24 @@ import { gql } from "@apollo/client";
 
 const CharacterFields = `
 id
+createdAt
 name
 description
 image
-createdAt
+plan
+planExpiresAt
 updatedAt
 `;
 
 const GQL = {
     Query: {
+        character: gql`
+            query Character($id: ID!) {
+                character(id: $id) {
+                    ${CharacterFields}
+                }
+            }
+        `,
         characters: gql`
             query Characters($input: CharacterSearchInput!) {
                 characters(input: $input) {

@@ -171,7 +171,7 @@ const ConversationList: React.FC<OrgListProps> = ({ session }) => {
         <Flex align="center" direction="column" height="100vh" justify="space-between" p={4}>
             <Flex
                 direction="column"
-                // flexGrow={1}
+                flexGrow={1}
                 gap={1}
                 justify="flex-end"
                 overflow="hidden"
@@ -180,6 +180,7 @@ const ConversationList: React.FC<OrgListProps> = ({ session }) => {
                 <Button
                     bg="button.primary"
                     _hover={{ bg: "button.primary.hover" }}
+                    width="100%"
                     onClick={handleOpenModal}
                 >
                     Create new account

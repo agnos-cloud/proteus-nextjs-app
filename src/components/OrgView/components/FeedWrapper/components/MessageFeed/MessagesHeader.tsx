@@ -106,7 +106,7 @@ const MessagesHeader: React.FC<MessagesHeaderProps> = ({
             {formatNames(conversation.characters, conversation.users, userId)}
           </Text> */}
           {conversation.characters.map((character) => (
-            <Button key={character.id}>{character.character.name}</Button>
+            <Button key={character.id} onClick={() => router.push(`/${org}/?characterId=${character.id}`)}>{character.character.name}</Button>
           ))}
         </Stack>
       )}

@@ -13,11 +13,11 @@ interface SideBarProps {
 
 const SideBar: React.FC<SideBarProps> = ({ org, session }) => {
     const router = useRouter();
-    const { query: { conversationId } } = router;
+    const { query: { characterId, conversationId } } = router;
 
     return (
         <Stack
-            display={{ base: conversationId ? "none" : "flex", md: "flex" }}
+            display={{ base: characterId || conversationId ? "none" : "flex", md: "flex" }}
             px={3}
             py={6}
             width={{ base: "100%", md: "400px" }}
