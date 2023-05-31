@@ -27,6 +27,7 @@ export const theme = extendTheme(
                 "secondary.hover": "RGBA(255, 255, 255, 0.36)",
             },
             color: {
+                50: "RGBA(255, 255, 255, 0.04)",
                 400: "RGBA(255, 255, 255, 0.24)",
                 500: "RGBA(255, 255, 255, 0.36)",
                 700: "RGBA(255, 255, 255, 0.64)",

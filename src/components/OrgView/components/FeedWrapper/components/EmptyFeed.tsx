@@ -7,14 +7,14 @@ import { OrgData, OrgVars } from "@org/types";
 import { BiMessageSquareDots } from "react-icons/bi";
 
 interface EmptyFeedProps {
-    org: string;
+    orgId: string;
 }
 
-const EmptyFeed: React.FC<EmptyFeedProps> = ({ org }) => {
+const EmptyFeed: React.FC<EmptyFeedProps> = ({ orgId }) => {
     const { data, loading, error } = useQuery<ConversationsData, ConversationsVars>(ConversationsOps.Queries.conversations, {
         variables: {
           input: {
-            org,
+            org: orgId,
           },
         }
     });
@@ -22,7 +22,7 @@ const EmptyFeed: React.FC<EmptyFeedProps> = ({ org }) => {
         data: orgData,
     } = useQuery<OrgData, OrgVars>(OrgsOps.Query.org, {
         variables: {
-            id: org,
+            id: orgId,
         },
     });
 

@@ -6,11 +6,11 @@ import EmptyFeed from "./components/EmptyFeed";
 import TrainingFeed from "./components/TrainingFeed";
 
 interface IFeedWrapperProps {
-    org: string;
+    orgId: string;
     session: Session;
 }
 
-const FeedWrapper: React.FC<IFeedWrapperProps> = ({ org, session }) => {
+const FeedWrapper: React.FC<IFeedWrapperProps> = ({ orgId, session }) => {
     const router = useRouter();
 
     const { characterId, conversationId } = router.query;
@@ -25,17 +25,17 @@ const FeedWrapper: React.FC<IFeedWrapperProps> = ({ org, session }) => {
         {characterId ? (
             <TrainingFeed
                 characterId={characterId as string}
-                org={org}
+                orgId={orgId}
                 session={session}
             />
         ) : conversationId ? (
             <MessageFeed
                 conversationId={conversationId as string}
-                org={org}
+                org={orgId}
                 session={session}
             />
         ) : (
-            <EmptyFeed org={org} />
+            <EmptyFeed orgId={orgId} />
         )}
         </Flex>
     );

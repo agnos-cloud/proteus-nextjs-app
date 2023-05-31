@@ -1,5 +1,4 @@
 import { Skeleton } from "@chakra-ui/react";
-import { m } from "framer-motion";
 
 interface SkeletonLoaderProps {
     count: number;

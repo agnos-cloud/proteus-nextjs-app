@@ -1,10 +1,27 @@
 export interface Character {
     id: string;
+    createdAt: Date;
     name: string;
     description?: string;
     image?: string;
-    createdAt: Date;
+    plan?: Plan;
+    planExpiresAt?: Date;
     updatedAt: Date;
+}
+
+export enum Plan {
+    ADVANCED = "ADVANCED",
+    BASIC = "BASIC",
+    FREE = "FREE",
+    PRO = "PRO"
+}
+
+export interface CharacterData {
+    character: Character
+}
+
+export interface CharacterVars {
+    id: string;
 }
 
 export interface CharactersData {
