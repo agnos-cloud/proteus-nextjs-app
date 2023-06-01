@@ -11,19 +11,19 @@ import { useMemo } from "react";
 import PricingForm from "./PricingForm";
 import { ModalOptions } from "@types";
 import NoCharacter from "./NoCharacter";
-import CharacterWrapper from "./CharacterWrapper";
+import CharacterFeedHeader from "./CharacterFeedHeader";
 
 type FormData = { name: string; description?: string; };
 
 let formData: FormData | undefined = undefined;
 
-interface TrainingFeedProps {
+interface CharacterFeedProps {
     characterId: string;
     orgId: string;
     session: Session;
 }
 
-const TrainingFeed: React.FC<TrainingFeedProps> = ({ characterId, orgId, session }) => {
+const CharacterFeed: React.FC<CharacterFeedProps> = ({ characterId, orgId, session }) => {
     const { openModal, closeModal, setModalIsLoading } = useApp();
     const {
         data: characterData,
@@ -120,7 +120,7 @@ const TrainingFeed: React.FC<TrainingFeedProps> = ({ characterId, orgId, session
             overflow="hidden"
             flexGrow={1}
         >
-            <CharacterWrapper
+            <CharacterFeedHeader
                 character={characterData?.character}
                 orgId={orgId}
             />
@@ -128,4 +128,4 @@ const TrainingFeed: React.FC<TrainingFeedProps> = ({ characterId, orgId, session
     );
 };
 
-export default TrainingFeed;
+export default CharacterFeed;

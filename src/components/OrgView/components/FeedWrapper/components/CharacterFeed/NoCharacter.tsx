@@ -12,7 +12,7 @@ const NoCharacter: React.FC<NoCharacterProps> = ({}) => {
                 <Stack align="center" spacing={1}>
                     <Text fontSize={50} textAlign="center">{text}</Text>
                     <Text color="color.700" fontSize={20} textAlign="center">
-                        This character may have been deleted or the character ID may be wrong.
+                        The character may have been deleted or the character ID may be wrong.
                     </Text>
                 </Stack>
                 <VscSearchStop fontSize={90} />
