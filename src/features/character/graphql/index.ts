@@ -6,6 +6,7 @@ createdAt
 name
 description
 image
+modelFamily
 plan
 planExpiresAt
 updatedAt

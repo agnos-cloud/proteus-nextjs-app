@@ -2,12 +2,12 @@ import { Button, Flex, Stack, Text } from "@chakra-ui/react";
 import { Character, Plan } from "@character/types";
 
 interface ExpiredProps {
-    character?: Character;
+    character: Character;
     onChoosePlan: () => void;
 }
 
 const Expired: React.FC<ExpiredProps> = ({ character, onChoosePlan }) => {
-    const isFreePlan = !character?.plan || character.plan === Plan.FREE;
+    const isFreePlan = character.plan === Plan.FREE;
 
     const text = isFreePlan
         ? "Your free plan has expired ⌛"

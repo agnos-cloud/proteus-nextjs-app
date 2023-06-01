@@ -4,16 +4,22 @@ export interface Character {
     name: string;
     description?: string;
     image?: string;
-    plan?: Plan;
+    modelFamily: ModelFamily;
+    plan: Plan;
     planExpiresAt?: Date;
     updatedAt: Date;
+}
+
+export enum ModelFamily {
+    GOOGLE_AI = "GOOGLE_AI",
+    OPENAI = "OPENAI",
 }
 
 export enum Plan {
     ADVANCED = "ADVANCED",
     BASIC = "BASIC",
     FREE = "FREE",
-    PRO = "PRO"
+    PRO = "PRO",
 }
 
 export interface CharacterData {

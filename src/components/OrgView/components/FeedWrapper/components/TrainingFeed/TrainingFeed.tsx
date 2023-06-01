@@ -10,6 +10,8 @@ import { useApp } from "@hooks";
 import { useMemo } from "react";
 import PricingForm from "./PricingForm";
 import { ModalOptions } from "@types";
+import NoCharacter from "./NoCharacter";
+import CharacterWrapper from "./CharacterWrapper";
 
 type FormData = { name: string; description?: string; };
 
@@ -93,7 +95,16 @@ const TrainingFeed: React.FC<TrainingFeedProps> = ({ characterId, orgId, session
         <Flex align="center" direction="column" gap={1} height="100%">
             <SkeletonLoader count={4} height="80px" width="100%" />
         </Flex>
-    ) : !isExpired ? (
+    ) : !characterData?.character ? (
+        <Flex
+            direction="column"
+            justify="space-between"
+            overflow="hidden"
+            flexGrow={1}
+        >
+            <NoCharacter />
+        </Flex>
+    ) : isExpired ? (
         <Flex
             direction="column"
             justify="space-between"
@@ -109,8 +120,10 @@ const TrainingFeed: React.FC<TrainingFeedProps> = ({ characterId, orgId, session
             overflow="hidden"
             flexGrow={1}
         >
-            <div>Header goes here</div>
-            <div>Body goes here</div>
+            <CharacterWrapper
+                character={characterData?.character}
+                orgId={orgId}
+            />
         </Flex>
     );
 };

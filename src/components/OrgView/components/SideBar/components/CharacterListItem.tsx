@@ -1,4 +1,4 @@
-import { Character } from "@character/types";
+import { Character, ModelFamily } from "@character/types";
 import {
     Avatar,
     Box,
@@ -15,6 +15,7 @@ import React, { useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
 import { BiBot } from "react-icons/bi";
+import { TbBrandGoogle, TbBrandOpenai } from "react-icons/tb";
 
 const formatRelativeLocale = {
     lastWeek: "eeee",
@@ -97,6 +98,10 @@ const CharacterListItem: React.FunctionComponent<CharacterListItemProps> = ({
             </Menu>
             {character.image ? (
                 <Avatar name={character.name} src={character.image} />
+            ) : character.modelFamily === ModelFamily.GOOGLE_AI ? (
+                <TbBrandGoogle size={48} />
+            ) : character.modelFamily === ModelFamily.OPENAI ? (
+                <TbBrandOpenai size={48} />
             ) : (
                 <BiBot size={48} />
             )}
