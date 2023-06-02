@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { Flex, Stack, Text } from "@chakra-ui/react";
-import { ConversationsData, ConversationsVars } from "@conversation/types";
+import { SearchConversationsData, SearchConversationsVariable } from "@conversation/types";
 import ConversationsOps from "@graphql/conversation";
 import OrgsOps from "@org/graphql";
 import { OrgData, OrgVars } from "@org/types";
@@ -11,10 +11,10 @@ interface EmptyFeedProps {
 }
 
 const EmptyFeed: React.FC<EmptyFeedProps> = ({ orgId }) => {
-    const { data, loading, error } = useQuery<ConversationsData, ConversationsVars>(ConversationsOps.Queries.conversations, {
+    const { data, loading, error } = useQuery<SearchConversationsData, SearchConversationsVariable>(ConversationsOps.Queries.conversations, {
         variables: {
           input: {
-            org: orgId,
+            orgId: orgId,
           },
         }
     });

@@ -32,17 +32,15 @@ export type ConversationUsersInclude = Array<{
     }
 }>;
 
-export interface ConversationsData {
+export interface SearchConversationsData {
     conversations: Array<Conversation>
 }
 
-export interface ConversationsInput {
-    characters?: Array<string>;
-    org: string;
-}
-
-export interface ConversationsVars {
-    input: ConversationsInput;
+export interface SearchConversationsVariable {
+    input: {
+        characterIds?: Array<string>;
+        orgId: string;
+    };
 }
 
 export interface CreateConversationData {
@@ -51,13 +49,19 @@ export interface CreateConversationData {
     }
 }
 
-export interface ConversationInput {
-    characters: Array<string>;
-    org: string;
-}
+export type ConversationUpdatedSubscriptionPayload = {
+    conversationUpdated: Conversation;
+};
+
+export type ConversationDeletedSubscriptionPayload = {
+    conversationDeleted: Conversation;
+};
 
 export interface CreateConversationVars {
-    input: ConversationInput;
+    input: {
+        characterIds: Array<string>;
+        orgId: string;
+    };
 }
 
 export interface DeleteConversationData {

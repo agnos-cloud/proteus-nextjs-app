@@ -7,11 +7,11 @@ import ConversationListPanel from "./components/ConversationListPanel";
 import OrgActionList from "./components/OrgActionList";
 
 interface SideBarProps {
-    org: string;
+    orgId: string;
     session: Session;
 }
 
-const SideBar: React.FC<SideBarProps> = ({ org, session }) => {
+const SideBar: React.FC<SideBarProps> = ({ orgId, session }) => {
     const router = useRouter();
     const { query: { characterId, conversationId } } = router;
 
@@ -25,7 +25,7 @@ const SideBar: React.FC<SideBarProps> = ({ org, session }) => {
             <Stack height="100%" justify="space-between" width="100%">
                 <Stack overflow="hidden" flexGrow={1} justify="space-between">
                     <Stack>
-                        <OrgActionList org={org} session={session} />
+                        <OrgActionList org={orgId} session={session} />
                         <Divider orientation="horizontal" />
                     </Stack>
                     <Stack overflow="hidden" flexGrow={1}>
@@ -37,10 +37,10 @@ const SideBar: React.FC<SideBarProps> = ({ org, session }) => {
 
                             <TabPanels height="92%">
                                 <TabPanel height="100%" p={1}>
-                                    <ConversationListPanel org={org} session={session} />
+                                    <ConversationListPanel orgId={orgId} session={session} />
                                 </TabPanel>
                                 <TabPanel height="100%" p={1}>
-                                    <CharacterListPanel orgId={org} session={session} />
+                                    <CharacterListPanel orgId={orgId} session={session} />
                                 </TabPanel>
                             </TabPanels>
                         </Tabs>

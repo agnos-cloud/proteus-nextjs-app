@@ -4,15 +4,15 @@ import FeedWrapper from "./components/FeedWrapper";
 import SideBar from "./components/SideBar";
 
 interface OrgViewProps {
-    org: string;
+    orgId: string;
     session: Session;
 }
 
-const OrgView: React.FC<OrgViewProps> = ({ org, session }) => {
+const OrgView: React.FC<OrgViewProps> = ({ orgId, session }) => {
   return (
     <Flex height="100vh">
-        <SideBar org={org} session={session} />
-        <FeedWrapper orgId={org} session={session} />
+        <SideBar orgId={orgId} session={session} />
+        <FeedWrapper orgId={orgId} session={session} />
     </Flex>
   );
 };

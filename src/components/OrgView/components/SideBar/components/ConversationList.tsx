@@ -13,7 +13,7 @@ import ConversationForm from "./ConversationForm";
 import ConversationListItem from "./ConversationListItem";
 
 interface ConversationListProps {
-    org: string;
+    orgId: string;
     session: Session;
     conversations: Array<Conversation>;
     onViewConversation: (conversationId: string) => void;
@@ -21,7 +21,7 @@ interface ConversationListProps {
 
 let participants: Character[] | undefined = undefined;
 
-const ConversationList: React.FC<ConversationListProps> = ({ conversations, org, session, onViewConversation }) => {
+const ConversationList: React.FC<ConversationListProps> = ({ conversations, orgId, session, onViewConversation }) => {
     const { openModal, closeModal, setModalIsLoading } = useApp();
     const router = useRouter();
 
@@ -34,7 +34,7 @@ const ConversationList: React.FC<ConversationListProps> = ({ conversations, org,
     useEffect(() => {
         if (data) {
             const conversationId = data.createConversation.id;
-            router.push(`/${org}/?conversationId=${conversationId}`);
+            router.push(`/${orgId}/?conversationId=${conversationId}`);
             handleCloseModal();
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -62,8 +62,8 @@ const ConversationList: React.FC<ConversationListProps> = ({ conversations, org,
         createConversation({
             variables: {
                 input: {
-                    characters: participants?.map((p) => p.id) || [],
-                    org,
+                    characterIds: participants?.map((p) => p.id) || [],
+                    orgId,
                 }
             },
         }).catch((e) => toast.error(e.message || String(e)));
@@ -79,7 +79,7 @@ const ConversationList: React.FC<ConversationListProps> = ({ conversations, org,
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const conversationForm = useMemo(() => <ConversationForm org={org} onChange={onChange} />, [org]);
+    const conversationForm = useMemo(() => <ConversationForm orgId={orgId} onChange={onChange} />, [orgId]);
 
     const conversationsModalArgs: ModalOptions = useMemo(
         () => ({
@@ -112,7 +112,7 @@ const ConversationList: React.FC<ConversationListProps> = ({ conversations, org,
                     id: conversationId,
                 },
                 update: () => {
-                    router.push(`/${org}`);
+                    router.push(`/${orgId}`);
                 }
             }), {
                 loading: "Deleting conversation...",

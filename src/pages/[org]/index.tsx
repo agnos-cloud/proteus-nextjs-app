@@ -11,7 +11,7 @@ const Org: NextPage = () => {
     const { org } = location.query;
     return (
         <Box>
-            {session?.user ? <OrgView org={org as string} session={session} /> : <Home />}
+            {session?.user ? <OrgView orgId={org as string} session={session} /> : <Home />}
         </Box>
     );
 };

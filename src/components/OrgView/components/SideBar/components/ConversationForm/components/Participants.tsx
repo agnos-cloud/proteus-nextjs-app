@@ -1,14 +1,9 @@
+import { Character } from "@character/types";
 import { Flex, Stack, Text } from "@chakra-ui/react";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 
-type SearchedCharacter = {
-    id: string;
-    name: string;
-    description?: string;
-};
-
 interface ParticipantsProps {
-    participants: Array<SearchedCharacter>;
+    participants: Array<Character>;
     removeParticipant: (characterId: string) => void;
 }
 
@@ -18,16 +13,17 @@ const Participants: React.FC<ParticipantsProps> = ({ participants, removePartici
             {participants.map((participant) => (
                 <Stack
                     key={participant.id}
-                    direction="row"
                     align="center"
-                    bg="blackAlpha.200" // "whiteAlpha.200"
+                    bg="button.secondary"
                     borderRadius={4}
+                    direction="row"
+                    _hover={{ bg: "button.secondary.hover" }}
                     p={2}
                 >
                     <Text>{participant.name}</Text>
                     <IoIosCloseCircleOutline
-                        size={20}
                         cursor="pointer"
+                        size={20}
                         onClick={() => removeParticipant(participant.id)}
                     />
                 </Stack>

@@ -4,6 +4,7 @@ export interface Character {
     name: string;
     description?: string;
     image?: string;
+    instruction?: string;
     modelFamily: ModelFamily;
     plan: Plan;
     planExpiresAt?: Date;
@@ -34,13 +35,11 @@ export interface CharactersData {
     characters: Array<Character>
 }
 
-export interface CharactersInput {
-    name?: string;
-    orgId: string;
-}
-
-export interface CharactersVars {
-    input: CharactersInput;
+export interface CharactersVariable {
+    input: {
+        name?: string;
+        orgId: string;
+    };
 }
 
 export type CharacterCreatedSubscriptionPayload = {
@@ -73,11 +72,21 @@ export interface CreateCharacterVars {
     input: CharacterInput;
 }
 
-export interface SearchCharacterInput {
-    name?: string;
-    orgId: string;
+export interface SearchCharacterVariable {
+    input: {
+        name?: string;
+        orgId: string;
+    };
 }
 
-export interface SearchCharacterVars {
-    input: SearchCharacterInput;
+export interface SaveCharacterInstructionVariable {
+    input: {
+        id: string;
+        instruction: string;
+        orgId: string;
+    };
+}
+
+export interface SaveCharacterInstructionData {
+    saveInstruction: boolean;
 }

@@ -194,7 +194,7 @@ const DesktopSubNav = ({ label, href, subLabel, orgId, character }: NavItem & Ch
             bg={href === tab ? "background.700" : "none"}
             color={href === tab ? "color.900" : "color.500"}
             display="block"
-            _hover={{ bg: "background.800" }}
+            _hover={{ bg: "background.800", color: "color.700" }}
             role="group"
             p={2}
             rounded="md"
@@ -342,17 +342,17 @@ interface NavItem {
       children: [
         {
           label: "Actions",
-          subLabel: "Trending Design to inspire you",
+          subLabel: "Send text messages, emails, and more",
           href: "actions",
         },
         {
           label: "Chat Bots",
-          subLabel: "Up-and-coming Designers",
+          subLabel: "Create chat bots for WhatsApp, Slack, and more",
           href: "chat-bots",
         },
         {
           label: "Widgets",
-          subLabel: "Up-and-coming Designers",
+          subLabel: "Create chat widgets, dashboard widgets, and more",
           href: "widgets",
         },
       ],

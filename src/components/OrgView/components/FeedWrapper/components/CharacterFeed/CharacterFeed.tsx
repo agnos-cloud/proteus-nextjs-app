@@ -12,6 +12,7 @@ import PricingForm from "./PricingForm";
 import { ModalOptions } from "@types";
 import NoCharacter from "./NoCharacter";
 import CharacterFeedHeader from "./CharacterFeedHeader";
+import CharacterFeedBody from "./CharacterFeedBody";
 
 type FormData = { name: string; description?: string; };
 
@@ -121,6 +122,10 @@ const CharacterFeed: React.FC<CharacterFeedProps> = ({ characterId, orgId, sessi
             flexGrow={1}
         >
             <CharacterFeedHeader
+                character={characterData?.character}
+                orgId={orgId}
+            />
+            <CharacterFeedBody
                 character={characterData?.character}
                 orgId={orgId}
             />

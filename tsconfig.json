@@ -32,6 +32,7 @@
       "@graphql/message": [ "./src/features/message/graphql" ],
       "@hooks": [ "./src/hooks" ],
       "@org/*": [ "./src/features/org/*" ],
+      "@rules": [ "./src/rules" ],
       "@types": [ "./src/types" ],
       "@utils/*": [ "./src/utils/*" ],
     }
