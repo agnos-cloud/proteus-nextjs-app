@@ -31,7 +31,7 @@ const FeedWrapper: React.FC<IFeedWrapperProps> = ({ orgId, session }) => {
         ) : conversationId ? (
             <MessageFeed
                 conversationId={conversationId as string}
-                org={orgId}
+                orgId={orgId}
                 session={session}
             />
         ) : (

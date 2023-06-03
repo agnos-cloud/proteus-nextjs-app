@@ -11,7 +11,7 @@ interface EmptyFeedProps {
 }
 
 const EmptyFeed: React.FC<EmptyFeedProps> = ({ orgId }) => {
-    const { data, loading, error } = useQuery<SearchConversationsData, SearchConversationsVariable>(ConversationsOps.Queries.conversations, {
+    const { data, loading, error } = useQuery<SearchConversationsData, SearchConversationsVariable>(ConversationsOps.Query.conversations, {
         variables: {
           input: {
             orgId: orgId,

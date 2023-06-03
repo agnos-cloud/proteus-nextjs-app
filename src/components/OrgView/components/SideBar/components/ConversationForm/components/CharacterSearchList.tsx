@@ -1,7 +1,7 @@
-import { Character, ModelFamily } from "@character/types";
 import { Avatar, Button, Flex, Stack, Text } from "@chakra-ui/react";
-import { TbBrandGoogle, TbBrandOpenai } from "react-icons/tb";
+import { Character, ModelFamily } from "@character/types";
 import { BiBot } from "react-icons/bi";
+import { TbBrandGoogle, TbBrandOpenai } from "react-icons/tb";
 
 interface CharacterSearchListProps {
     characters: Array<Character>;

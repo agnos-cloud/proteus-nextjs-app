@@ -26,10 +26,10 @@ const ConversationList: React.FC<ConversationListProps> = ({ conversations, orgI
     const router = useRouter();
 
     const [ createConversation, { data, loading, error }] =
-        useMutation<CreateConversationData, CreateConversationVars>(ConversationsOps.Mutations.createConversation);
+        useMutation<CreateConversationData, CreateConversationVars>(ConversationsOps.Mutation.createConversation);
 
     const [ deleteConversation ] =
-        useMutation<DeleteConversationData, DeleteConversationVars>(ConversationsOps.Mutations.deleteConversation);
+        useMutation<DeleteConversationData, DeleteConversationVars>(ConversationsOps.Mutation.deleteConversation);
 
     useEffect(() => {
         if (data) {

@@ -5,61 +5,18 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import MessagesOps from  "@graphql/message";
 import { ObjectID } from "bson";
-
-type MessageType = "TEXT";
-
-interface Message {
-    id: string;
-    createdAt: Date;
-    updatedAt: Date;
-    conversationId: string;
-    content: string;
-    type: MessageType;
-    senderId: string;
-    sender: {
-        id: string;
-        name: string;
-    }
-}
-
-interface SendMessageData {
-    sendUserMessage: boolean;
-}
-
-interface MessagesInput {
-    id: string;
-    content: string;
-    conversation: string;
-    sender: string;
-    type: MessageType;
-}
-
-interface SendMessageVars {
-    input: MessagesInput;
-}
+import { MessagesVariable, SendUserMessageData, SendMessageVariable, UserMessagesData, MessageType } from "@message/types";
 
 interface MessageInputProps {
     conversationId: string;
     session: Session;
-    org: string;
-}
-
-interface UserMessagesData {
-    userMessages: Array<Message>
-}
-
-interface GetMessagesInput {
-    conversation: string;
-}
-
-interface MessagesVars {
-    input: GetMessagesInput;
+    orgId: string;
 }
 
 const MessageInput: React.FC<MessageInputProps> = ({ conversationId, session }) => {
     const [message, setMessage] = useState("");
     const [ sendMessage ] =
-        useMutation<SendMessageData, SendMessageVars>(MessagesOps.Mutations.sendUserMessage);
+        useMutation<SendUserMessageData, SendMessageVariable>(MessagesOps.Mutation.sendUserMessage);
 
     const onSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -71,30 +28,30 @@ const MessageInput: React.FC<MessageInputProps> = ({ conversationId, session }) 
                 variables: {
                     input: {
                         id: messageId,
-                        conversation: conversationId,
-                        sender: session.user.id,
+                        conversationId,
+                        senderId: session.user.id,
                         content: message,
-                        type: "TEXT",
+                        type: MessageType.TEXT,
                     }
                 },
                 optimisticResponse: {
                     sendUserMessage: true,
                 },
                 update: (cache) => {
-                    const existing = cache.readQuery<UserMessagesData>({
-                        query: MessagesOps.Queries.userMessages,
+                    const existing = cache.readQuery<UserMessagesData, MessagesVariable>({
+                        query: MessagesOps.Query.userMessages,
                         variables: {
                             input: {
-                                conversation: conversationId,
+                                conversationId,
                             },
                         },
                     });
 
-                    cache.writeQuery<UserMessagesData, MessagesVars>({
-                        query: MessagesOps.Queries.userMessages,
+                    cache.writeQuery<UserMessagesData, MessagesVariable>({
+                        query: MessagesOps.Query.userMessages,
                         variables: {
                             input: {
-                                conversation: conversationId,
+                                conversationId,
                             },
                         },
                         data: {
@@ -107,9 +64,10 @@ const MessageInput: React.FC<MessageInputProps> = ({ conversationId, session }) 
                                     sender: {
                                         id: session.user.id,
                                         name: session.user.name!,
+                                        image: session.user.image as string|undefined,
                                     },
                                     content: message,
-                                    type: "TEXT",
+                                    type: MessageType.TEXT,
                                     createdAt: new Date(),
                                     updatedAt: new Date(),
                                 },
@@ -140,7 +98,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ conversationId, session }) 
                     placeholder="Send a message..."
                     size="md"
                     resize="none"
-                    bg="whiteAlpha.900"
+                    bg="background.700"
                     _focus={{
                         boxShadow: "none",
                         border: "1px solid",

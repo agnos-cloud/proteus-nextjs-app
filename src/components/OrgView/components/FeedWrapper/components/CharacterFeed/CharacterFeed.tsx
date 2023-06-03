@@ -1,18 +1,18 @@
 import { useQuery } from "@apollo/client";
 import { Flex } from "@chakra-ui/react";
-import { Session } from "next-auth";
-import CharactersOps from "@graphql/character";
 import { CharacterData, CharacterVars, Plan } from "@character/types";
-import { differenceInDays } from "date-fns";
-import { SkeletonLoader } from "@components";
-import Expired from "./Expired";
+import { NotFound, SkeletonLoader } from "@components";
+import CharactersOps from "@graphql/character";
 import { useApp } from "@hooks";
-import { useMemo } from "react";
-import PricingForm from "./PricingForm";
 import { ModalOptions } from "@types";
-import NoCharacter from "./NoCharacter";
-import CharacterFeedHeader from "./CharacterFeedHeader";
+import { differenceInDays } from "date-fns";
+import { Session } from "next-auth";
+import { useMemo } from "react";
+import { VscSearchStop } from "react-icons/vsc";
 import CharacterFeedBody from "./CharacterFeedBody";
+import CharacterFeedHeader from "./CharacterFeedHeader";
+import Expired from "./Expired";
+import PricingForm from "./PricingForm";
 
 type FormData = { name: string; description?: string; };
 
@@ -103,7 +103,12 @@ const CharacterFeed: React.FC<CharacterFeedProps> = ({ characterId, orgId, sessi
             overflow="hidden"
             flexGrow={1}
         >
-            <NoCharacter />
+            <NotFound
+                text={"Cannot find this character 😓"}
+                subtext="The character may have been deleted or the character ID may be wrong."
+                Icon={VscSearchStop}
+                returnUrl={`/${orgId}`}
+            />
         </Flex>
     ) : isExpired ? (
         <Flex

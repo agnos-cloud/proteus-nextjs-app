@@ -4,7 +4,7 @@ import { SkeletonLoader } from "@components";
 import ConversationsOps from "@graphql/conversation";
 import { useApp } from "@hooks";
 import OrgsOps from "@org/graphql";
-import { CreateOrgData, CreateOrgInput, CreateOrgVars, Org, OrgsData } from "@org/types";
+import { CreateOrgData, CreateOrgInput, CreateOrgVars, Org, OrgCreatedSubscriptionPayload, OrgsData } from "@org/types";
 import { ModalOptions } from "@types";
 import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
@@ -62,7 +62,7 @@ const ConversationList: React.FC<OrgListProps> = ({ session }) => {
     ] = useMutation<CreateOrgData, CreateOrgVars>(OrgsOps.Mutation.createOrg);
 
     const [ deleteConversation ] =
-        useMutation<DeleteConversationData, DeleteConversationVars>(ConversationsOps.Mutations.deleteConversation);
+        useMutation<DeleteConversationData, DeleteConversationVars>(ConversationsOps.Mutation.deleteConversation);
 
     useEffect(() => {
         if (createOrgData) {
@@ -81,7 +81,7 @@ const ConversationList: React.FC<OrgListProps> = ({ session }) => {
     const subscribeToNewOrgs = () => {
         subscribeToMoreOrgs({
           document: OrgsOps.Subscription.orgCreated,
-          updateQuery: (prev, { subscriptionData }: { subscriptionData: { data: { orgCreated: Org } } }) => {
+          updateQuery: (prev, { subscriptionData }: { subscriptionData: { data: OrgCreatedSubscriptionPayload } }) => {
             if (!subscriptionData.data) return prev;
             const newOrg = subscriptionData.data.orgCreated;
             // the below is already checked on the server, but just in case

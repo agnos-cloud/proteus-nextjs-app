@@ -1,12 +1,9 @@
+import { useLazyQuery } from "@apollo/client";
 import { Button, Input, Stack } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { useLazyQuery, useQuery } from "@apollo/client";
-import CharactersOps from  "@graphql/character";
-import toast from "react-hot-toast";
-import next from "next/types";
-import { nextTick } from "process";
-import { on } from "events";
 import { Character, CharactersData, CharactersVariable } from "@character/types";
+import CharactersOps from "@graphql/character";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import CharacterSearchList from "./components/CharacterSearchList";
 import Participants from "./components/Participants";
 
@@ -37,7 +34,7 @@ const ConversationForm: React.FC<ConversationFormProps> = ({ orgId, onChange }) 
             variables: {
               input: {
                 name: characterName,
-                orgId: orgId,
+                orgId,
               }
             }
         }).catch((e) => toast.error(e.message || String(e)));

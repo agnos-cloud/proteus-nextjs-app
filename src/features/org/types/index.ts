@@ -55,3 +55,15 @@ export interface SaveApiKeyVars {
     id: string;
     key: string;
 }
+
+export type OrgCreatedSubscriptionPayload = {
+    orgCreated: Org;
+};
+
+export type OrgDeletedSubscriptionPayload = {
+    orgDeleted: Org;
+};
+
+export type OrgUpdatedSubscriptionPayload = {
+    orgUpdated: Org;
+};

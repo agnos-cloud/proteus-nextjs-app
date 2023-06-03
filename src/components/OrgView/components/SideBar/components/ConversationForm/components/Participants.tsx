@@ -1,5 +1,5 @@
-import { Character } from "@character/types";
 import { Flex, Stack, Text } from "@chakra-ui/react";
+import { Character } from "@character/types";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 
 interface ParticipantsProps {

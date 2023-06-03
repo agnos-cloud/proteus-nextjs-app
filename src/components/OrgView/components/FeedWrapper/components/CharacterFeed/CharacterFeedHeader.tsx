@@ -14,13 +14,13 @@ import {
     Text,
     useBreakpointValue,
     useDisclosure
-} from '@chakra-ui/react';
-import { Character, ModelFamily } from '@character/types';
-import { useRouter } from 'next/router';
+} from "@chakra-ui/react";
+import { Character, ModelFamily } from "@character/types";
+import { useRouter } from "next/router";
 import { BiBot, BiChevronDown as ChevronDownIcon } from "react-icons/bi";
-import { IoArrowBack as BackArrowIcon } from 'react-icons/io5';
+import { IoArrowBack as BackArrowIcon } from "react-icons/io5";
 import { RxHamburgerMenu as HamburgerIcon } from "react-icons/rx";
-import { TbBrandGoogle, TbBrandOpenai } from 'react-icons/tb';
+import { TbBrandGoogle, TbBrandOpenai } from "react-icons/tb";
 import { TfiClose as CloseIcon } from "react-icons/tfi";
 
 interface CharacterFeedHeaderProps {
@@ -44,8 +44,8 @@ export default function CharacterFeedHeader(props: CharacterFeedHeaderProps) {
                 px={{ base: 4 }}
             >
                 <Flex
-                    display={{ base: 'flex', md: 'none' }}
-                    // flex={{ base: 1, md: 'auto' }}
+                    display={{ base: "flex", md: "none" }}
+                    // flex={{ base: 1, md: "auto" }}
                     ml={{ base: -2 }}
                 >
                     <IconButton
@@ -56,9 +56,9 @@ export default function CharacterFeedHeader(props: CharacterFeedHeaderProps) {
                     />
                 </Flex>
                 <Flex
-                    flex={{ base: 1, md: 'auto' }}
+                    flex={{ base: 1, md: "auto" }}
                     ml={{ base: -2 }}
-                    display={{ base: 'flex', md: 'none' }}
+                    display={{ base: "flex", md: "none" }}
                 >
                     <IconButton
                         aria-label="Toggle Navigation"
@@ -90,7 +90,7 @@ export default function CharacterFeedHeader(props: CharacterFeedHeaderProps) {
                         </Text>
                     </Flex>
 
-                    <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
+                    <Flex display={{ base: "none", md: "flex" }} ml={10}>
                         <DesktopNav {...props} />
                     </Flex>
                 </Flex>
@@ -212,7 +212,7 @@ const DesktopSubNav = ({ label, href, subLabel, orgId, character }: NavItem & Ch
                     >
                         {label}
                     </Text>
-                    <Text fontSize={'sm'}>{subLabel}</Text>
+                    <Text fontSize="sm">{subLabel}</Text>
                 </Box>
             </Stack>
         </Link>

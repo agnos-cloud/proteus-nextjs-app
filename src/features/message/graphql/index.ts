@@ -9,13 +9,14 @@ sender {
     name
     image
 }
+type
 content
 createdAt
 updatedAt
 `;
 
 const GQL = {
-    Queries: {
+    Query: {
         characterMessages: gql`
             query CharacterMessages($input: MessageSearchInput!) {
                 characterMessages(input: $input) {
@@ -31,7 +32,7 @@ const GQL = {
             }
         `,
     },
-    Mutations: {
+    Mutation: {
         sendCharacterMessage: gql`
             mutation SendCharacterMessage($input: MessageInput!) {
                 sendCharacterMessage(input: $input)
@@ -43,7 +44,7 @@ const GQL = {
             }
         `,
     },
-    Subscriptions: {
+    Subscription: {
         characterMessageSent: gql`
             subscription CharacterMessageSent($input: MessageSearchInput!) {
                 characterMessageSent(input: $input) {

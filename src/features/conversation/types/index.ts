@@ -1,16 +1,10 @@
+import { ModelFamily } from "@character/types";
+
 export interface Conversation {
     id: string;
     createdAt: Date;
     updatedAt: Date;
-    characters: Array<{
-        id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        character: {
-            id: string;
-            name: string;
-        }
-    }>;
+    characters: ConversationCharactersInclude;
     users: ConversationUsersInclude;
     org: {
         id: string;
@@ -21,6 +15,18 @@ export interface Conversation {
     }
 }
 
+export type ConversationCharactersInclude = Array<{
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    character: {
+        id: string;
+        name: string;
+        image?: string;
+        modelFamily: ModelFamily;
+    }
+}>;
+
 export type ConversationUsersInclude = Array<{
     id: string;
     createdAt: Date;
@@ -29,8 +35,21 @@ export type ConversationUsersInclude = Array<{
     user: {
         id: string;
         name: string;
+        image?: string;
     }
 }>;
+
+export interface ConversationsData {
+    conversations: Array<Conversation>
+}
+
+export interface ConversationsVariable {
+    input: {
+        characterIds?: Array<string>;
+        orgId: string;
+        id?: string;
+    };
+}
 
 export interface SearchConversationsData {
     conversations: Array<Conversation>

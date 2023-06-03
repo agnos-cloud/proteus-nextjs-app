@@ -1,6 +1,7 @@
-import { Conversation } from "@conversation/types";
 import {
     Avatar,
+    AvatarBadge,
+    AvatarGroup,
     Box,
     Flex,
     Menu,
@@ -9,6 +10,7 @@ import {
     Stack,
     Text,
 } from "@chakra-ui/react";
+import { Conversation } from "@conversation/types";
 import { formatNames } from "@utils/functions";
 import { formatRelativeLocale } from "@utils/time";
 import { formatRelative } from "date-fns";
@@ -16,7 +18,6 @@ import enUS from "date-fns/locale/en-US";
 import React, { useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
-import { GoPrimitiveDot } from "react-icons/go";
 import { MdDeleteOutline } from "react-icons/md";
 
 interface ConversationListItemProps {
@@ -55,17 +56,17 @@ const ConversationListItem: React.FunctionComponent<ConversationListItemProps> =
 
     return (
         <Stack
-            direction="row"
             align="center"
+            bg={ isSelected ? "background.700" : "none" }
+            borderRadius={4}
+            cursor="pointer"
+            direction="row"
+            _hover={{ bg: "background.800" }}
             justify="space-between"
             p={2}
-            cursor="pointer"
-            borderRadius={4}
-            bg={ isSelected ? "blackAlpha.200" : "none" }
-            _hover={{ bg: "blackAlpha.200" }}
+            position="relative"
             onClick={handleClick}
             onContextMenu={handleClick}
-            position="relative"
         >
             <Menu isOpen={menuOpen} onClose={() => setMenuOpen(false)}>
                 <MenuList bg="#d2d2d2">
@@ -105,12 +106,15 @@ const ConversationListItem: React.FunctionComponent<ConversationListItemProps> =
                     )}
                 </MenuList>
             </Menu>
-            <Flex position="absolute" left="-6px">
-                {hasUnread && (
-                    <GoPrimitiveDot fontSize={18} color="#6B46C1" />
-                )}
-            </Flex>
-            <Avatar />
+            <AvatarGroup size="md" max={1}>
+                {conversation.characters.map((character, index) => (
+                    <Avatar key={character.id} name={character.character.name} src={character.character.image}>
+                        {hasUnread && index === 0 && (
+                            <AvatarBadge boxSize='1.25em' bg='green.500' />
+                        )}
+                    </Avatar>
+                ))}
+            </AvatarGroup>
             <Flex justify="space-between" width="80%" height="100%">
                 <Flex direction="column" width="70%" height="100%">
                     <Text
@@ -124,7 +128,7 @@ const ConversationListItem: React.FunctionComponent<ConversationListItemProps> =
                     {conversation.latestMessage && (
                         <Box width="140%" maxWidth="360px">
                             <Text
-                                color="blackAlpha.700"
+                                color="color.700"
                                 whiteSpace="nowrap"
                                 overflow="hidden"
                                 textOverflow="ellipsis"
@@ -135,7 +139,7 @@ const ConversationListItem: React.FunctionComponent<ConversationListItemProps> =
                     )}
                 </Flex>
                 <Text
-                    color="blackAlpha.700"
+                    color="color.400"
                     textAlign="right"
                     position="absolute"
                     right={4}

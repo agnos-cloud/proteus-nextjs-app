@@ -3,20 +3,20 @@ import { Stack } from "@chakra-ui/react";
 import { SkeletonLoader } from "@components";
 import {
     Conversation,
+    ConversationDeletedSubscriptionPayload,
+    ConversationUpdatedSubscriptionPayload,
     ConversationUsersInclude,
-    SearchConversationsData,
-    SearchConversationsVariable,
     MarkConversationAsReadData,
     MarkConversationAsReadVars,
-    ConversationUpdatedSubscriptionPayload,
-    ConversationDeletedSubscriptionPayload
+    SearchConversationsData,
+    SearchConversationsVariable
 } from "@conversation/types";
 import ConversationsOps from "@graphql/conversation";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import ConversationList from "./ConversationList";
 import toast from "react-hot-toast";
+import ConversationList from "./ConversationList";
 
 interface ConversationListPanelProps {
     orgId: string;
@@ -31,7 +31,7 @@ const ConversationListPanel: React.FC<ConversationListPanelProps> = ({ orgId, se
         loading: conversationsLoading,
         error: conversationsError,
         subscribeToMore: subscribeToMoreConversations
-    } = useQuery<SearchConversationsData, SearchConversationsVariable>(ConversationsOps.Queries.conversations, {
+    } = useQuery<SearchConversationsData, SearchConversationsVariable>(ConversationsOps.Query.conversations, {
         variables: {
             input: {
                 orgId,
@@ -46,10 +46,10 @@ const ConversationListPanel: React.FC<ConversationListPanelProps> = ({ orgId, se
     }, [conversationsError]);
 
     const [ markConversationAsRead ] =
-        useMutation<MarkConversationAsReadData, MarkConversationAsReadVars>(ConversationsOps.Mutations.markConversationAsRead);
+        useMutation<MarkConversationAsReadData, MarkConversationAsReadVars>(ConversationsOps.Mutation.markConversationAsRead);
 
     useSubscription<ConversationUpdatedSubscriptionPayload, SearchConversationsVariable>(
-        ConversationsOps.Subscriptions.conversationUpdated, {
+        ConversationsOps.Subscription.conversationUpdated, {
         variables: {
             input: {
                 orgId,
@@ -69,7 +69,7 @@ const ConversationListPanel: React.FC<ConversationListPanelProps> = ({ orgId, se
     });
 
     useSubscription<ConversationDeletedSubscriptionPayload, SearchConversationsVariable>(
-        ConversationsOps.Subscriptions.conversationDeleted, {
+        ConversationsOps.Subscription.conversationDeleted, {
         variables: {
             input: {
                 orgId,
@@ -80,7 +80,7 @@ const ConversationListPanel: React.FC<ConversationListPanelProps> = ({ orgId, se
             if (!subscriptionData) return;
 
             const existingConversations = client.readQuery<SearchConversationsData, SearchConversationsVariable>({
-                query: ConversationsOps.Queries.conversations,
+                query: ConversationsOps.Query.conversations,
                 variables: {
                     input: {
                         orgId,
@@ -94,7 +94,7 @@ const ConversationListPanel: React.FC<ConversationListPanelProps> = ({ orgId, se
             const { conversationDeleted: deletedConversation } = subscriptionData;
 
             client.writeQuery<SearchConversationsData, SearchConversationsVariable>({
-                query: ConversationsOps.Queries.conversations,
+                query: ConversationsOps.Query.conversations,
                 variables: {
                     input: {
                         orgId,
@@ -109,7 +109,7 @@ const ConversationListPanel: React.FC<ConversationListPanelProps> = ({ orgId, se
 
     const subscribeToNewConversations = () => {
         subscribeToMoreConversations({
-            document: ConversationsOps.Subscriptions.conversationCreated,
+            document: ConversationsOps.Subscription.conversationCreated,
             variables: {
                 input: {
                     orgId,
@@ -159,6 +159,7 @@ const ConversationListPanel: React.FC<ConversationListPanelProps> = ({ orgId, se
                             user {
                                 id
                                 name
+                                image
                             }
                         }
                     }`
