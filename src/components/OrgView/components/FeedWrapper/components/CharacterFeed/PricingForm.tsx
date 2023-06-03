@@ -13,16 +13,12 @@ import {
     useColorModeValue,
 } from "@chakra-ui/react";
 import { ReactNode, useState } from "react";
-import { FaCheckCircle } from "react-icons/fa";
-import { BiBot, BiMemoryCard } from "react-icons/bi";
-import { SiKnowledgebase } from "react-icons/si";
 import { IconType } from "react-icons";
-import { VscGithubAction } from "react-icons/vsc";
-import { MdUpdate } from "react-icons/md";
-import { IoBookOutline } from "react-icons/io5";
-import { GiBookshelf } from "react-icons/gi";
+import { BiBot, BiMemoryCard } from "react-icons/bi";
+import { FaCheckCircle } from "react-icons/fa";
 import { ImBooks } from "react-icons/im";
-import { MdOutlineWidgets } from "react-icons/md";
+import { MdOutlineTune, MdOutlineWidgets, MdUpdate } from "react-icons/md";
+import { VscGithubAction } from "react-icons/vsc";
 
 type FormData = { name: string; description?: string; };
 
@@ -35,6 +31,12 @@ type PricingInfo = Record<string, Record<string, string[]>>;
 const pricingInfo: PricingInfo = {
     basic: {
         actions: ["can send text, email messages"],
+        "fine-tuning": [],
+        integrations: [
+            "WhatsApp integration",
+            "Telegram integration",
+            "Slack integration",
+        ],
         "knowledge base": ["1000 text characters"],
         "knowledge update": ["manual knowledge update"],
         memory: ["remembers only last prompt"],
@@ -49,6 +51,17 @@ const pricingInfo: PricingInfo = {
             "1000 text characters",
             "20MB of your uploaded files",
             "20MB of your website data",
+        ],
+        "fine-tuning": [
+            "can fine-tune with JSONL files",
+            "1000 text characters",
+            "20MB of your uploaded files",
+            "20MB of your website data",
+        ],
+        integrations: [
+            "WhatsApp integration",
+            "Telegram integration",
+            "Slack integration",
         ],
         "knowledge update": [
             "manual knowledge update",
@@ -66,6 +79,21 @@ const pricingInfo: PricingInfo = {
         actions: [
             "can send text, email messages",
             "can perform custom actions",
+        ],
+        "fine-tuning": [
+            "can fine-tune with JSONL files",
+            "can fine-tune with non-JSONL files",
+            "1000 text characters",
+            "50MB of your uploaded files",
+            "50MB of your website data",
+            "50MB of your database data",
+            "50MB of your API data",
+        ],
+        integrations: [
+            "WhatsApp integration",
+            "Telegram integration",
+            "Slack integration",
+            "custom integrations",
         ],
         "knowledge base": [
             "1000 text characters",
@@ -187,8 +215,10 @@ export default function PricingForm(props: PricingFormProps) {
                         {getList("basic", "memory", BiMemoryCard)}
                         {getList("basic", "knowledge base", ImBooks)}
                         {getList("basic", "knowledge update", MdUpdate)}
-                        {getList("basic", "actions", VscGithubAction)}
+                        {getList("basic", "integrations", VscGithubAction)}
+                        {showMore && getList("basic", "actions", VscGithubAction)}
                         {showMore && getList("basic", "widgets", MdOutlineWidgets)}
+                        {showMore && getList("basic", "fine-tuning", MdOutlineTune)}
                         {showMore && getList("basic", "models", BiBot)}
                         {showMoreBtn}
                         <Box w="80%" pt={7}>
@@ -249,8 +279,10 @@ export default function PricingForm(props: PricingFormProps) {
                             {getList("professional", "memory", BiMemoryCard)}
                             {getList("professional", "knowledge base", ImBooks)}
                             {getList("professional", "knowledge update", MdUpdate)}
-                            {getList("professional", "actions", VscGithubAction)}
+                            {getList("professional", "integrations", VscGithubAction)}
+                            {showMore && getList("professional", "actions", VscGithubAction)}
                             {showMore && getList("professional", "widgets", MdOutlineWidgets)}
+                            {showMore && getList("professional", "fine-tuning", MdOutlineTune)}
                             {showMore && getList("professional", "models", BiBot)}
                             {showMoreBtn}
                             <Box w="80%" pt={7}>
@@ -291,8 +323,10 @@ export default function PricingForm(props: PricingFormProps) {
                         {getList("advanced", "memory", BiMemoryCard)}
                         {getList("advanced", "knowledge base", ImBooks)}
                         {getList("advanced", "knowledge update", MdUpdate)}
-                        {getList("advanced", "actions", VscGithubAction)}
+                        {getList("advanced", "integrations", VscGithubAction)}
+                        {showMore && getList("advanced", "actions", VscGithubAction)}
                         {showMore && getList("advanced", "widgets", MdOutlineWidgets)}
+                        {showMore && getList("advanced", "fine-tuning", MdOutlineTune)}
                         {showMore && getList("advanced", "models", BiBot)}
                         {showMoreBtn}
                         <Box w="80%" pt={7}>

@@ -5,40 +5,17 @@ import MessagesOps from "@graphql/message";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import MessageItem from "./MessageItem";
+import {
+    CharacterMessageSentSubscriptionPayload,
+    CharacterMessagesData,
+    Message,
+    MessagesVariable,
+    UserMessageSentSubscriptionPayload,
+    UserMessagesData
+} from "@message/types";
 
-// enum MessageType {
-//     TEXT = "TEXT",
-// }
-type MessageType = "TEXT";
-
-interface Message {
-    id: string;
-    createdAt: Date;
-    content: string;
-    type: MessageType;
-    conversationId: string;
-    sender: {
-        id: string;
-        name: string;
-        image?: string;
-    }
-}
-
-interface CharacterMessagesData {
-    characterMessages: Array<Message>
-}
-
-interface UserMessagesData {
-    userMessages: Array<Message>
-}
-
-interface MessagesInput {
-    conversation: string;
-}
-
-interface MessagesVars {
-    input: MessagesInput;
-}
+const bgs = ["#2B6CB0", "#1A365D", "#2F855A", "#1C4532", "#00A3C4", "#065666"];
+const bgsMap: { [key: string]: string } = {};
 
 interface MessagesProps {
     conversationId: string;
@@ -52,28 +29,28 @@ const Messages: React.FC<MessagesProps> = ({ conversationId, userId }) => {
         loading: charMsgsLoading,
         error: charMsgsError,
         subscribeToMore: subscribeToMoreCharMsgs,
-    } = useQuery<CharacterMessagesData, MessagesVars>(
-        MessagesOps.Queries.characterMessages, {
-          variables: {
-            input: {
-              conversation: conversationId,
+    } = useQuery<CharacterMessagesData, MessagesVariable>(
+        MessagesOps.Query.characterMessages, {
+            variables: {
+                input: {
+                    conversationId,
+                },
             },
-          },
-          onError: ({ message }) => toast.error(message),
+            onError: ({ message }) => toast.error(message),
         });
     const {
         data: userMsgsData,
         loading: userMsgsLoading,
         error: userMsgsError,
         subscribeToMore: subscribeToMoreUserMsgs
-    } = useQuery<UserMessagesData, MessagesVars>(
-        MessagesOps.Queries.userMessages, {
-          variables: {
-            input: {
-              conversation: conversationId,
+    } = useQuery<UserMessagesData, MessagesVariable>(
+        MessagesOps.Query.userMessages, {
+            variables: {
+                input: {
+                    conversationId,
+                },
             },
-          },
-          onError: ({ message }) => toast.error(message),
+            onError: ({ message }) => toast.error(message),
         });
 
     useEffect(() => {
@@ -93,13 +70,13 @@ const Messages: React.FC<MessagesProps> = ({ conversationId, userId }) => {
 
     const subscribeToNewCharMessages = (conversationId: string) => {
         return subscribeToMoreCharMsgs({
-            document: MessagesOps.Subscriptions.characterMessageSent,
+            document: MessagesOps.Subscription.characterMessageSent,
             variables: {
                 input: {
-                    conversation: conversationId,
+                    conversationId,
                 },
             },
-            updateQuery: (prev, { subscriptionData }: { subscriptionData: { data: { characterMessageSent: Message } } }) => {
+            updateQuery: (prev, { subscriptionData }: { subscriptionData: { data: CharacterMessageSentSubscriptionPayload } }) => {
                 if (!subscriptionData.data) return prev;
                 const newMessage = subscriptionData.data.characterMessageSent;
                 if (prev.characterMessages.find((m) => m.id === newMessage.id)) {
@@ -114,13 +91,13 @@ const Messages: React.FC<MessagesProps> = ({ conversationId, userId }) => {
 
     const subscribeToNewUserMessages = (conversationId: string) => {
         return subscribeToMoreUserMsgs({
-            document: MessagesOps.Subscriptions.userMessageSent,
+            document: MessagesOps.Subscription.userMessageSent,
             variables: {
                 input: {
-                    conversation: conversationId,
+                    conversationId,
                 },
             },
-            updateQuery: (prev, { subscriptionData }: { subscriptionData: { data: { userMessageSent: Message } } }) => {
+            updateQuery: (prev, { subscriptionData }: { subscriptionData: { data: UserMessageSentSubscriptionPayload } }) => {
                 if (!subscriptionData.data) return prev;
                 const newMessage = subscriptionData.data.userMessageSent;
                 if (prev.userMessages.find((m) => m.id === newMessage.id)) {
@@ -145,28 +122,36 @@ const Messages: React.FC<MessagesProps> = ({ conversationId, userId }) => {
     }, [conversationId]);
 
     if (charMsgsError || userMsgsError) {
-        return null;
+        return null; // TODO: handle error
     }
 
-  return <Flex direction="column" justify="flex-end" overflow="hidden">
-    {charMsgsLoading || userMsgsLoading && (
-        <Stack spacing={4} px={2}>
-            <SkeletonLoader count={4} height="60px" width="full" />
-        </Stack>
-    )}
-    {messages.length > 0 && (
-        <Flex direction="column-reverse" overflowY="scroll" height="100%">
-            {messages.map((message) => (
-                <MessageItem
-                    key={message.id}
-                    message={message}
-                    sentByMe={message.sender.id === userId}
-                    isCharacter={charMsgsData?.characterMessages.find((m) => m.id === message.id) !== undefined}
-                />
-            ))}
+    return (
+        <Flex direction="column" justify="flex-end" overflow="hidden">
+            {charMsgsLoading || userMsgsLoading && (
+                <Stack spacing={4} px={2}>
+                    <SkeletonLoader count={4} height="60px" width="full" />
+                </Stack>
+            )}
+            {messages.length > 0 && (
+                <Flex direction="column-reverse" overflowY="scroll" height="100%">
+                    {messages.map((message) => {
+                        if (!bgsMap[message.sender.id]) {
+                            bgsMap[message.sender.id] = bgs[Math.floor(Math.random() * bgs.length)];
+                        }
+                        return (
+                            <MessageItem
+                                key={message.id}
+                                bg={message.sender.id === userId ? "#6B46C1" : bgsMap[message.sender.id]}
+                                message={message}
+                                sentByMe={message.sender.id === userId}
+                                isCharacter={charMsgsData?.characterMessages.find((m) => m.id === message.id) !== undefined}
+                            />
+                        );
+                    })}
+                </Flex>
+            )}
         </Flex>
-    )}
-  </Flex>;
+    );
 };
 
 export default Messages;

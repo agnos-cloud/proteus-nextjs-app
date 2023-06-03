@@ -4,8 +4,8 @@ import {
     CharacterCreatedSubscriptionPayload,
     CharacterUpdatedSubscriptionPayload,
     CharactersData,
-    CharactersVars,
-    SearchCharacterVars
+    CharactersVariable,
+    SearchCharacterVariable
 } from "@character/types";
 import { SkeletonLoader } from "@components";
 import CharactersOps from "@graphql/character";
@@ -29,7 +29,7 @@ const CharacterListPanel: React.FC<CharacterListPanelProps> = ({ orgId, session 
         error: charactersError,
         subscribeToMore: subscribeToMoreCharacters
     } =
-        useQuery<CharactersData, CharactersVars>(CharactersOps.Query.characters, {
+        useQuery<CharactersData, CharactersVariable>(CharactersOps.Query.characters, {
         variables: {
             input: {
                 orgId,
@@ -43,13 +43,13 @@ const CharacterListPanel: React.FC<CharacterListPanelProps> = ({ orgId, session 
         }
     }, [charactersError]);
 
-    useSubscription<CharacterUpdatedSubscriptionPayload, SearchCharacterVars>(CharactersOps.Subscription.characterUpdated, {
+    useSubscription<CharacterUpdatedSubscriptionPayload, SearchCharacterVariable>(CharactersOps.Subscription.characterUpdated, {
         variables: {
             input: {
                 orgId,
             },
         },
-        onData: ({ client, data }) => {
+        onData: ({ data }) => {
             const { data: subscriptionData } = data;
             if (!subscriptionData) return;
 

@@ -3,25 +3,27 @@ import { Stack } from "@chakra-ui/react";
 import { SkeletonLoader } from "@components";
 import {
     Conversation,
+    ConversationDeletedSubscriptionPayload,
+    ConversationUpdatedSubscriptionPayload,
     ConversationUsersInclude,
-    ConversationsData,
-    ConversationsVars,
     MarkConversationAsReadData,
-    MarkConversationAsReadVars
+    MarkConversationAsReadVars,
+    SearchConversationsData,
+    SearchConversationsVariable
 } from "@conversation/types";
 import ConversationsOps from "@graphql/conversation";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import ConversationList from "./ConversationList";
 import toast from "react-hot-toast";
+import ConversationList from "./ConversationList";
 
 interface ConversationListPanelProps {
-    org: string;
+    orgId: string;
     session: Session;
 }
 
-const ConversationListPanel: React.FC<ConversationListPanelProps> = ({ org, session }) => {
+const ConversationListPanel: React.FC<ConversationListPanelProps> = ({ orgId, session }) => {
     const router = useRouter();
     const { query: { conversationId } } = router;
     const {
@@ -29,10 +31,10 @@ const ConversationListPanel: React.FC<ConversationListPanelProps> = ({ org, sess
         loading: conversationsLoading,
         error: conversationsError,
         subscribeToMore: subscribeToMoreConversations
-    } = useQuery<ConversationsData, ConversationsVars>(ConversationsOps.Queries.conversations, {
+    } = useQuery<SearchConversationsData, SearchConversationsVariable>(ConversationsOps.Query.conversations, {
         variables: {
             input: {
-                org,
+                orgId,
             },
         }
     });
@@ -44,19 +46,16 @@ const ConversationListPanel: React.FC<ConversationListPanelProps> = ({ org, sess
     }, [conversationsError]);
 
     const [ markConversationAsRead ] =
-        useMutation<MarkConversationAsReadData, MarkConversationAsReadVars>(ConversationsOps.Mutations.markConversationAsRead);
+        useMutation<MarkConversationAsReadData, MarkConversationAsReadVars>(ConversationsOps.Mutation.markConversationAsRead);
 
-    useSubscription<{
-        conversationUpdated: Conversation
-    }, {
-        input: { org: string }
-    }>(ConversationsOps.Subscriptions.conversationUpdated, {
+    useSubscription<ConversationUpdatedSubscriptionPayload, SearchConversationsVariable>(
+        ConversationsOps.Subscription.conversationUpdated, {
         variables: {
             input: {
-                org,
+                orgId,
             },
         },
-        onData: ({ client, data }) => {
+        onData: ({ data }) => {
             const { data: subscriptionData } = data;
             if (!subscriptionData) return;
 
@@ -69,25 +68,22 @@ const ConversationListPanel: React.FC<ConversationListPanelProps> = ({ org, sess
         },
     });
 
-    useSubscription<{
-        conversationDeleted: Conversation
-    }, {
-        input: { org: string }
-    }>(ConversationsOps.Subscriptions.conversationDeleted, {
+    useSubscription<ConversationDeletedSubscriptionPayload, SearchConversationsVariable>(
+        ConversationsOps.Subscription.conversationDeleted, {
         variables: {
             input: {
-                org,
+                orgId,
             },
         },
         onData: ({ client, data }) => {
             const { data: subscriptionData } = data;
             if (!subscriptionData) return;
 
-            const existingConversations = client.readQuery<ConversationsData, ConversationsVars>({
-                query: ConversationsOps.Queries.conversations,
+            const existingConversations = client.readQuery<SearchConversationsData, SearchConversationsVariable>({
+                query: ConversationsOps.Query.conversations,
                 variables: {
                     input: {
-                        org,
+                        orgId,
                     },
                 },
             });
@@ -97,11 +93,11 @@ const ConversationListPanel: React.FC<ConversationListPanelProps> = ({ org, sess
             const { conversations } = existingConversations;
             const { conversationDeleted: deletedConversation } = subscriptionData;
 
-            client.writeQuery<ConversationsData, ConversationsVars>({
-                query: ConversationsOps.Queries.conversations,
+            client.writeQuery<SearchConversationsData, SearchConversationsVariable>({
+                query: ConversationsOps.Query.conversations,
                 variables: {
                     input: {
-                        org,
+                        orgId,
                     },
                 },
                 data: {
@@ -113,17 +109,17 @@ const ConversationListPanel: React.FC<ConversationListPanelProps> = ({ org, sess
 
     const subscribeToNewConversations = () => {
         subscribeToMoreConversations({
-            document: ConversationsOps.Subscriptions.conversationCreated,
+            document: ConversationsOps.Subscription.conversationCreated,
             variables: {
                 input: {
-                    org,
+                    orgId,
                 },
             },
             updateQuery: (prev, { subscriptionData }: { subscriptionData: { data: { conversationCreated: Conversation } } }) => {
                 if (!subscriptionData.data) return prev;
                 const newConversation = subscriptionData.data.conversationCreated;
                 // the below is already checked on the server, but just in case
-                if (!newConversation.users.some(u => u.user.id === session.user.id) || newConversation.org.id !== org) return prev;
+                if (!newConversation.users.some(u => u.user.id === session.user.id) || newConversation.org.id !== orgId) return prev;
                 if (prev.conversations.find((c) => c.id === newConversation.id)) {
                     return prev;
                 }
@@ -140,7 +136,7 @@ const ConversationListPanel: React.FC<ConversationListPanelProps> = ({ org, sess
     }, []);
 
     const onViewConversation = async (conversationId: string) => {
-        router.push(`/${org}/?conversationId=${conversationId}`);
+        router.push(`/${orgId}/?conversationId=${conversationId}`);
 
         try {
             await markConversationAsRead({
@@ -163,6 +159,7 @@ const ConversationListPanel: React.FC<ConversationListPanelProps> = ({ org, sess
                             user {
                                 id
                                 name
+                                image
                             }
                         }
                     }`
@@ -187,7 +184,7 @@ const ConversationListPanel: React.FC<ConversationListPanelProps> = ({ org, sess
                         users
                     }`,
                     data: {
-                    users,
+                        users,
                     }
                 });
                 }
@@ -204,7 +201,7 @@ const ConversationListPanel: React.FC<ConversationListPanelProps> = ({ org, sess
                 <SkeletonLoader count={7} height="80px" width="350px" />
             ) : (
                 <ConversationList
-                    org={org}
+                    orgId={orgId}
                     session={session}
                     conversations={conversationsData?.conversations || []}
                     onViewConversation={onViewConversation}

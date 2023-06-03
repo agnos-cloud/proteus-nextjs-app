@@ -12,6 +12,8 @@ characters {
     character {
         id
         name
+        image
+        modelFamily
     }
 }
 users {
@@ -20,6 +22,7 @@ users {
     user {
         id
         name
+        image
     }
 }
 latestMessage {
@@ -29,7 +32,7 @@ updatedAt
 `;
 
 const GQL = {
-    Queries: {
+    Query: {
         conversations: gql`
             query Conversations($input: ConversationSearchInput!) {
                 conversations(input: $input) {
@@ -38,7 +41,7 @@ const GQL = {
             }
         `,
     },
-    Mutations: {
+    Mutation: {
         createConversation: gql`
             mutation CreateConversation($input: ConversationInput!) {
                 createConversation(input: $input) {
@@ -57,7 +60,7 @@ const GQL = {
             }
         `,
     },
-    Subscriptions: {
+    Subscription: {
         conversationCreated: gql`
             subscription ConversationCreated($input: ConversationSearchInput!) {
                 conversationCreated(input: $input) {

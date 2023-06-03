@@ -3,7 +3,7 @@ import { Session } from "next-auth";
 import { useRouter } from "next/router";
 import MessageFeed from "./components/MessageFeed";
 import EmptyFeed from "./components/EmptyFeed";
-import TrainingFeed from "./components/TrainingFeed";
+import CharacterFeed from "./components/CharacterFeed";
 
 interface IFeedWrapperProps {
     orgId: string;
@@ -23,7 +23,7 @@ const FeedWrapper: React.FC<IFeedWrapperProps> = ({ orgId, session }) => {
             bg="background.800"
         >
         {characterId ? (
-            <TrainingFeed
+            <CharacterFeed
                 characterId={characterId as string}
                 orgId={orgId}
                 session={session}
@@ -31,7 +31,7 @@ const FeedWrapper: React.FC<IFeedWrapperProps> = ({ orgId, session }) => {
         ) : conversationId ? (
             <MessageFeed
                 conversationId={conversationId as string}
-                org={orgId}
+                orgId={orgId}
                 session={session}
             />
         ) : (

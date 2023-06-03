@@ -1,5 +1,7 @@
 import { Avatar, Button, Flex, Stack, Text } from "@chakra-ui/react";
-import { Character } from "../types";
+import { Character, ModelFamily } from "@character/types";
+import { BiBot } from "react-icons/bi";
+import { TbBrandGoogle, TbBrandOpenai } from "react-icons/tb";
 
 interface CharacterSearchListProps {
     characters: Array<Character>;
@@ -18,21 +20,27 @@ const CharacterSearchList: React.FC<CharacterSearchListProps> = ({ characters, a
                     {characters.map((character) => (
                         <Stack
                             key={character.id}
-                            direction="row"
                             align="center"
+                            direction="row"
+                            _hover={{ bg: "background.800" }}
+                            p={2}
                             spacing={4}
-                            py={2}
-                            px={2}
-                            borderRadius={4}
-                            _hover={{ bg: "blackAlpha.200" }}
                         >
-                            <Avatar />
+                            {character.image ? (
+                                <Avatar name={character.name} src={character.image} />
+                            ) : character.modelFamily === ModelFamily.GOOGLE_AI ? (
+                                <TbBrandGoogle size={48} />
+                            ) : character.modelFamily === ModelFamily.OPENAI ? (
+                                <TbBrandOpenai size={48} />
+                            ) : (
+                                <BiBot size={48} />
+                            )}
                             <Flex justify="space-between" align="center" width="100%">
                                 <Text>{character.name}</Text>
                                 <Button
                                     size="sm"
-                                    bg="brand.200"
-                                    _hover={{ bg: "brand.200" }}
+                                    bg="button.secondary"
+                                    _hover={{ bg: "button.secondary.hover" }}
                                     onClick={() => addCharacters(character)}
                                 >
                                     Select

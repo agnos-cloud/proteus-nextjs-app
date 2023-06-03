@@ -6,6 +6,8 @@ createdAt
 name
 description
 image
+instruction
+modelFamily
 plan
 planExpiresAt
 updatedAt
@@ -34,6 +36,11 @@ const GQL = {
                 createCharacter(input: $input) {
                     ${CharacterFields}
                 }
+            }
+        `,
+        saveInstruction: gql`
+            mutation SaveInstruction($input: SaveCharacterInstructionInput!) {
+                saveInstruction(input: $input)
             }
         `,
     },

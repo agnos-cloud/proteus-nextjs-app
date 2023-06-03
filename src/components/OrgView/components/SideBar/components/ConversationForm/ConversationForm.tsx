@@ -1,28 +1,22 @@
-import { CharacterSearchList, Participants } from "@components/character";
+import { useLazyQuery } from "@apollo/client";
 import { Button, Input, Stack } from "@chakra-ui/react";
+import { Character, CharactersData, CharactersVariable } from "@character/types";
+import CharactersOps from "@graphql/character";
 import { useEffect, useState } from "react";
-import { useLazyQuery, useQuery } from "@apollo/client";
-import CharactersOps from  "@graphql/character";
 import toast from "react-hot-toast";
-import next from "next/types";
-import { nextTick } from "process";
-import { on } from "events";
-import { Character, CharactersData, CharactersVars } from "@character/types";
-
-export type FormData = {
-    characterName: string;
-}
+import CharacterSearchList from "./components/CharacterSearchList";
+import Participants from "./components/Participants";
 
 interface ConversationFormProps {
     onChange: (participants: Character[]) => void;
-    org: string;
+    orgId: string;
 }
 
-const ConversationForm: React.FC<ConversationFormProps> = ({ org, onChange }) => {
+const ConversationForm: React.FC<ConversationFormProps> = ({ orgId, onChange }) => {
     const [characterName, setCharacterName] = useState<string>("");
     const [participants, setParticipants] = useState<Array<Character>>([]);
     const [characters, { data, loading, error }] =
-        useLazyQuery<CharactersData, CharactersVars>(CharactersOps.Query.characters);
+        useLazyQuery<CharactersData, CharactersVariable>(CharactersOps.Query.characters);
 
     useEffect(() => {
         if (error) {
@@ -40,7 +34,7 @@ const ConversationForm: React.FC<ConversationFormProps> = ({ org, onChange }) =>
             variables: {
               input: {
                 name: characterName,
-                orgId: org,
+                orgId,
               }
             }
         }).catch((e) => toast.error(e.message || String(e)));
@@ -75,7 +69,13 @@ const ConversationForm: React.FC<ConversationFormProps> = ({ org, onChange }) =>
                         value={characterName}
                         onChange={handleNameChange}
                     />
-                    <Button type="submit" isLoading={loading}>
+                    <Button
+                        bg="button.secondary"
+                        _hover={{ bg: "button.secondary.hover" }}
+                        isLoading={loading}
+                        size="sm"
+                        type="submit"
+                    >
                         Search
                     </Button>
                 </Stack>

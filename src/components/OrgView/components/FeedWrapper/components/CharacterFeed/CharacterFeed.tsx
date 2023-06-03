@@ -1,27 +1,30 @@
 import { useQuery } from "@apollo/client";
 import { Flex } from "@chakra-ui/react";
-import { Session } from "next-auth";
-import CharactersOps from "@graphql/character";
 import { CharacterData, CharacterVars, Plan } from "@character/types";
-import { differenceInDays } from "date-fns";
-import { SkeletonLoader } from "@components";
-import Expired from "./Expired";
+import { NotFound, SkeletonLoader } from "@components";
+import CharactersOps from "@graphql/character";
 import { useApp } from "@hooks";
-import { useMemo } from "react";
-import PricingForm from "./PricingForm";
 import { ModalOptions } from "@types";
+import { differenceInDays } from "date-fns";
+import { Session } from "next-auth";
+import { useMemo } from "react";
+import { VscSearchStop } from "react-icons/vsc";
+import CharacterFeedBody from "./CharacterFeedBody";
+import CharacterFeedHeader from "./CharacterFeedHeader";
+import Expired from "./Expired";
+import PricingForm from "./PricingForm";
 
 type FormData = { name: string; description?: string; };
 
 let formData: FormData | undefined = undefined;
 
-interface TrainingFeedProps {
+interface CharacterFeedProps {
     characterId: string;
     orgId: string;
     session: Session;
 }
 
-const TrainingFeed: React.FC<TrainingFeedProps> = ({ characterId, orgId, session }) => {
+const CharacterFeed: React.FC<CharacterFeedProps> = ({ characterId, orgId, session }) => {
     const { openModal, closeModal, setModalIsLoading } = useApp();
     const {
         data: characterData,
@@ -93,7 +96,21 @@ const TrainingFeed: React.FC<TrainingFeedProps> = ({ characterId, orgId, session
         <Flex align="center" direction="column" gap={1} height="100%">
             <SkeletonLoader count={4} height="80px" width="100%" />
         </Flex>
-    ) : !isExpired ? (
+    ) : !characterData?.character ? (
+        <Flex
+            direction="column"
+            justify="space-between"
+            overflow="hidden"
+            flexGrow={1}
+        >
+            <NotFound
+                text={"Cannot find this character 😓"}
+                subtext="The character may have been deleted or the character ID may be wrong."
+                Icon={VscSearchStop}
+                returnUrl={`/${orgId}`}
+            />
+        </Flex>
+    ) : isExpired ? (
         <Flex
             direction="column"
             justify="space-between"
@@ -109,10 +126,16 @@ const TrainingFeed: React.FC<TrainingFeedProps> = ({ characterId, orgId, session
             overflow="hidden"
             flexGrow={1}
         >
-            <div>Header goes here</div>
-            <div>Body goes here</div>
+            <CharacterFeedHeader
+                character={characterData?.character}
+                orgId={orgId}
+            />
+            <CharacterFeedBody
+                character={characterData?.character}
+                orgId={orgId}
+            />
         </Flex>
     );
 };
 
-export default TrainingFeed;
+export default CharacterFeed;

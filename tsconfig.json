@@ -31,7 +31,9 @@
       "@graphql/conversation": [ "./src/features/conversation/graphql" ],
       "@graphql/message": [ "./src/features/message/graphql" ],
       "@hooks": [ "./src/hooks" ],
+      "@message/*": [ "./src/features/message/*" ],
       "@org/*": [ "./src/features/org/*" ],
+      "@rules": [ "./src/rules" ],
       "@types": [ "./src/types" ],
       "@utils/*": [ "./src/utils/*" ],
     }
