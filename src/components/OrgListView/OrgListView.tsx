@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { Avatar, Button, Flex, Text } from "@chakra-ui/react";
 import { SkeletonLoader } from "@components";
-import ConversationsOps from "@graphql/conversation";
+import ConversationsOps from "@conversation/graphql";
 import { useApp } from "@hooks";
 import OrgsOps from "@org/graphql";
 import { CreateOrgData, CreateOrgInput, CreateOrgVars, Org, OrgCreatedSubscriptionPayload, OrgsData } from "@org/types";

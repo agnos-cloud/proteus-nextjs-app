@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 import { Flex, Stack } from "@chakra-ui/react";
 import { NotFound, SkeletonLoader } from "@components";
 import { ConversationsData, ConversationsVariable } from "@conversation/types";
-import ConversationsOps from "@graphql/conversation";
+import ConversationsOps from "@conversation/graphql";
 import { Session } from "next-auth";
 import { VscSearchStop } from "react-icons/vsc";
 import MessageInput from "./MessageInput";

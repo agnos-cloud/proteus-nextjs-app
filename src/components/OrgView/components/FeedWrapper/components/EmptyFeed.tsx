@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { Flex, Stack, Text } from "@chakra-ui/react";
 import { SearchConversationsData, SearchConversationsVariable } from "@conversation/types";
-import ConversationsOps from "@graphql/conversation";
+import ConversationsOps from "@conversation/graphql";
 import OrgsOps from "@org/graphql";
 import { OrgData, OrgVars } from "@org/types";
 import { BiMessageSquareDots } from "react-icons/bi";

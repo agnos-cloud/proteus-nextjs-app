@@ -8,7 +8,7 @@ import {
     SearchCharacterVariable
 } from "@character/types";
 import { SkeletonLoader } from "@components";
-import CharactersOps from "@graphql/character";
+import CharactersOps from "@character/graphql";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
 import { useEffect } from "react";

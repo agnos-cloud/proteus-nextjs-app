@@ -1,8 +1,7 @@
-import { Avatar, Box, Flex, Stack, Text } from "@chakra-ui/react";
+import { Avatar, Box, Button, Flex, Stack, Text } from "@chakra-ui/react";
 import { Message, MessageType } from "@message/types";
 import { formatRelative } from "date-fns";
 import enUS from "date-fns/locale/en-US";
-import { BiBot } from "react-icons/bi";
 import { MdDangerous } from "react-icons/md";
 
 const formatRelativeLocale = {
@@ -19,7 +18,30 @@ interface MessageItemProps {
     isCharacter: boolean;
 }
 
-const MessageItem: React.FC<MessageItemProps> = ({ bg, message, sentByMe, isCharacter }) => {
+const MessageItem: React.FC<MessageItemProps> = ({ bg, message, sentByMe }) => {
+    let messageContent: object | string = "";
+    let messageComponent = null;
+
+    try {
+        messageContent = JSON.parse(message.content);
+    } catch (e) {
+        messageContent = message.content;
+    }
+
+    if (typeof messageContent === "string") {
+        messageComponent = <Text>{messageContent}</Text>;
+    } else if (typeof messageContent === "object" && (messageContent as any)["type"] === "message_button") {
+        messageComponent = (
+            <Button
+                bg="button.secondary"
+                _hover={{ bg: "button.secondary.hover" }}
+                onClick={() => {}}
+            >
+                {(messageContent as any)["text"]}
+            </Button>
+        );
+    }
+
     return (
         <Stack
             direction="row"
@@ -31,11 +53,7 @@ const MessageItem: React.FC<MessageItemProps> = ({ bg, message, sentByMe, isChar
         >
             {!sentByMe && (
                 <Flex align="flex-end">
-                    {isCharacter && !message.sender.image ? (
-                        <BiBot size={24} />
-                    ) : (
-                        <Avatar size="xs" name={message.sender.name} src={message.sender.image} />
-                    )}
+                    <Avatar size="xs" name={message.sender.name} src={message.sender.image} />
                 </Flex>
             )}
             <Stack spacing={1} width="100%">
@@ -59,14 +77,14 @@ const MessageItem: React.FC<MessageItemProps> = ({ bg, message, sentByMe, isChar
                     </Stack>
                     <Flex justify={sentByMe ? "flex-end" : "flex-start"}>
                         <Box
-                            bg={bg || "background.900"}
+                            bg={typeof messageContent === "string" ? bg || "background.900" : "none"}
                             border={message.type === MessageType.ERROR_MESSAGE ? "1px solid red" : "none"}
                             px={2}
                             py={1}
                             borderRadius={12}
                             maxWidth="65%"
                         >
-                            <Text>{message.content}</Text>
+                            {messageComponent}
                         </Box>
                     </Flex>
             </Stack>

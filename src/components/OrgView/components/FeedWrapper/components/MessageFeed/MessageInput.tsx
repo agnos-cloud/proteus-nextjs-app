@@ -3,7 +3,7 @@ import { Box, Input } from "@chakra-ui/react";
 import { Session } from "next-auth";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import MessagesOps from  "@graphql/message";
+import MessagesOps from  "@message/graphql";
 import { ObjectID } from "bson";
 import { MessagesVariable, SendUserMessageData, SendMessageVariable, UserMessagesData, MessageType } from "@message/types";
 

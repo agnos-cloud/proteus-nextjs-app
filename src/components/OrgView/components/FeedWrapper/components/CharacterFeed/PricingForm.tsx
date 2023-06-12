@@ -37,7 +37,7 @@ const pricingInfo: PricingInfo = {
             "Telegram integration",
             "Slack integration",
         ],
-        "knowledge base": ["1000 text characters"],
+        "knowledge base": ["1000 characters of instructions"],
         "knowledge update": ["manual knowledge update"],
         memory: ["remembers only last prompt"],
         models: ["OpenAI models"],
@@ -48,7 +48,7 @@ const pricingInfo: PricingInfo = {
             "can send text, email messages",
         ],
         "knowledge base": [
-            "1000 text characters",
+            "2000 characters of instructions",
             "20MB of your uploaded files",
             "20MB of your website data",
         ],
@@ -96,7 +96,7 @@ const pricingInfo: PricingInfo = {
             "custom integrations",
         ],
         "knowledge base": [
-            "1000 text characters",
+            "5000 characters of instructions",
             "50MB of your uploaded files",
             "50MB of your website data",
             "50MB of your database data",
