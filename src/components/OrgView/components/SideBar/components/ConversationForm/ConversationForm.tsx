@@ -1,7 +1,7 @@
 import { useLazyQuery } from "@apollo/client";
 import { Button, Input, Stack } from "@chakra-ui/react";
 import { Character, CharactersData, CharactersVariable } from "@character/types";
-import CharactersOps from "@graphql/character";
+import CharactersOps from "@character/graphql";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import CharacterSearchList from "./components/CharacterSearchList";

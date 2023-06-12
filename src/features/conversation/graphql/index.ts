@@ -1,4 +1,4 @@
-import { MessageFields } from "@graphql/message";
+import { MessageFields } from "@message/graphql";
 import { gql } from "@apollo/client";
 
 const ConversationFields = `

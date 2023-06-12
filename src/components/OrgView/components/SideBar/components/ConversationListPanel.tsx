@@ -11,7 +11,7 @@ import {
     SearchConversationsData,
     SearchConversationsVariable
 } from "@conversation/types";
-import ConversationsOps from "@graphql/conversation";
+import ConversationsOps from "@conversation/graphql";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
 import { useEffect } from "react";

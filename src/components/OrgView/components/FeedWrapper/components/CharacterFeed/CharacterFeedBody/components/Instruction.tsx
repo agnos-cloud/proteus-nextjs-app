@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/client";
 import { Box, Button, Stack, Text, Textarea } from "@chakra-ui/react";
 import { Character, SaveCharacterInstructionData, SaveCharacterInstructionVariable } from "@character/types";
-import CharactersOps from "@graphql/character";
+import CharactersOps from "@character/graphql";
 import rules from "@rules";
 import { ChangeEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";

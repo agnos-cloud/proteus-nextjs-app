@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/client";
 import { Button, Flex } from "@chakra-ui/react";
 import { Character, CreateCharacterData, CreateCharacterVars } from "@character/types";
-import CharactersOps from "@graphql/character";
+import CharactersOps from "@character/graphql";
 import { useApp } from "@hooks";
 import { ModalOptions } from "@types";
 import { Session } from "next-auth";

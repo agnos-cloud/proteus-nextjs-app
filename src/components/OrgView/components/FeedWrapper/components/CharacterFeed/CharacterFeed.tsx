@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 import { Flex } from "@chakra-ui/react";
 import { CharacterData, CharacterVars, Plan } from "@character/types";
 import { NotFound, SkeletonLoader } from "@components";
-import CharactersOps from "@graphql/character";
+import CharactersOps from "@character/graphql";
 import { useApp } from "@hooks";
 import { ModalOptions } from "@types";
 import { differenceInDays } from "date-fns";

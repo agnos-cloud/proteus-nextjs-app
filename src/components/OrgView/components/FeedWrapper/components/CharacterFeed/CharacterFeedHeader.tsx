@@ -332,16 +332,16 @@ interface NavItem {
       label: "Knowledge",
       href: "knowledge",
     },
-    {
-      label: "Fine-Tuning",
-      href: "fine-tuning",
-    },
+    // {
+    //   label: "Fine-Tuning",
+    //   href: "fine-tuning",
+    // },
     {
       label: "Integrations",
       href: "integrations",
       children: [
         {
-          label: "Actions",
+          label: "Flows & Actions",
           subLabel: "Send text messages, emails, and more",
           href: "actions",
         },

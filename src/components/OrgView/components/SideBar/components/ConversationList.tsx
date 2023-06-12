@@ -2,7 +2,7 @@ import { useMutation } from "@apollo/client";
 import { Button, Flex } from "@chakra-ui/react";
 import { Character } from "@character/types";
 import { Conversation, CreateConversationData, CreateConversationVars, DeleteConversationData, DeleteConversationVars } from "@conversation/types";
-import ConversationsOps from "@graphql/conversation";
+import ConversationsOps from "@conversation/graphql";
 import { useApp } from "@hooks";
 import { ModalOptions } from "@types";
 import { Session } from "next-auth";
