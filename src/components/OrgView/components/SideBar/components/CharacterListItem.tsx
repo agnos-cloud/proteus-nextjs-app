@@ -1,4 +1,3 @@
-import { Character, ModelFamily } from "@character/types";
 import {
     Avatar,
     Box,
@@ -9,20 +8,15 @@ import {
     Stack,
     Text
 } from "@chakra-ui/react";
+import { Character, ModelFamily } from "@character/types";
+import { formatRelativeLocale } from "@utils/time";
 import { formatRelative } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 import React, { useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
-import { MdDeleteOutline } from "react-icons/md";
 import { BiBot } from "react-icons/bi";
+import { MdDeleteOutline } from "react-icons/md";
 import { TbBrandGoogle, TbBrandOpenai } from "react-icons/tb";
-
-const formatRelativeLocale = {
-    lastWeek: "eeee",
-    yesterday: "'Yesterday",
-    today: "p",
-    other: "MM/dd/yy",
-};
 
 interface CharacterListItemProps {
     character: Character;

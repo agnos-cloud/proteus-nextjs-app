@@ -2,6 +2,7 @@ import { Knowledge, KnowledgeSourceType } from "@/features/knowledge/types";
 import { Button, Stack, Text } from "@chakra-ui/react";
 import { useApp } from "@hooks";
 import { ModalOptions } from "@types";
+import { formatRelativeLocale } from "@utils/time";
 import { formatRelative } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 import { useMemo } from "react";
@@ -9,13 +10,6 @@ import { BiLinkExternal } from "react-icons/bi";
 import { BsBodyText, BsFiletypePdf } from "react-icons/bs";
 import { FiLink } from "react-icons/fi";
 import RawTextForm from "./RawTextForm";
-
-const formatRelativeLocale = {
-    lastWeek: "eeee 'at' p",
-    yesterday: "'Yesterday at' p",
-    today: "p",
-    other: "MM/dd/yy",
-};
 
 interface KnowledgeListItemProps {
     knowledge: Knowledge;
