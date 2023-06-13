@@ -35,8 +35,10 @@ const OrgActionList: React.FC<OrgActionListProps> = ({ org }) => {
 
     useEffect(() => {
         if (data) {
+            handleOpenaiApiKeyFormCloseModal();
             toast.success("API key saved!");
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
     useEffect(() => {
         setModalIsLoading(loading);

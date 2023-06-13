@@ -62,14 +62,12 @@ export interface CreateCharacterData {
     }
 }
 
-export interface CharacterInput {
-    name: string;
-    description?: string;
-    orgId: string;
-}
-
-export interface CreateCharacterVars {
-    input: CharacterInput;
+export interface CreateCharacterVariable {
+    input: {
+        name: string;
+        description?: string;
+        orgId: string;
+    };
 }
 
 export interface SearchCharacterVariable {

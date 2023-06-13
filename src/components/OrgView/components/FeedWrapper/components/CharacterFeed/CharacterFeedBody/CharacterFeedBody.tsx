@@ -2,7 +2,7 @@ import { Flex } from "@chakra-ui/react";
 import { Character } from "@character/types";
 import { useRouter } from "next/router";
 import Instruction from "./components/Instruction";
-import Knowledge from "./components/Knowledge";
+import KnowledgeList from "./components/KnowledgeList";
 
 enum Tab {
     INSTRUCTION = "instruction",
@@ -25,7 +25,7 @@ const CharacterFeedBody: React.FC<CharacterFeedBodyProps> = ({ character, orgId 
             visible={!tab || tab === Tab.INSTRUCTION}
         />
         {tab === Tab.KNOWLEDGE && (
-            <Knowledge
+            <KnowledgeList
                 character={character}
                 orgId={orgId}
                 visible={tab === Tab.KNOWLEDGE}

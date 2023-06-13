@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { Button, Flex } from "@chakra-ui/react";
-import { Character, CreateCharacterData, CreateCharacterVars } from "@character/types";
+import { Character, CreateCharacterData, CreateCharacterVariable } from "@character/types";
 import CharactersOps from "@character/graphql";
 import { useApp } from "@hooks";
 import { ModalOptions } from "@types";
@@ -26,7 +26,7 @@ const CharacterList: React.FC<CharacterListProps> = ({ characters, orgId, sessio
     const { openModal, closeModal, setModalIsLoading } = useApp();
     const router = useRouter();
     const [ createCharacter, { data, loading, error }] =
-        useMutation<CreateCharacterData, CreateCharacterVars>(CharactersOps.Mutation.createCharacter);
+        useMutation<CreateCharacterData, CreateCharacterVariable>(CharactersOps.Mutation.createCharacter);
 
     useEffect(() => {
         if (data) {

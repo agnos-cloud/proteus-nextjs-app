@@ -40,6 +40,8 @@ const MessageItem: React.FC<MessageItemProps> = ({ bg, message, sentByMe }) => {
                 {(messageContent as any)["text"]}
             </Button>
         );
+    } else {
+        messageComponent = <Text>{message.content}</Text>;
     }
 
     return (
