@@ -1,15 +1,9 @@
 import { Avatar, Box, Button, Flex, Stack, Text } from "@chakra-ui/react";
 import { Message, MessageType } from "@message/types";
+import { formatRelativeLocale } from "@utils/time";
 import { formatRelative } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 import { MdDangerous } from "react-icons/md";
-
-const formatRelativeLocale = {
-    lastWeek: "eeee 'at' p",
-    yesterday: "'Yesterday at' p",
-    today: "p",
-    other: "MM/dd/yy",
-};
 
 interface MessageItemProps {
     bg?: string;
@@ -40,6 +34,8 @@ const MessageItem: React.FC<MessageItemProps> = ({ bg, message, sentByMe }) => {
                 {(messageContent as any)["text"]}
             </Button>
         );
+    } else {
+        messageComponent = <Text>{message.content}</Text>;
     }
 
     return (

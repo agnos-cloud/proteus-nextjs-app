@@ -16,6 +16,7 @@ This is a [Next.js](https://nextjs.org/) client for the Proteus API.
 
 - [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app)
 - [NextAuth](https://next-auth.js.org/)
+- [React Icons](https://react-icons.github.io/react-icons)
 
 ## Resources
 

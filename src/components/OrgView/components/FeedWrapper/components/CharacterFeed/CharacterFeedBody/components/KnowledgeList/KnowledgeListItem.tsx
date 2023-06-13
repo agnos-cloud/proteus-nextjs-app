@@ -1,26 +1,52 @@
+import { Knowledge, KnowledgeSourceType } from "@/features/knowledge/types";
 import { Button, Stack, Text } from "@chakra-ui/react";
-import { EmbSet, EmbSource } from "@embset/types";
+import { useApp } from "@hooks";
+import { ModalOptions } from "@types";
+import { formatRelativeLocale } from "@utils/time";
 import { formatRelative } from "date-fns";
 import enUS from "date-fns/locale/en-US";
+import { useMemo } from "react";
 import { BiLinkExternal } from "react-icons/bi";
 import { BsBodyText, BsFiletypePdf } from "react-icons/bs";
 import { FiLink } from "react-icons/fi";
+import RawTextForm from "./RawTextForm";
 
-const formatRelativeLocale = {
-    lastWeek: "eeee 'at' p",
-    yesterday: "'Yesterday at' p",
-    today: "p",
-    other: "MM/dd/yy",
-};
-
-interface EmbSetItemProps {
-    embset: EmbSet;
+interface KnowledgeListItemProps {
+    knowledge: Knowledge;
 }
 
-const EmbSetItem: React.FC<EmbSetItemProps> = ({ embset }) => {
-    const bg = embset.source === EmbSource.PDF_FILE ?
+const KnowledgeListItem: React.FC<KnowledgeListItemProps> = ({ knowledge }) => {
+    const { openModal, closeModal } = useApp();
+
+    const handleOpenRawTextModal = () => openModal(rawTextModalArgs);
+
+    const handleCloseModal = () => {
+        closeModal();
+    };
+
+    const rawTextForm = useMemo(() => <RawTextForm text={knowledge.source} />, [knowledge]);
+
+    const rawTextModalArgs: ModalOptions = useMemo(
+        () => ({
+            title: "Knowledge Source",
+            content: rawTextForm,
+            size: "full",
+            actions: [
+                {
+                    text: "Close",
+                    onClick: () => {
+                        handleCloseModal();
+                    },
+                },
+            ],
+        }),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        []
+    );
+
+    const bg = knowledge.sourceType === KnowledgeSourceType.PDF_FILE ?
         "orange.900" :
-        embset.source === EmbSource.TEXT ? "background.800" :
+        knowledge.sourceType === KnowledgeSourceType.TEXT ? "background.800" :
         "green.900";
 
     return (
@@ -28,16 +54,16 @@ const EmbSetItem: React.FC<EmbSetItemProps> = ({ embset }) => {
             <Stack alignItems="center" direction="row" justifyContent="space-between">
                 <Stack alignItems="center" direction="row">
                     {
-                        embset.source === EmbSource.PDF_FILE ?
+                        knowledge.sourceType === KnowledgeSourceType.PDF_FILE ?
                         <BsFiletypePdf /> :
-                        embset.source === EmbSource.TEXT ?
+                        knowledge.sourceType === KnowledgeSourceType.TEXT ?
                         <BsBodyText /> :
                         <FiLink />
                     }
-                    <Text fontWeight="semibold">{embset.title}</Text>
+                    <Text fontWeight="semibold">{knowledge.name}</Text>
                 </Stack>
                 <Text color="color.400" fontSize={14}>
-                    {formatRelative(new Date(embset.createdAt), new Date(), {
+                    {formatRelative(new Date(knowledge.createdAt), new Date(), {
                         locale: {
                             ...enUS,
                             formatRelative: (token) => formatRelativeLocale[token as keyof typeof formatRelativeLocale],
@@ -51,14 +77,15 @@ const EmbSetItem: React.FC<EmbSetItemProps> = ({ embset }) => {
                 justifyContent="space-between"
             >
                 <Text fontSize={{ base: "sm" }} maxW="4xl" textAlign="left">
-                    {embset.description}
+                    {knowledge.description}
                 </Text>
                 <Stack direction={{ base: "column", md: "row" }}>
-                    {embset.source === EmbSource.TEXT ? (
+                    {knowledge.sourceType === KnowledgeSourceType.TEXT ? (
                         <Button
                             bg="button.secondary"
                             _hover={{ bg:"button.secondary.hover" }}
                             size="sm"
+                            onClick={handleOpenRawTextModal}
                         >
                             View Source
                         </Button>
@@ -81,4 +108,4 @@ const EmbSetItem: React.FC<EmbSetItemProps> = ({ embset }) => {
     );
 };
 
-export default EmbSetItem;
+export default KnowledgeListItem;
