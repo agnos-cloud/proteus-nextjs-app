@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { Flex, Stack } from "@chakra-ui/react";
+import { Flex, Spinner, Stack, Text } from "@chakra-ui/react";
 import { SkeletonLoader } from "@components";
 import MessagesOps from "@message/graphql";
 import { useEffect, useState } from "react";
@@ -16,6 +16,7 @@ import {
 
 const bgs = ["#2B6CB0", "#1A365D", "#2F855A", "#1C4532", "#00A3C4", "#065666"];
 const bgsMap: { [key: string]: string } = {};
+let timeout: NodeJS.Timeout | null = null;
 
 interface MessagesProps {
     conversationId: string;
@@ -24,6 +25,8 @@ interface MessagesProps {
 
 const Messages: React.FC<MessagesProps> = ({ conversationId, userId }) => {
     const [messages, setMessages] = useState<Array<Message>>([]);
+    const [waitingForResponse, setWaitingForResponse] = useState(true);
+    const [waitingForTooLong, setWaitingForTooLong] = useState(false);
     const {
         data: charMsgsData,
         loading: charMsgsLoading,
@@ -66,6 +69,25 @@ const Messages: React.FC<MessagesProps> = ({ conversationId, userId }) => {
             return [...acc, curr];
         }, []);
         setMessages(uniqueMessages);
+
+        // if the last message is not from a user, show loading indicator
+        if (uniqueMessages.length > 0 && (userMsgsData?.userMessages || []).includes(uniqueMessages[0])) {
+            // toast.loading("Waiting for response...");
+            setWaitingForResponse(true);
+            setWaitingForTooLong(false);
+            timeout = setTimeout(() => {
+                if (waitingForResponse) {
+                    setWaitingForTooLong(true);
+                }
+            }, 30000);
+        } else {
+            // toast.dismiss();
+            setWaitingForResponse(false);
+            if (timeout) {
+                clearTimeout(timeout);
+            }
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [charMsgsData, userMsgsData, conversationId]);
 
     const subscribeToNewCharMessages = (conversationId: string) => {
@@ -132,7 +154,18 @@ const Messages: React.FC<MessagesProps> = ({ conversationId, userId }) => {
                     <SkeletonLoader count={4} height="60px" width="full" />
                 </Stack>
             )}
-            {messages.length > 0 && (
+            {/* {!charMsgsLoading && !userMsgsLoading && waitingForResponse && (
+                <Flex direction="column-reverse" overflowY="scroll" height="100%">
+                    <Spinner
+                        thickness='4px'
+                        speed='0.65s'
+                        emptyColor='gray.200'
+                        color='blue.500'
+                        size='xl'
+                    />
+                </Flex>
+            )} */}
+            {/* {messages.length > 0 && (
                 <Flex direction="column-reverse" overflowY="scroll" height="100%">
                     {messages.map((message) => {
                         if (!bgsMap[message.sender.id]) {
@@ -149,7 +182,39 @@ const Messages: React.FC<MessagesProps> = ({ conversationId, userId }) => {
                         );
                     })}
                 </Flex>
-            )}
+            )} */}
+            <Flex direction="column-reverse" overflowY="scroll" height="100%">
+                {!charMsgsLoading && !userMsgsLoading && !waitingForTooLong && waitingForResponse && (
+                    <Flex align="center" justify="center" width="100%">
+                        <Spinner
+                            thickness="4px"
+                            speed="0.65s"
+                            emptyColor="button.secondary"
+                            color="button.primary"
+                            size="lg"
+                        />
+                    </Flex>
+                )}
+                {waitingForTooLong && (
+                    <Flex align="center" justify="center" width="100%">
+                        <Text>You may have new messages. You may want to refresh the page.</Text>
+                    </Flex>
+                )}
+                {messages.map((message) => {
+                    if (!bgsMap[message.sender.id]) {
+                        bgsMap[message.sender.id] = bgs[Math.floor(Math.random() * bgs.length)];
+                    }
+                    return (
+                        <MessageItem
+                            key={message.id}
+                            bg={message.sender.id === userId ? "#6B46C1" : bgsMap[message.sender.id]}
+                            message={message}
+                            sentByMe={message.sender.id === userId}
+                            isCharacter={charMsgsData?.characterMessages.find((m) => m.id === message.id) !== undefined}
+                        />
+                    );
+                })}
+            </Flex>
         </Flex>
     );
 };
