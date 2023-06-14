@@ -8,15 +8,13 @@ import {
     Stack,
     Text
 } from "@chakra-ui/react";
-import { Character, ModelFamily } from "@character/types";
+import { Character } from "@character/types";
 import { formatRelativeLocale } from "@utils/time";
 import { formatRelative } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 import React, { useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
-import { BiBot } from "react-icons/bi";
 import { MdDeleteOutline } from "react-icons/md";
-import { TbBrandGoogle, TbBrandOpenai } from "react-icons/tb";
 
 interface CharacterListItemProps {
     character: Character;
@@ -90,15 +88,7 @@ const CharacterListItem: React.FunctionComponent<CharacterListItemProps> = ({
                     </MenuItem>
                 </MenuList>
             </Menu>
-            {character.image ? (
-                <Avatar name={character.name} src={character.image} />
-            ) : character.modelFamily === ModelFamily.GOOGLE_AI ? (
-                <TbBrandGoogle size={48} />
-            ) : character.modelFamily === ModelFamily.OPENAI ? (
-                <TbBrandOpenai size={48} />
-            ) : (
-                <BiBot size={48} />
-            )}
+            <Avatar name={character.name} src={character.image} />
             <Flex justify="space-between" width="80%" height="100%">
                 <Flex direction="column" width="70%" height="100%">
                     <Text
