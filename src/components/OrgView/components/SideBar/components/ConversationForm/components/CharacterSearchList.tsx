@@ -1,7 +1,5 @@
 import { Avatar, Button, Flex, Stack, Text } from "@chakra-ui/react";
-import { Character, ModelFamily } from "@character/types";
-import { BiBot } from "react-icons/bi";
-import { TbBrandGoogle, TbBrandOpenai } from "react-icons/tb";
+import { Character } from "@character/types";
 
 interface CharacterSearchListProps {
     characters: Array<Character>;
@@ -26,15 +24,7 @@ const CharacterSearchList: React.FC<CharacterSearchListProps> = ({ characters, a
                             p={2}
                             spacing={4}
                         >
-                            {character.image ? (
-                                <Avatar name={character.name} src={character.image} />
-                            ) : character.modelFamily === ModelFamily.GOOGLE_AI ? (
-                                <TbBrandGoogle size={48} />
-                            ) : character.modelFamily === ModelFamily.OPENAI ? (
-                                <TbBrandOpenai size={48} />
-                            ) : (
-                                <BiBot size={48} />
-                            )}
+                            <Avatar name={character.name} src={character.image} />
                             <Flex justify="space-between" align="center" width="100%">
                                 <Text>{character.name}</Text>
                                 <Button

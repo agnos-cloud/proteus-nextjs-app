@@ -354,7 +354,7 @@ interface NavItem {
         },
         {
           label: "Widgets",
-          subLabel: "Create chat widgets, dashboard widgets, and more",
+          subLabel: "Create chat widgets, search pages, and more",
           href: "widgets",
         },
       ],

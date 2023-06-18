@@ -47,3 +47,21 @@ export interface CreateKnowledgeFromTextVariable {
         content: string;
     };
 }
+
+export interface SearchKnowledgeVariable {
+    input: {
+        characterId: string;
+    };
+}
+
+export type KnowledgeCreatedSubscriptionPayload = {
+    knowledgeCreated: Knowledge;
+};
+
+export type KnowledgeDeletedSubscriptionPayload = {
+    knowledgeDeleted: Knowledge;
+};
+
+export type KnowledgeUpdatedSubscriptionPayload = {
+    knowledgeUpdated: Knowledge;
+};
