@@ -8,7 +8,7 @@ This is a [Next.js](https://nextjs.org/) client for the Proteus API.
 - Create `.env.local` in the root directory. See the `.env.local.example` file for names of environment variables.
   - Reach out to a project member for values of environment variables.
 - Install dependencies by running `yarn`.
-  - Ideally, you should be running Node version 18 or 19. However, some packages may require a lower Node version during installation.
+  - Ideally, you should be running Node version `18.12.0` as this is the version we use in production.
 - Start the server by running `yarn dev`.
   - This starts the frontend server at port 4000 by default.
 

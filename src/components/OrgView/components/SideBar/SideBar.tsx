@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import CharacterListPanel from "./components/CharacterListPanel";
 import ConversationListPanel from "./components/ConversationListPanel";
 import OrgActionList from "./components/OrgActionList";
+import { useEffect, useState } from "react";
 
 interface SideBarProps {
     orgId: string;
@@ -14,6 +15,20 @@ interface SideBarProps {
 const SideBar: React.FC<SideBarProps> = ({ orgId, session }) => {
     const router = useRouter();
     const { query: { characterId, conversationId } } = router;
+    const [tabIndex, setTabIndex] = useState(0);
+
+    useEffect(() => {
+        if (conversationId) {
+            setTabIndex(0);
+        } else if (characterId) {
+            setTabIndex(1);
+        }
+    }, [characterId, conversationId]);
+
+    const handleTabsChange = (index: number) => {
+        // characterId, conversationId should control visible tab panel
+        setTabIndex(index);
+    }
 
     return (
         <Stack
@@ -29,7 +44,14 @@ const SideBar: React.FC<SideBarProps> = ({ orgId, session }) => {
                         <Divider orientation="horizontal" />
                     </Stack>
                     <Stack overflow="hidden" flexGrow={1}>
-                        <Tabs colorScheme="tab" height="100%" isFitted isLazy>
+                        <Tabs
+                            colorScheme="tab"
+                            height="100%"
+                            isFitted
+                            isLazy
+                            index={tabIndex}
+                            onChange={handleTabsChange}
+                        >
                             <TabList color="color.400">
                                 <Tab>Conversations</Tab>
                                 <Tab>Characters</Tab>

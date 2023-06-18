@@ -15,12 +15,12 @@ import {
     useBreakpointValue,
     useDisclosure
 } from "@chakra-ui/react";
-import { Character, ModelFamily } from "@character/types";
+import { Character } from "@character/types";
+import { CharacterIcon } from "@components";
 import { useRouter } from "next/router";
-import { BiBot, BiChevronDown as ChevronDownIcon } from "react-icons/bi";
+import { BiChevronDown as ChevronDownIcon } from "react-icons/bi";
 import { IoArrowBack as BackArrowIcon } from "react-icons/io5";
 import { RxHamburgerMenu as HamburgerIcon } from "react-icons/rx";
-import { TbBrandGoogle, TbBrandOpenai } from "react-icons/tb";
 import { TfiClose as CloseIcon } from "react-icons/tfi";
 
 interface CharacterFeedHeaderProps {
@@ -69,24 +69,26 @@ export default function CharacterFeedHeader(props: CharacterFeedHeaderProps) {
                         onClick={onToggle}
                     />
                 </Flex>
-                <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
+                <Flex flex={{ base: 1.5, md: 1 }} justify={{ base: "center", md: "start" }}>
                     <Flex gap={1}>
-                        {character.image ? (
-                            <Avatar name={character.name} src={character.image} />
-                        ) : character.modelFamily === ModelFamily.GOOGLE_AI ? (
-                            <TbBrandGoogle size={24} />
-                        ) : character.modelFamily === ModelFamily.OPENAI ? (
-                            <TbBrandOpenai size={24} />
-                        ) : (
-                            <BiBot size={24} />
-                        )}
+                        <Avatar name={character.name} src={character.image} size="xs" />
                         <Text
                             textAlign={useBreakpointValue({ base: "center", md: "left" })}
                             fontFamily="heading"
                         >
                             {character.name}
                             {" "}
-                            <sup style={{ color: "RGBA(255, 255, 255, 0.36)" }}>{String(character.plan).toLowerCase()}</sup>
+                            <sup style={{ color: "RGBA(255, 255, 255, 0.36)" }}>
+                                {String(character.plan).toLowerCase()}
+                            </sup>
+                        </Text>
+                        <Text
+                            textAlign={useBreakpointValue({ base: "center", md: "left" })}
+                            fontFamily="heading"
+                        >
+                            <sup style={{ color: "RGBA(255, 255, 255, 0.36)" }}>
+                                <CharacterIcon character={character} size={16} />
+                            </sup>
                         </Text>
                     </Flex>
 
@@ -352,7 +354,7 @@ interface NavItem {
         },
         {
           label: "Widgets",
-          subLabel: "Create chat widgets, dashboard widgets, and more",
+          subLabel: "Create chat widgets, search pages, and more",
           href: "widgets",
         },
       ],

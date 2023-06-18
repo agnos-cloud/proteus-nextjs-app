@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery, useSubscription } from "@apollo/client";
 import { Button, Grid, Stack } from "@chakra-ui/react";
 import { Character } from "@character/types";
 import { DropDownButton } from "@components";
@@ -7,8 +7,11 @@ import KnowledgeOps from "@knowledge/graphql";
 import {
     CreateKnowledgeFromTextData,
     CreateKnowledgeFromTextVariable,
+    KnowledgeCreatedSubscriptionPayload,
+    KnowledgeUpdatedSubscriptionPayload,
     KnowledgesData,
-    KnowledgesVariable
+    KnowledgesVariable,
+    SearchKnowledgeVariable
 } from "@knowledge/types";
 import { ModalOptions } from "@types";
 import { useEffect, useMemo } from "react";
@@ -59,6 +62,32 @@ const KnowledgeList: React.FC<KnowledgeListProps> = ({ character, orgId, visible
             toast.error(error.message);
         }
     }, [error]);
+
+    const subscribeToNewKnowledges = () => {
+        subscribeToMoreKnowledges({
+            document: KnowledgeOps.Subscription.knowledgeCreated,
+            variables: {
+                input: {
+                    characterId: character.id,
+                },
+            },
+            updateQuery: (prev, { subscriptionData }: { subscriptionData: { data: KnowledgeCreatedSubscriptionPayload } }) => {
+                if (!subscriptionData.data) return prev;
+                const newKnowledge = subscriptionData.data.knowledgeCreated;
+                if (prev.knowledges.find((k) => k.id === newKnowledge.id)) {
+                    return prev;
+                }
+                return Object.assign({}, prev, {
+                    knowledges: [newKnowledge, ...prev.knowledges]
+                });
+            }
+        });
+    };
+
+    useEffect(() => {
+        subscribeToNewKnowledges();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const handleOpenKnowledgeFromTextModal = () => openModal(newKnowledgeFromTextModalArgs);
 

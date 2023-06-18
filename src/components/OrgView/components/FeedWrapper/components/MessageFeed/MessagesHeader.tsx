@@ -1,5 +1,4 @@
-import { Button, IconButton, Stack, Text } from "@chakra-ui/react";
-import { CharacterIcon } from "@components";
+import { Avatar, Button, IconButton, Stack, Text } from "@chakra-ui/react";
 import { Conversation } from "@conversation/types";
 import { useRouter } from "next/router";
 import React from "react";
@@ -40,7 +39,7 @@ const MessagesHeader: React.FC<MessagesHeaderProps> = ({
                           bg="button.secondary"
                           _hover={{ bg: "button.secondary.hover" }}
                           key={character.id}
-                          leftIcon={<CharacterIcon character={character.character} size={24} />}
+                          leftIcon={<Avatar size="xs" name={character.character.name} src={character.character.image} />}
                           onClick={() => router.push(`/${orgId}/?characterId=${character.character.id}`)}
                       >
                           {character.character.name}
