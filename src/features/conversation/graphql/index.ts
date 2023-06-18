@@ -3,6 +3,7 @@ import { gql } from "@apollo/client";
 
 const ConversationFields = `
 id
+state
 org {
     id
     name
@@ -57,6 +58,11 @@ const GQL = {
         markConversationAsRead: gql`
             mutation MarkConversationAsRead($id: ID!) {
                 markConversationAsRead(id: $id)
+            }
+        `,
+        setConversationState: gql`
+            mutation SetConversationState($input: ConversationStateInput!) {
+                setConversationState(input: $input)
             }
         `,
     },

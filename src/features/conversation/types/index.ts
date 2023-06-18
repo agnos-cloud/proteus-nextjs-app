@@ -2,9 +2,10 @@ import { ModelFamily } from "@character/types";
 
 export interface Conversation {
     id: string;
-    createdAt: Date;
-    updatedAt: Date;
     characters: ConversationCharactersInclude;
+    createdAt: Date;
+    state?: string;
+    updatedAt: Date;
     users: ConversationUsersInclude;
     org: {
         id: string;
