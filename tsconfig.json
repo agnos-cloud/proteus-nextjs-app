@@ -22,6 +22,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@character/*": [ "./src/features/character/*" ],
+      "@chat-widget/*": [ "./src/features/chat-widget/*" ],
       "@components": [ "./src/components" ],
       "@components/character": [ "./src/features/character/components" ],
       "@components/org": [ "./src/features/org/components" ],
