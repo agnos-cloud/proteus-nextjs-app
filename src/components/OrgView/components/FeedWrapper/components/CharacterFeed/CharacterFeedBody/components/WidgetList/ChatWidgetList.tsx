@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { Button, Grid, Stack } from "@chakra-ui/react";
+import { Box, Button, Grid, GridItem, Stack } from "@chakra-ui/react";
 import { Character } from "@character/types";
 import { DropDownButton } from "@components";
 import { useApp } from "@hooks";
@@ -16,17 +16,17 @@ import { useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import { BsBodyText, BsFiletypePdf } from "react-icons/bs";
 import { FiLink } from "react-icons/fi";
-import KnowledgeListItem from "./KnowledgeListItem";
-import NewKnowledgeFromTextForm from "./NewKnowledgeFromTextForm";
+import KnowledgeListItem from "../KnowledgeList/KnowledgeListItem";
+import NewKnowledgeFromTextForm from "../KnowledgeList/NewKnowledgeFromTextForm";
 
 let rawText: string | undefined = undefined;
 
-interface KnowledgeListProps {
+interface ChatWidgetListProps {
     character: Character;
     orgId: string;
 }
 
-const KnowledgeList: React.FC<KnowledgeListProps> = ({ character, orgId }) => {
+const ChatWidgetList: React.FC<ChatWidgetListProps> = ({ character, orgId }) => {
     const { openModal, closeModal, setModalIsLoading } = useApp();
     const {
         data: knowledgesData,
@@ -143,51 +143,35 @@ const KnowledgeList: React.FC<KnowledgeListProps> = ({ character, orgId }) => {
 
     return (
         <Stack
-            display= "flex"
-            p={4}
+            height="100%"
             spacing={4}
         >
-            <Stack spacing={2}>
-                <DropDownButton text="Add Knowledge" subtext="Add new source of knowledge">
-                    <Grid gap={2}>
-                        <Button
-                            bg="button.secondary"
-                            _hover={{ bg: "button.secondary.hover" }}
-                            leftIcon={<BsBodyText />}
-                            onClick={handleOpenKnowledgeFromTextModal}
-                        >
-                            Raw Text
-                        </Button>
-                        <Button
-                            bg="button.secondary"
-                            _hover={{ bg: "button.secondary.hover" }}
-                            leftIcon={<BsFiletypePdf />}
-                            onClick={handleOpenKnowledgeFromTextModal}
-                        >
-                            PDF File
-                        </Button>
-                        <Button
-                            bg="button.secondary"
-                            _hover={{ bg: "button.secondary.hover" }}
-                            leftIcon={<FiLink />}
-                            onClick={handleOpenKnowledgeFromTextModal}
-                        >
-                            Web Link
-                        </Button>
-                    </Grid>
-                </DropDownButton>
+            <Stack spacing={1} height="100%">
+                <Box>
+                    <Button
+                        bg="button.primary"
+                        _hover={{ bg: "button.primary.hover" }}
+                        size="md"
+                        onClick={handleOpenKnowledgeFromTextModal}
+                    >
+                        Create a chat widget
+                    </Button>
+                </Box>
 
-                {[...(knowledgesData?.knowledges || [])]
-                    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-                    .map((knowledge) => (
-                        <KnowledgeListItem
-                            key={knowledge.id}
-                            knowledge={knowledge}
-                        />
-                    ))}
+                <Grid
+                    gap={2}
+                    templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
+                    overflowY="scroll"
+                >
+                    <GridItem w="auto" h="400" bg='blue.500' />
+                    <GridItem w="auto" h="400" bg='blue.500' />
+                    <GridItem w="auto" h="400" bg='blue.500' />
+                    <GridItem w="auto" h="400" bg='blue.500' />
+                    <GridItem w="auto" h="400" bg='blue.500' />
+                </Grid>
             </Stack>
         </Stack>
     );
 };
 
-export default KnowledgeList;
+export default ChatWidgetList;

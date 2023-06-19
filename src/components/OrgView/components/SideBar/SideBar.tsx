@@ -2,10 +2,11 @@ import { Avatar, Button, Divider, Flex, Stack, Tab, TabList, TabPanel, TabPanels
 import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { BiBot, BiConversation } from "react-icons/bi";
 import CharacterListPanel from "./components/CharacterListPanel";
 import ConversationListPanel from "./components/ConversationListPanel";
 import OrgActionList from "./components/OrgActionList";
-import { useEffect, useState } from "react";
 
 interface SideBarProps {
     orgId: string;
@@ -53,8 +54,8 @@ const SideBar: React.FC<SideBarProps> = ({ orgId, session }) => {
                             onChange={handleTabsChange}
                         >
                             <TabList color="color.400">
-                                <Tab>Conversations</Tab>
-                                <Tab>Characters</Tab>
+                                <Tab><BiConversation />&nbsp;Conversations</Tab>
+                                <Tab><BiBot />&nbsp;Characters</Tab>
                             </TabList>
 
                             <TabPanels height="92%">
