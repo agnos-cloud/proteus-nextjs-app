@@ -1,25 +1,17 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { Box, Button, Grid, GridItem, Stack } from "@chakra-ui/react";
+import { Box, Button, Grid, GridItem, Stack, Text } from "@chakra-ui/react";
 import { Character } from "@character/types";
-import { DropDownButton } from "@components";
+import ChatWidgetOps from "@chat-widget/graphql";
+import { ChatWidget, ChatWidgetCreatedSubscriptionPayload, CreateChatWidgetData, CreateChatWidgetVariable, SearchChatWidgetsData, SearchChatWidgetsVariable } from "@chat-widget/types";
 import { useApp } from "@hooks";
-import KnowledgeOps from "@knowledge/graphql";
-import {
-    CreateKnowledgeFromTextData,
-    CreateKnowledgeFromTextVariable,
-    KnowledgeCreatedSubscriptionPayload,
-    KnowledgesData,
-    KnowledgesVariable
-} from "@knowledge/types";
 import { ModalOptions } from "@types";
 import { useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
-import { BsBodyText, BsFiletypePdf } from "react-icons/bs";
-import { FiLink } from "react-icons/fi";
-import KnowledgeListItem from "../KnowledgeList/KnowledgeListItem";
-import NewKnowledgeFromTextForm from "../KnowledgeList/NewKnowledgeFromTextForm";
+import ChatWidgetForm from "./ChatWidgetForm";
 
-let rawText: string | undefined = undefined;
+type ChatWidgetToCreate = Pick<ChatWidget, "name" | "description" | "origins" | "primaryColor" | "secondaryColor">;
+
+let chatWidgetToCreate: ChatWidgetToCreate | undefined = undefined;
 
 interface ChatWidgetListProps {
     character: Character;
@@ -29,20 +21,20 @@ interface ChatWidgetListProps {
 const ChatWidgetList: React.FC<ChatWidgetListProps> = ({ character, orgId }) => {
     const { openModal, closeModal, setModalIsLoading } = useApp();
     const {
-        data: knowledgesData,
-        loading: knowledgesLoading,
-        error: knowledgesError,
-        subscribeToMore: subscribeToMoreKnowledges
+        data: chatWidgetsData,
+        loading: chatWidgetsLoading,
+        error: chatWidgetsError,
+        subscribeToMore: subscribeToMoreChatWidgets
     } =
-        useQuery<KnowledgesData, KnowledgesVariable>(KnowledgeOps.Query.knowledges, {
+        useQuery<SearchChatWidgetsData, SearchChatWidgetsVariable>(ChatWidgetOps.Query.chatWidgets, {
         variables: {
             input: {
                 characterId: character.id,
             },
         }
     });
-    const [ createKnowledgeFromText, { data, loading, error }] =
-        useMutation<CreateKnowledgeFromTextData, CreateKnowledgeFromTextVariable>(KnowledgeOps.Mutation.createKnowledgeFromText);
+    const [ createChatWidget, { data, loading, error }] =
+        useMutation<CreateChatWidgetData, CreateChatWidgetVariable>(ChatWidgetOps.Mutation.createChatWidget);
 
     useEffect(() => {
         if (data) {
@@ -60,69 +52,71 @@ const ChatWidgetList: React.FC<ChatWidgetListProps> = ({ character, orgId }) => 
         }
     }, [error]);
 
-    const subscribeToNewKnowledges = () => {
-        subscribeToMoreKnowledges({
-            document: KnowledgeOps.Subscription.knowledgeCreated,
+    const subscribeToNewChatWidgets = () => {
+        subscribeToMoreChatWidgets({
+            document: ChatWidgetOps.Subscription.chatWidgetCreated,
             variables: {
                 input: {
                     characterId: character.id,
                 },
             },
-            updateQuery: (prev, { subscriptionData }: { subscriptionData: { data: KnowledgeCreatedSubscriptionPayload } }) => {
+            updateQuery: (prev, { subscriptionData }: { subscriptionData: { data: ChatWidgetCreatedSubscriptionPayload } }) => {
                 if (!subscriptionData.data) return prev;
-                const newKnowledge = subscriptionData.data.knowledgeCreated;
-                if (prev.knowledges.find((k) => k.id === newKnowledge.id)) {
+                const newChatWidget = subscriptionData.data.chatWidgetCreated;
+                if (prev.chatWidgets.find((k) => k.id === newChatWidget.id)) {
                     return prev;
                 }
                 return Object.assign({}, prev, {
-                    knowledges: [newKnowledge, ...prev.knowledges]
+                    chatWidgets: [newChatWidget, ...prev.chatWidgets]
                 });
             }
         });
     };
 
     useEffect(() => {
-        subscribeToNewKnowledges();
+        subscribeToNewChatWidgets();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const handleOpenKnowledgeFromTextModal = () => openModal(newKnowledgeFromTextModalArgs);
+    const handleOpenChatWidgetModal = () => openModal(newChatWidgetModalArgs);
 
     const handleCloseModal = () => {
-        rawText = undefined;
+        chatWidgetToCreate = undefined;
         closeModal();
     };
 
     const handleSubmitKnowledgeFromTextModal = () => {
-        if (!rawText) return;
+        if (!chatWidgetToCreate) return;
 
-        createKnowledgeFromText({
+        createChatWidget({
             variables: {
                 input: {
+                    name: chatWidgetToCreate.name,
                     characterId: character.id,
-                    content: rawText,
+                    description: chatWidgetToCreate.description,
+                    origins: chatWidgetToCreate.origins,
+                    primaryColor: chatWidgetToCreate.primaryColor,
+                    secondaryColor: chatWidgetToCreate.secondaryColor,
                 }
             },
         }).catch((e) => toast.error(e.message || String(e)));
     };
 
-    const onChangeKnowledgeFromTextModal = (text: string) => {
-        rawText = text;
+    const onChange = (chatWidget: ChatWidgetToCreate) => {
+        chatWidgetToCreate = chatWidget;
     };
 
-    const newKnowledgeFromTextForm = useMemo(
-        () => <NewKnowledgeFromTextForm
-                character={character}
-                onChange={onChangeKnowledgeFromTextModal}
+    const newChatWidgetForm = useMemo(
+        () => <ChatWidgetForm
+                onChange={onChange}
             />,
-        [character]
+        []
     );
 
-    const newKnowledgeFromTextModalArgs: ModalOptions = useMemo(
+    const newChatWidgetModalArgs: ModalOptions = useMemo(
         () => ({
-            title: "Create Knowledge from Text",
-            content: newKnowledgeFromTextForm,
-            size: "full",
+            title: "Chat Widget",
+            content: newChatWidgetForm,
             actions: [
                 {
                     text: "Cancel",
@@ -152,7 +146,7 @@ const ChatWidgetList: React.FC<ChatWidgetListProps> = ({ character, orgId }) => 
                         bg="button.primary"
                         _hover={{ bg: "button.primary.hover" }}
                         size="md"
-                        onClick={handleOpenKnowledgeFromTextModal}
+                        onClick={handleOpenChatWidgetModal}
                     >
                         Create a chat widget
                     </Button>
@@ -160,14 +154,16 @@ const ChatWidgetList: React.FC<ChatWidgetListProps> = ({ character, orgId }) => 
 
                 <Grid
                     gap={2}
-                    templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
+                    templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)", xl: "repeat(6, 1fr)", "2xl": "repeat(8, 1fr)" }}
                     overflowY="scroll"
                 >
-                    <GridItem w="auto" h="400" bg='blue.500' />
-                    <GridItem w="auto" h="400" bg='blue.500' />
-                    <GridItem w="auto" h="400" bg='blue.500' />
-                    <GridItem w="auto" h="400" bg='blue.500' />
-                    <GridItem w="auto" h="400" bg='blue.500' />
+                    {[...(chatWidgetsData?.chatWidgets || [])]
+                        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                        .map((chatWidget) => (
+                            <GridItem key={chatWidget.id} w="auto" h="400" bg={chatWidget.primaryColor}>
+                                <Text>{chatWidget.name}: {chatWidget.origins.join(",")}</Text>
+                            </GridItem>
+                        ))}
                 </Grid>
             </Stack>
         </Stack>
