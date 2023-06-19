@@ -9,10 +9,9 @@ import toast from "react-hot-toast";
 interface InstructionProps {
     character: Character;
     orgId: string;
-    visible?: boolean;
 }
 
-const Instruction: React.FC<InstructionProps> = ({ character, orgId, visible }) => {
+const Instruction: React.FC<InstructionProps> = ({ character, orgId }) => {
     const [instruction, setInstruction] = useState(character.instruction || "");
     useEffect(() => {
         setInstruction(character.instruction || "");
@@ -50,7 +49,7 @@ const Instruction: React.FC<InstructionProps> = ({ character, orgId, visible }) 
 
     return (
         <Stack
-            display= {visible ? "flex" : "none"}
+            display="flex"
             p={4}
             spacing={4}
         >

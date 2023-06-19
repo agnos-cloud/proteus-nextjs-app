@@ -3,10 +3,12 @@ import { Character } from "@character/types";
 import { useRouter } from "next/router";
 import Instruction from "./components/Instruction";
 import KnowledgeList from "./components/KnowledgeList";
+import WidgetList from "./components/WidgetList";
 
 enum Tab {
     INSTRUCTION = "instruction",
     KNOWLEDGE = "knowledge",
+    WIDGETS = "widgets",
 };
 
 interface CharacterFeedBodyProps {
@@ -19,16 +21,20 @@ const CharacterFeedBody: React.FC<CharacterFeedBodyProps> = ({ character, orgId 
     const { query: { tab } } = router;
 
     return <Flex direction="column" overflow="hidden" overflowY="scroll" flex={1}>
-        <Instruction
+        {(!tab || tab === Tab.INSTRUCTION) && <Instruction
             character={character}
             orgId={orgId}
-            visible={!tab || tab === Tab.INSTRUCTION}
-        />
+        />}
         {tab === Tab.KNOWLEDGE && (
             <KnowledgeList
                 character={character}
                 orgId={orgId}
-                visible={tab === Tab.KNOWLEDGE}
+            />
+        )}
+        {tab === Tab.WIDGETS && (
+            <WidgetList
+                character={character}
+                orgId={orgId}
             />
         )}
     </Flex>;
