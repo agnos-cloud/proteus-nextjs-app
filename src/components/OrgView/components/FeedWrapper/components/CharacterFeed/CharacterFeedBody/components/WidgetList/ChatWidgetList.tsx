@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { Box, Button, Grid, GridItem, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Grid, GridItem, Stack } from "@chakra-ui/react";
 import { Character } from "@character/types";
 import ChatWidgetOps from "@chat-widget/graphql";
 import { ChatWidget, ChatWidgetCreatedSubscriptionPayload, CreateChatWidgetData, CreateChatWidgetVariable, SearchChatWidgetsData, SearchChatWidgetsVariable } from "@chat-widget/types";
@@ -8,6 +8,7 @@ import { ModalOptions } from "@types";
 import { useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import ChatWidgetForm from "./ChatWidgetForm";
+import DummyChatWidget from "./DummyChatWidget";
 
 type ChatWidgetToCreate = Pick<ChatWidget, "name" | "description" | "origins" | "primaryColor" | "secondaryColor">;
 
@@ -154,14 +155,14 @@ const ChatWidgetList: React.FC<ChatWidgetListProps> = ({ character, orgId }) => 
 
                 <Grid
                     gap={2}
-                    templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)", xl: "repeat(6, 1fr)", "2xl": "repeat(8, 1fr)" }}
+                    templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)", xl: "repeat(4, 1fr)", "2xl": "repeat(6, 1fr)" }}
                     overflowY="scroll"
                 >
                     {[...(chatWidgetsData?.chatWidgets || [])]
                         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
                         .map((chatWidget) => (
-                            <GridItem key={chatWidget.id} w="auto" h="400" bg={chatWidget.primaryColor}>
-                                <Text>{chatWidget.name}: {chatWidget.origins.join(",")}</Text>
+                            <GridItem key={chatWidget.id} w="auto" h="400">
+                                <DummyChatWidget character={character} chatWidget={chatWidget} />
                             </GridItem>
                         ))}
                 </Grid>
