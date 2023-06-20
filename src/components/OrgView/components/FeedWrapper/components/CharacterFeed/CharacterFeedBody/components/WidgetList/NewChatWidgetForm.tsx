@@ -1,18 +1,17 @@
-import { Input, Stack, Textarea } from "@chakra-ui/react";
-import { ChangeEvent, useState } from "react";
-import rules from "@rules";
-import { Character } from "@character/types";
+import { Input, Stack } from "@chakra-ui/react";
 import { ChatWidget } from "@chat-widget/types";
+import { useState } from "react";
 
-interface ChatWidgetFormProps {
-    onChange: (chatWidget: Pick<ChatWidget, "name" | "description" | "origins" | "primaryColor" | "secondaryColor">) => void;
+interface NewChatWidgetFormProps {
+    onChange: (chatWidget: Pick<ChatWidget, "name" | "description" | "origins" | "primaryColor" | "secondaryColor" | "tertiaryColor">) => void;
 }
 
-const ChatWidgetForm: React.FC<ChatWidgetFormProps> = ({ onChange }) => {
+const NewChatWidgetForm: React.FC<NewChatWidgetFormProps> = ({ onChange }) => {
     const [name, setName] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [primaryColor, setPrimaryColor] = useState<string>("");
     const [secondaryColor, setSecondaryColor] = useState<string>("");
+    const [tertiaryColor, setTertiaryColor] = useState<string>("");
     const [origins, setOrigins] = useState<string>("");
 
     const handleFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,6 +28,9 @@ const ChatWidgetForm: React.FC<ChatWidgetFormProps> = ({ onChange }) => {
             case "secondaryColor":
                 setSecondaryColor(event.target.value);
                 break;
+            case "tertiaryColor":
+                setTertiaryColor(event.target.value);
+                break;
             case "origins":
                 setOrigins(event.target.value);
                 break;
@@ -39,6 +41,7 @@ const ChatWidgetForm: React.FC<ChatWidgetFormProps> = ({ onChange }) => {
             origins: event.target.name === "origins" ? event.target.value.split(",").map((origin) => origin.trim()) : origins.split(",").map((origin) => origin.trim()),
             primaryColor: event.target.name === "primaryColor" ? event.target.value : primaryColor,
             secondaryColor: event.target.name === "secondaryColor" ? event.target.value : secondaryColor,
+            tertiaryColor: event.target.name === "tertiaryColor" ? event.target.value : tertiaryColor,
         });
     };
 
@@ -70,6 +73,12 @@ const ChatWidgetForm: React.FC<ChatWidgetFormProps> = ({ onChange }) => {
                     onChange={handleFieldChange}
                 />
                 <Input
+                    name="tertiaryColor"
+                    placeholder="Enter tertiary color"
+                    value={tertiaryColor}
+                    onChange={handleFieldChange}
+                />
+                <Input
                     name="origins"
                     placeholder="Enter comma-separated URLs"
                     value={origins}
@@ -80,4 +89,4 @@ const ChatWidgetForm: React.FC<ChatWidgetFormProps> = ({ onChange }) => {
     );
 };
 
-export default ChatWidgetForm;
+export default NewChatWidgetForm;

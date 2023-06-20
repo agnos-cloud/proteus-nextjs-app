@@ -5,12 +5,13 @@ export interface ChatWidget {
     character: Character;
     characterId: string
     createdAt: Date;
-    description: string;
-    logo: string;
-    name: string;
-    origins: Array<string>;
-    primaryColor: string;
-    secondaryColor: string;
+    description?: string;
+    logo?: string;
+    name?: string;
+    origins?: Array<string>;
+    primaryColor?: string;
+    secondaryColor?: string;
+    tertiaryColor?: string;
     updatedAt: Date;
 }
 
@@ -20,12 +21,13 @@ export interface CreateChatWidgetData {
 
 export interface CreateChatWidgetVariable {
     input: {
-        name: string;
+        name?: string;
         characterId: string;
-        description: string;
-        origins: Array<string>;
-        primaryColor: string;
-        secondaryColor: string;
+        description?: string;
+        origins?: Array<string>;
+        primaryColor?: string;
+        secondaryColor?: string;
+        tertiaryColor?: string;
     };
 }
 

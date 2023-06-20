@@ -10,6 +10,7 @@ name
 origins
 primaryColor
 secondaryColor
+tertiaryColor
 updatedAt
 character {
     id

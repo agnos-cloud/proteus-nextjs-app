@@ -2,15 +2,22 @@ import { useMutation, useQuery } from "@apollo/client";
 import { Box, Button, Grid, GridItem, Stack } from "@chakra-ui/react";
 import { Character } from "@character/types";
 import ChatWidgetOps from "@chat-widget/graphql";
-import { ChatWidget, ChatWidgetCreatedSubscriptionPayload, CreateChatWidgetData, CreateChatWidgetVariable, SearchChatWidgetsData, SearchChatWidgetsVariable } from "@chat-widget/types";
+import {
+    ChatWidget,
+    ChatWidgetCreatedSubscriptionPayload,
+    CreateChatWidgetData,
+    CreateChatWidgetVariable,
+    SearchChatWidgetsData,
+    SearchChatWidgetsVariable,
+} from "@chat-widget/types";
 import { useApp } from "@hooks";
 import { ModalOptions } from "@types";
 import { useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
-import ChatWidgetForm from "./ChatWidgetForm";
+import NewChatWidgetForm from "./NewChatWidgetForm";
 import DummyChatWidget from "./DummyChatWidget";
 
-type ChatWidgetToCreate = Pick<ChatWidget, "name" | "description" | "origins" | "primaryColor" | "secondaryColor">;
+type ChatWidgetToCreate = Pick<ChatWidget, "name" | "description" | "origins" | "primaryColor" | "secondaryColor" | "tertiaryColor">;
 
 let chatWidgetToCreate: ChatWidgetToCreate | undefined = undefined;
 
@@ -86,18 +93,19 @@ const ChatWidgetList: React.FC<ChatWidgetListProps> = ({ character, orgId }) => 
         closeModal();
     };
 
-    const handleSubmitKnowledgeFromTextModal = () => {
+    const handleSubmitNewChatWidgetModal = () => {
         if (!chatWidgetToCreate) return;
 
         createChatWidget({
             variables: {
                 input: {
-                    name: chatWidgetToCreate.name,
+                    name: chatWidgetToCreate.name || character.name,
                     characterId: character.id,
-                    description: chatWidgetToCreate.description,
-                    origins: chatWidgetToCreate.origins,
-                    primaryColor: chatWidgetToCreate.primaryColor,
-                    secondaryColor: chatWidgetToCreate.secondaryColor,
+                    description: chatWidgetToCreate.description || character.description,
+                    origins: chatWidgetToCreate.origins || [],
+                    primaryColor: chatWidgetToCreate.primaryColor || "button.primary",
+                    secondaryColor: chatWidgetToCreate.secondaryColor || chatWidgetToCreate.primaryColor || "button.primary",
+                    tertiaryColor: chatWidgetToCreate.tertiaryColor || "color.900",
                 }
             },
         }).catch((e) => toast.error(e.message || String(e)));
@@ -108,7 +116,7 @@ const ChatWidgetList: React.FC<ChatWidgetListProps> = ({ character, orgId }) => 
     };
 
     const newChatWidgetForm = useMemo(
-        () => <ChatWidgetForm
+        () => <NewChatWidgetForm
                 onChange={onChange}
             />,
         []
@@ -128,7 +136,7 @@ const ChatWidgetList: React.FC<ChatWidgetListProps> = ({ character, orgId }) => 
                 {
                     text: "Submit",
                     isPrimary: true,
-                    onClick: handleSubmitKnowledgeFromTextModal,
+                    onClick: handleSubmitNewChatWidgetModal,
                 },
             ],
         }),
