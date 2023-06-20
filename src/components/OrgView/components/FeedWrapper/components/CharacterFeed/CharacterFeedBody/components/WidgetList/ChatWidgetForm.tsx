@@ -69,7 +69,6 @@ const ChatWidgetForm: React.FC<ChatWidgetFormProps> = ({ onChange }) => {
                     value={secondaryColor}
                     onChange={handleFieldChange}
                 />
-
                 <Input
                     name="origins"
                     placeholder="Enter comma-separated URLs"
