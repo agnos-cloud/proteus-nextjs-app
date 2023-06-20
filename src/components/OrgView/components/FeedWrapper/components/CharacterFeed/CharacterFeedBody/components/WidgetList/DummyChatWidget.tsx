@@ -9,24 +9,30 @@ interface DummyChatWidgetProps {
 }
 
 const DummyChatWidget: React.FC<DummyChatWidgetProps> = ({ character, chatWidget }) => {
+    const name = chatWidget.name || character.name;
+    const image = chatWidget.logo || character.image;
+    const primaryColor = chatWidget.primaryColor || "button.primary";
+    const secondaryColor = chatWidget.secondaryColor || chatWidget.primaryColor || "button.primary";
+    const tertiaryColor = chatWidget.tertiaryColor || "color.900";
+
     return (
         <Stack height="100%" justify="space-between" width="100%">
             <Stack flexGrow={1} justify="space-between" spacing={0}>
                 <Stack>
-                    <Box bg={chatWidget.primaryColor} borderTopRadius={10} height="80px" px={2} py={7} width="100%">
+                    <Box bg={primaryColor} borderTopRadius={10} height="80px" px={2} py={7} width="100%">
                         <Flex align="flex-end" gap={1} justify="flex-start">
-                            <Avatar name={character.name} src={character.image} size="xs" />
-                            <Text>{character.name}</Text>
+                            <Avatar name={name} src={image} size="xs" />
+                            <Text>{name}</Text>
                         </Flex>
                     </Box>
                 </Stack>
-                <Stack bg="white" flexGrow={1} justify="flex-end" overflow="hidden" p={1}>
+                <Stack bg={tertiaryColor} flexGrow={1} justify="flex-end" overflow="hidden" p={1}>
                     <Flex align="flex-end" gap={1} justify="flex-start">
-                        <Avatar name={character.name} src={character.image} size="xs" />
-                        <Box bg="grey" borderRadius={10} height="40px" width="70%"></Box>
+                        <Avatar name={name} src={image} size="xs" />
+                        <Box bg="gray.400" borderRadius={10} height="40px" width="70%"></Box>
                     </Flex>
                     <Flex justify="flex-end">
-                        <Box bg={chatWidget.secondaryColor} borderRadius={10} height="40px" width="70%"></Box>
+                        <Box bg={secondaryColor} borderRadius={10} height="40px" width="70%"></Box>
                     </Flex>
                 </Stack>
                 <Text
@@ -41,7 +47,7 @@ const DummyChatWidget: React.FC<DummyChatWidgetProps> = ({ character, chatWidget
                 </Text>
             </Stack>
             <Flex justify="flex-end">
-                <Button bg={chatWidget.primaryColor} borderRadius={50} p={0}>
+                <Button bg={primaryColor} borderRadius={50} p={0}>
                     <CgClose size="25" />
                 </Button>
             </Flex>
