@@ -16,6 +16,7 @@
     "@emotion/styled": "^11.11.0",
     "@next-auth/prisma-adapter": "^1.0.6",
     "@prisma/client": "^4.14.1",
+    "@proteus-ai/react-chat-widget": "^1.0.4",
     "bson": "4.7.0",
     "date-fns": "^2.30.0",
     "framer-motion": "^10.12.14",
