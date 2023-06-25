@@ -1173,10 +1173,10 @@
   resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-4.14.1.tgz#dac49f8d1f2d4f14a8ed7e6f96b24cd49bd6cd91"
   integrity sha512-APqFddPVHYmWNKqc+5J5SqrLFfOghKOLZxobmguDUacxOwdEutLsbXPVhNnpFDmuQWQFbXmrTTPoRrrF6B1MWA==
 
-"@proteus-ai/react-chat-widget@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.npmjs.org/@proteus-ai/react-chat-widget/-/react-chat-widget-1.0.4.tgz#dbcf98f7dba647ab21e6ea464e96fba72d72bf43"
-  integrity sha512-uw7dKKNF2RGVs0EyiSOSO88NJ14Tdvmt9lge/sGaOiFYWgiV0DUHHJDh6oXFwceaiO7oCYgRlSHJoV5Ds+4oKg==
+"@proteus-ai/react-chat-widget@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.npmjs.org/@proteus-ai/react-chat-widget/-/react-chat-widget-1.0.5.tgz#60f71c0198512be6d295f6704f335eb4604af669"
+  integrity sha512-OEf94/wuPxPW3BLnL1qYEU9hNsw0EgpH9mME7Q4Uu/AXgc1ac49psVRa5X1F/ZRBmp3vdm2m9AtSkG8W5nnwJg==
   dependencies:
     classnames "^2.2.6"
     date-fns "^2.11.1"

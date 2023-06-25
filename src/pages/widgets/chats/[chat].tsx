@@ -71,7 +71,7 @@ const Chat: NextPage = () => {
                 subtitle="powered by Proteus"
                 senderPlaceHolder="Ask a question ..."
                 primaryColor='green'
-                secondaryColor='black'
+                secondaryColor='purple'
                 handleNewUserMessage={handleNewUserMessage}
                 handleQuickButtonClicked={handleQuickButtonClicked}
                 imagePreview
