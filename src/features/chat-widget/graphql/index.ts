@@ -22,6 +22,13 @@ character {
 
 const GQL = {
     Query: {
+        chatWidget: gql`
+            query ChatWidget($id: ID!) {
+                chatWidget(id: $id) {
+                    ${ChatWidgetFields}
+                }
+            }
+        `,
         chatWidgets: gql`
             query ChatWidgets($input: ChatWidgetSearchInput!) {
                 chatWidgets(input: $input) {

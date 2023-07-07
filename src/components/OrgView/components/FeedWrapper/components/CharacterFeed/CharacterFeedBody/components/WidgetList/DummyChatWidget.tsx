@@ -10,16 +10,14 @@ interface DummyChatWidgetProps {
 
 const HOST = "http://localhost:4000";
 
-const DummyChatWidget: React.FC<DummyChatWidgetProps> = ({ character, chatWidget }) => {
-    console.log({character});
-    
+const DummyChatWidget: React.FC<DummyChatWidgetProps> = ({ character, chatWidget }) => {    
     const name = chatWidget.name || character.name;
     const image = chatWidget.logo || character.image;
     const primaryColor = chatWidget.primaryColor || "button.primary";
     const secondaryColor = chatWidget.secondaryColor || chatWidget.primaryColor || "button.primary";
     const tertiaryColor = chatWidget.tertiaryColor || "color.900";
 
-    const WIDGET_URL = `${HOST}/widgets/chats/${chatWidget.id}`;
+    const WIDGET_URL = `${HOST}/widgets/chats/${chatWidget.id}/origins/${chatWidget.origins?.toString()}`;
     const IFRAME = `<iframe allowtransparency="true" id="proteusIframe" src="${WIDGET_URL}" title="Proteus Iframe" />`;
 
     return (
@@ -42,15 +40,14 @@ const DummyChatWidget: React.FC<DummyChatWidgetProps> = ({ character, chatWidget
                         <Box bg={secondaryColor} borderRadius={10} height="40px" width="70%"></Box>
                     </Flex>
                 </Stack>
-                <Input
+                <Text
                     bg="background.700"
                     border="1px solid"
                     borderBottomRadius={5}
                     color="color.500"
                     px={4}
                     py={2}
-                    value={IFRAME}
-                />
+                >{IFRAME}</Text>
             </Stack>
             <Flex justify="flex-end">
                 <Button bg={primaryColor} borderRadius={50} p={0}>
