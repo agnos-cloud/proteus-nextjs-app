@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Flex, Stack, Text } from "@chakra-ui/react";
+import { Avatar, Box, Button, Flex, Stack, Text, Input } from "@chakra-ui/react";
 import { Character } from "@character/types";
 import { ChatWidget } from "@chat-widget/types";
 import { CgClose } from "react-icons/cg";
@@ -8,12 +8,17 @@ interface DummyChatWidgetProps {
     chatWidget: ChatWidget;
 }
 
-const DummyChatWidget: React.FC<DummyChatWidgetProps> = ({ character, chatWidget }) => {
+const HOST = "http://localhost:4000";
+
+const DummyChatWidget: React.FC<DummyChatWidgetProps> = ({ character, chatWidget }) => {    
     const name = chatWidget.name || character.name;
     const image = chatWidget.logo || character.image;
     const primaryColor = chatWidget.primaryColor || "button.primary";
     const secondaryColor = chatWidget.secondaryColor || chatWidget.primaryColor || "button.primary";
     const tertiaryColor = chatWidget.tertiaryColor || "color.900";
+
+    const WIDGET_URL = `${HOST}/widgets/chats/${chatWidget.id}/origins/${chatWidget.origins?.toString()}`;
+    const IFRAME = `<iframe allowtransparency="true" id="proteusIframe" src="${WIDGET_URL}" title="Proteus Iframe" />`;
 
     return (
         <Stack height="100%" justify="space-between" width="100%">
@@ -42,9 +47,7 @@ const DummyChatWidget: React.FC<DummyChatWidgetProps> = ({ character, chatWidget
                     color="color.500"
                     px={4}
                     py={2}
-                >
-                    Send message...
-                </Text>
+                >{IFRAME}</Text>
             </Stack>
             <Flex justify="flex-end">
                 <Button bg={primaryColor} borderRadius={50} p={0}>
