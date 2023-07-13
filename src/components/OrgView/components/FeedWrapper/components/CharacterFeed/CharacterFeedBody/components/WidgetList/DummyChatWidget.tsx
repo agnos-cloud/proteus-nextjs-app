@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Flex, Stack, Text } from "@chakra-ui/react";
+import { Avatar, Box, Flex, Stack, Text } from "@chakra-ui/react";
 import { Character } from "@character/types";
 import { ChatWidget } from "@chat-widget/types";
 import { CgClose } from "react-icons/cg";
@@ -47,9 +47,9 @@ const DummyChatWidget: React.FC<DummyChatWidgetProps> = ({ character, chatWidget
                 </Text>
             </Stack>
             <Flex justify="flex-end">
-                <Button bg={primaryColor} borderRadius={50} p={0}>
+                <Box bg={primaryColor} borderRadius={50} p={2}>
                     <CgClose size="25" />
-                </Button>
+                </Box>
             </Flex>
         </Stack>
     );
